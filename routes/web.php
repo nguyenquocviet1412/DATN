@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,14 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
         Route::put('/update/{id}', [AdminController::class,'productUpdate'])->name('product.update');
         Route::delete('/delete/{id}', [AdminController::class,'productDelete'])->name('product.delete');
     });
+
+    //route voucher
+    Route::prefix('voucher')->group(function () {
+        Route::get('/', [VoucherController::class,'voucherIndex'])->name('voucher.index');
+        Route::get('/create', [VoucherController::class,'voucherCreate'])->name('voucher.create');
+        Route::post('/store', [VoucherController::class,'voucherStore'])->name('voucher.store');
+        Route::get('/edit/{id}', [VoucherController::class,'voucherEdit'])->name('voucher.edit');
+        Route::put('/update/{id}', [VoucherController::class,'voucherUpdate'])->name('voucher.update');
+        Route::delete('/delete/{id}', [VoucherController::class,'voucherDelete'])->name('voucher.delete');
+    });
+
