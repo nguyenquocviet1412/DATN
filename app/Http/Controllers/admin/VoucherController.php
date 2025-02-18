@@ -10,4 +10,7 @@ class VoucherController extends Controller
     public function voucherIndex(){
         return view('admin.voucher');
     }
+    public function voucherCreate(){
+        return view('admin.voucher_create');
+    }
 }
