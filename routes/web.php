@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\VoucherController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,4 +43,16 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
         Route::put('/update/{id}', [VoucherController::class,'voucherUpdate'])->name('voucher.update');
         Route::delete('/delete/{id}', [VoucherController::class,'voucherDelete'])->name('voucher.delete');
     });
+
+    //route Category
+    Route::prefix('category')->group(function () {
+        Route::get('/', [CategoryController::class,'categoryIndex'])->name('category.index');
+        Route::get('/create', [CategoryController::class,'categoryCreate'])->name('category.create');
+        Route::post('/store', [CategoryController::class,'categoryStore'])->name('category.store');
+        Route::get('/edit/{id}', [CategoryController::class,'categoryEdit'])->name('category.edit');
+        Route::put('/update/{id}', [CategoryController::class,'categoryUpdate'])->name('category.update');
+        Route::delete('/delete/{id}', [CategoryController::class,'categoryDelete'])->name('category.delete');
+    });
+
+    
 
