@@ -409,9 +409,6 @@ color: #ea0000;">Chỉnh sửa sản phẩm nâng cao</a>
 </div>
 </div>
 </div>
-<!--
-MODAL
--->
 
 
 @endsection
