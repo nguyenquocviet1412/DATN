@@ -4,30 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        return view("home.index");
-    }
-
-
     public function login()
     {
-        //
-        return view("home.login");
+        return view('account.login');
     }
-
-    public function register()
-    {
-        //
-        return view("home.register");
-    }
-
 
     /**
      * Show the form for creating a new resource.
