@@ -18,6 +18,122 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
+
+{{-- css và js chp form add và update --}}
+
+<script>
+
+    function readURL(input, thumbimage) {
+      if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $("#thumbimage").attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+      else { // Sử dụng cho IE
+        $("#thumbimage").attr('src', input.value);
+
+      }
+      $("#thumbimage").show();
+      $('.filename').text($("#uploadfile").val());
+      $('.Choicefile').css('background', '#14142B');
+      $('.Choicefile').css('cursor', 'default');
+      $(".removeimg").show();
+      $(".Choicefile").unbind('click');
+
+    }
+    $(document).ready(function () {
+      $(".Choicefile").bind('click', function () {
+        $("#uploadfile").click();
+
+      });
+      $(".removeimg").click(function () {
+        $("#thumbimage").attr('src', '').hide();
+        $("#myfileupload").html('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
+        $(".removeimg").hide();
+        $(".Choicefile").bind('click', function () {
+          $("#uploadfile").click();
+        });
+        $('.Choicefile').css('background', '#14142B');
+        $('.Choicefile').css('cursor', 'pointer');
+        $(".filename").text("");
+      });
+    })
+  </script>
+
+  <style>
+    .Choicefile {
+      display: block;
+      background: #14142B;
+      border: 1px solid #fff;
+      color: #fff;
+      width: 150px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 5px 0px;
+      border-radius: 5px;
+      font-weight: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .Choicefile:hover {
+      text-decoration: none;
+      color: white;
+    }
+
+    #uploadfile,
+    .removeimg {
+      display: none;
+    }
+
+    #thumbbox {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .removeimg {
+      height: 25px;
+      position: absolute;
+      background-repeat: no-repeat;
+      top: 5px;
+      left: 5px;
+      background-size: 25px;
+      width: 25px;
+      /* border: 3px solid red; */
+      border-radius: 50%;
+
+    }
+
+    .removeimg::before {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      content: '';
+      border: 1px solid red;
+      background: red;
+      text-align: center;
+      display: block;
+      margin-top: 11px;
+      transform: rotate(45deg);
+    }
+
+    .removeimg::after {
+      /* color: #FFF; */
+      /* background-color: #DC403B; */
+      content: '';
+      background: red;
+      border: 1px solid red;
+      text-align: center;
+      display: block;
+      transform: rotate(-45deg);
+      margin-top: -2px;
+    }
+  </style>
+
+
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -73,6 +189,8 @@
       </li>
       <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-task'></i><span
             class="app-menu__label">Quản lý đơn hàng</span></a></li>
+      <li><a class="app-menu__item" href="{{ route('voucher.index') }}"><i class='app-menu__icon bx bx-purchase-tag'></i><span
+            class="app-menu__label">Quản lý voucher</span></a></li>
       <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-run'></i><span
             class="app-menu__label">Quản lý nội bộ
           </span></a></li>
@@ -177,6 +295,23 @@
       }
     }
   </script>
+
+
+<!-- Essential javascripts for application to work-->
+<script src="{{ asset('admin/doc/js/jquery-3.2.1.min.js')}}"></script>
+<script src="{{ asset('admin/doc/js/popper.min.js')}}"></script>
+<script src="{{ asset('admin/doc/js/bootstrap.min.js')}}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../src/jquery.table2excel.js"></script>
+<script src="{{ asset('admin/doc/js/main.js')}}"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="{{ asset('admin/doc/js/plugins/pace.min.js')}}"></script>
+<!-- Page specific javascripts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- Data table plugin-->
+<script type="text/javascript" src="{{ asset('admin/doc/js/plugins/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('admin/doc/js/plugins/dataTables.bootstrap.min.js')}}"></script>
+<script type="text/javascript">$('#sampleTable').DataTable();</script>
 </body>
 
 </html>
