@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,15 +28,14 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 //Route Admin
 Route::get('/test', [AdminController::class,'index'])->name('test');
     //route product
-    Route::prefix('product')->group(function () {
-        Route::get('/', [AdminController::class,'productIndex'])->name('product.index');
-        Route::get('/create', [AdminController::class,'productCreate'])->name('product.create');
-        Route::post('/store', [AdminController::class,'productStore'])->name('product.store');
-        Route::get('/edit/{id}', [AdminController::class,'productEdit'])->name('product.edit');
-        Route::put('/update/{id}', [AdminController::class,'productUpdate'])->name('product.update');
-        Route::delete('/delete/{id}', [AdminController::class,'productDelete'])->name('product.delete');
+    Route::prefix('admin/product')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     });
-
     //route voucher
     Route::prefix('voucher')->group(function () {
         Route::get('/', [VoucherController::class,'voucherIndex'])->name('voucher.index');
