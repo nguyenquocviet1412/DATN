@@ -33,4 +33,47 @@ class CategoryController extends Controller
 
         return redirect()->route('category.index')->with('success', 'Thêm mới danh mục thành công');
     }
+    public function categoryDelete($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        }
+
+        $category->delete();
+
+        return redirect()->route('category.index')->with('success', 'Xóa danh mục thành công');
+    }
+    public function categoryEdit($id)
+{
+    $category = Category::find($id);
+
+    if (!$category) {
+        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+    }
+
+    return view('admin.editcategory', compact('category'));
+}
+
+public function categoryUpdate(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|max:255',
+    ]);
+
+    $category = Category::find($id);
+
+    if (!$category) {
+        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+    }
+
+    $category->update([
+        'name' => $request->name,
+    ]);
+
+    return redirect()->route('category.index')->with('success', 'Cập nhật danh mục thành công');
+}
+
+
 }
