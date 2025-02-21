@@ -1,6 +1,6 @@
 @extends('admin.layout')
 @section('title', 'Chỉnh sửa sản phẩm | Quản trị Admin')
-
+@section('title2', 'Chỉnh sửa sản phẩm')
 @section('content')
     <script>
         function readURL(input) {

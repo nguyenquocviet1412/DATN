@@ -7,6 +7,16 @@ Danh sách Voucher
 @endsection
 @section('content')
 
+<!-- jQuery (Cần thiết cho Bootstrap Toggle) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap Toggle -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+
+
+
+
 <div class=" mt-4">
     <h2 class="mb-4"><i class="fas fa-ticket-alt"></i> Quản Lý Voucher</h2>
 
@@ -32,6 +42,21 @@ Danh sách Voucher
                             </script>
                         @endif
 
+
+                        {{-- Thông báo lỗi --}}
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        @if(session('error'))
+                            <script>
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: '{{ session("error") }}',
+                                    icon: 'error',
+                                    showConfirmButton: false,
+                                    timer: 4000,
+                                    backdrop: true  // Làm tối nền
+                                });
+                            </script>
+                        @endif
 
                       <a class="btn btn-add btn-sm" href="{{route('voucher.create')}}" title="Thêm">
                         <i class="fas fa-plus"></i> Thêm Voucher</a>
@@ -80,16 +105,24 @@ Danh sách Voucher
                         <td>{{ $voucher->usage_limit }}</td>
                         <td>{{ $voucher->used_count }}</td>
                         <td>
-                            @if(\Carbon\Carbon::now()->greaterThan($voucher->end_date))
-                                <span class="badge bg-danger">Hết Hạn</span>
-                            @else
-                                <span class="badge bg-success">Còn Hạn</span>
-                            @endif
+                            <form action="{{ route('voucher.toggleStatus', $voucher->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="status" value="{{ $voucher->status == 'active' ? 'disabled' : 'active' }}">
+                                <input type="checkbox" class="toggle-status"
+                                       data-toggle="toggle"
+                                       data-on="Hoạt động"
+                                       data-off="Vô hiệu hóa"
+                                       data-onstyle="success"
+                                       data-offstyle="danger"
+                                       {{ $voucher->status == 'active' ? 'checked' : '' }}
+                                       onchange="this.form.submit()">
+                            </form>
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editVoucherModal{{ $voucher->id }}">
+                            <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp">
                                 <i class="fas fa-edit"></i> Sửa
-                            </button>
+                            </a>
+
                             <form action="{{ route('voucher.delete', $voucher->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
@@ -100,50 +133,6 @@ Danh sách Voucher
                         </td>
                     </tr>
 
-                    <!-- Modal Chỉnh Sửa Voucher -->
-                    <div class="modal fade" id="editVoucherModal{{ $voucher->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="{{ route('voucher.update', $voucher->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Chỉnh Sửa Voucher</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Mã Voucher</label>
-                                            <input type="text" name="code" value="{{ $voucher->code }}" class="form-control">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Loại Giảm Giá</label>
-                                            <select name="discount_type" class="form-select">
-                                                <option value="percentage" {{ $voucher->discount_type == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
-                                                <option value="fixed" {{ $voucher->discount_type == 'fixed' ? 'selected' : '' }}>Tiền mặt</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Giá Trị Giảm</label>
-                                            <input type="number" name="discount_value" value="{{ $voucher->discount_value }}" class="form-control">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Ngày Bắt Đầu</label>
-                                            <input type="date" name="start_date" value="{{ $voucher->start_date }}" class="form-control">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Ngày Kết Thúc</label>
-                                            <input type="date" name="end_date" value="{{ $voucher->end_date }}" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success">Lưu</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     @endforeach
                 </tbody>
               </table>
@@ -156,10 +145,31 @@ Danh sách Voucher
 
 </div>
 
+<script>
+    <script>
+        $(document).ready(function () {
+    console.log("Khởi tạo DataTable...");
+
+    var table = $('#sampleTable').DataTable();
+
+    // Khởi tạo toggle sau khi DataTable đã load xong
+    $('.toggle-status').bootstrapToggle();
+
+    table.on('draw', function () {
+        console.log("Cập nhật lại Bootstrap Toggle...");
+        $('.toggle-status').bootstrapToggle('destroy');
+        $('.toggle-status').bootstrapToggle();
+    });
+});
+
+</script>
+
+
+
+
 <!--
   MODAL
 -->
-
 
   <script>
     function deleteRow(r) {
