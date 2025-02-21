@@ -28,7 +28,7 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 //Route Admin
 Route::get('/test', [AdminController::class,'index'])->name('test');
     //route product
-    Route::prefix('admin/product')->group(function () {
+    Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
         Route::get('/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/store', [ProductController::class, 'store'])->name('product.store');
@@ -44,6 +44,8 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
         Route::get('/edit/{id}', [VoucherController::class,'voucherEdit'])->name('voucher.edit');
         Route::put('/update/{id}', [VoucherController::class,'voucherUpdate'])->name('voucher.update');
         Route::delete('/delete/{id}', [VoucherController::class,'voucherDelete'])->name('voucher.delete');
+
+        Route::post('/toggle-status/{id}', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
     });
 
     //route Category
@@ -56,5 +58,5 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
         Route::delete('/delete/{id}', [CategoryController::class,'categoryDelete'])->name('category.delete');
     });
 
-    
+
 
