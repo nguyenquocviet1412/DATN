@@ -15,7 +15,7 @@ class VoucherController extends Controller
     }
 
     //Xóa voucher
-    public function destroy($id)
+    public function voucherDelete($id)
 {
     $voucher = Voucher::find($id);
 
@@ -23,11 +23,15 @@ class VoucherController extends Controller
         return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
 
-    $voucher->delete();  // Xóa voucher
+    // Kiểm tra nếu voucher có dữ liệu liên kết
+    if ($voucher->userVouchers()->exists() || $voucher->orders()->exists()) {
+        return redirect()->route('voucher.index')->with('error', 'Không thể xóa! Voucher này đang tồn tại dữ liệu ở nơi khác.');
+    }
+
+    $voucher->delete();
 
     return redirect()->route('voucher.index')->with('success', 'Voucher đã được xóa thành công!');
 }
-
 
     // Hiển thị form thêm mới voucher
     public function voucherCreate(){

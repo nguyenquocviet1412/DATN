@@ -8,6 +8,37 @@
             <div class="tile">
                 <div class="tile-body">
 
+{{-- thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
+
+
+{{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                showConfirmButton: true,  // Hiển thị nút đóng
+                confirmButtonText: 'Đóng',  // Nội dung nút đóng
+                backdrop: true  // Làm tối nền
+            });
+        </script>
+    @endif
+
 
                     <div class="row element-button">
                         <div class="col-sm-6">

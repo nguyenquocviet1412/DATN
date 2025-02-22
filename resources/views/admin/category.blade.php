@@ -21,6 +21,22 @@
     </script>
 @endif
 
+
+{{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                showConfirmButton: true,  // Hiển thị nút đóng
+                confirmButtonText: 'Đóng',  // Nội dung nút đóng
+                backdrop: true  // Làm tối nền
+            });
+        </script>
+    @endif
+
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
