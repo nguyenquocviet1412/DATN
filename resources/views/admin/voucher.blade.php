@@ -44,20 +44,19 @@ Danh sách Voucher
 
 
                         {{-- Thông báo lỗi --}}
-                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                            @if(session('error'))
-                                <script>
-                                    Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: '{{ session("error") }}',
-                                        icon: 'error',
-                                        showConfirmButton: true,  // Hiển thị nút đóng
-                                        confirmButtonText: 'Đóng',  // Nội dung nút đóng
-                                        backdrop: true  // Làm tối nền
-                                    });
-                                </script>
-                            @endif
-
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        @if(session('error'))
+                            <script>
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: '{{ session("error") }}',
+                                    icon: 'error',
+                                    showConfirmButton: false,
+                                    timer: 4000,
+                                    backdrop: true  // Làm tối nền
+                                });
+                            </script>
+                        @endif
 
                       <a class="btn btn-add btn-sm" href="{{route('voucher.create')}}" title="Thêm">
                         <i class="fas fa-plus"></i> Thêm Voucher</a>

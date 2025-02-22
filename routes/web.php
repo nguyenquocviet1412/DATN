@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\VariantConntroller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,7 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 
 // ----------------------------------------------------------------
 //Route Admin
-Route::get('/test', [AdminController::class,'index'])->name('test');
+Route::prefix('admin')->group(function () {
     //route product
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
@@ -36,6 +37,16 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     });
+    //route variant
+    Route::prefix('variant')->group(function () {
+        Route::get('/', [VariantConntroller::class, 'variantIndex'])->name('variant.index');
+        Route::get('/create/{id}', [VariantConntroller::class, 'variantCreate'])->name('variant.create');
+        Route::post('/store/{id}', [VariantConntroller::class, 'variantStore'])->name('variant.store');
+        Route::get('/edit/{id}', [VariantConntroller::class, 'variantEdit'])->name('variant.edit');
+        Route::put('/update/{id}', [VariantConntroller::class, 'variantUpdate'])->name('variant.update');
+        Route::delete('/delete/{id}', [VariantConntroller::class, 'variantDelete'])->name('variant.delete');
+    });
+
     //route voucher
     Route::prefix('voucher')->group(function () {
         Route::get('/', [VoucherController::class,'voucherIndex'])->name('voucher.index');
@@ -59,4 +70,4 @@ Route::get('/test', [AdminController::class,'index'])->name('test');
     });
 
 
-
+});
