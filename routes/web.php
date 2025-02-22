@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VariantConntroller;
+use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,25 +53,44 @@ Route::prefix('admin')->group(function () {
 
     //route voucher
     Route::prefix('voucher')->group(function () {
-        Route::get('/', [VoucherController::class,'voucherIndex'])->name('voucher.index');
-        Route::get('/create', [VoucherController::class,'voucherCreate'])->name('voucher.create');
-        Route::post('/store', [VoucherController::class,'voucherStore'])->name('voucher.store');
-        Route::get('/edit/{id}', [VoucherController::class,'voucherEdit'])->name('voucher.edit');
-        Route::put('/update/{id}', [VoucherController::class,'voucherUpdate'])->name('voucher.update');
-        Route::delete('/delete/{id}', [VoucherController::class,'voucherDelete'])->name('voucher.delete');
+        Route::get('/', [VoucherController::class, 'voucherIndex'])->name('voucher.index');
+        Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
+        Route::post('/store', [VoucherController::class, 'voucherStore'])->name('voucher.store');
+        Route::get('/edit/{id}', [VoucherController::class, 'voucherEdit'])->name('voucher.edit');
+        Route::put('/update/{id}', [VoucherController::class, 'voucherUpdate'])->name('voucher.update');
+        Route::delete('/delete/{id}', [VoucherController::class, 'voucherDelete'])->name('voucher.delete');
 
         Route::post('/toggle-status/{id}', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
     });
 
     //route Category
     Route::prefix('category')->group(function () {
-        Route::get('/', [CategoryController::class,'categoryIndex'])->name('category.index');
-        Route::get('/create', [CategoryController::class,'categoryCreate'])->name('category.create');
-        Route::post('/store', [CategoryController::class,'categoryStore'])->name('category.store');
-        Route::get('/edit/{id}', [CategoryController::class,'categoryEdit'])->name('category.edit');
-        Route::put('/update/{id}', [CategoryController::class,'categoryUpdate'])->name('category.update');
-        Route::delete('/delete/{id}', [CategoryController::class,'categoryDelete'])->name('category.delete');
+        Route::get('/', [CategoryController::class, 'categoryIndex'])->name('category.index');
+        Route::get('/create', [CategoryController::class, 'categoryCreate'])->name('category.create');
+        Route::post('/store', [CategoryController::class, 'categoryStore'])->name('category.store');
+        Route::get('/edit/{id}', [CategoryController::class, 'categoryEdit'])->name('category.edit');
+        Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
+        Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
     });
 
 
+    //route Employee
+    Route::prefix('employee')->group(function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('employee.index');
+        Route::get('/create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::put('/update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->name('employee.delete');
+    });
+
+    //route User
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+    });
 });

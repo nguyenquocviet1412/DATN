@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(request $request)
     {
         //
+        $sortBy = $request->input('sort_by', 'id');
+        $sortOrder = $request->input('sort_order', 'asc');
+        $search = $request->input('search');
+
+        $users = User::all();
+        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search'));
     }
 
     /**
@@ -21,6 +29,8 @@ class UserController extends Controller
     public function create()
     {
         //
+        $users = User::all();
+        return view('admin.user.create', compact('users'));
     }
 
     /**
@@ -29,6 +39,27 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'password' => 'required|string|max:255',
+            'role' => 'required|string',
+            'fullname' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'address' => 'required|string',
+            'status' => 'required|boolean',
+        ]);
+
+        $users = User::create([
+            'password' => Hash::make($request->input('password')),
+            'role' => $request->input('role'),
+            'fullname' => $request->input('fullname'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'status' => $request->input('status')
+        ]);
+
+        return redirect()->route('user.index')->with('success', 'User created successfully');
     }
 
     /**
@@ -44,22 +75,50 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('admin.user.edit', compact('user'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'password' => 'nullable|string|max:255',
+            'role' => 'required|string',
+            'fullname' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'address' => 'required|string',
+            'status' => 'required|boolean',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'password' => $request->input('password') ? Hash::make($request->input('password')) : $user->password,
+            'role' => $request->input('role'),
+            'fullname' => $request->input('fullname'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'status' => $request->input('status')
+        ]);
+
+        return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 }
