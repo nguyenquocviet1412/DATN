@@ -34,17 +34,23 @@ class CategoryController extends Controller
         return redirect()->route('category.index')->with('success', 'Thêm mới danh mục thành công');
     }
     public function categoryDelete($id)
-    {
-        $category = Category::find($id);
+{
+    $category = Category::find($id);
 
-        if (!$category) {
-            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
-        }
-
-        $category->delete();
-
-        return redirect()->route('category.index')->with('success', 'Xóa danh mục thành công');
+    if (!$category) {
+        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại!');
     }
+
+    // Kiểm tra nếu danh mục có sản phẩm liên kết
+    if ($category->products()->exists()) {
+        return redirect()->route('category.index')->with('error', 'Không thể xóa! Danh mục này có sản phẩm liên quan liên quan.');
+    }
+
+    $category->delete();
+
+    return redirect()->route('category.index')->with('success', 'Xóa danh mục thành công!');
+}
+
     public function categoryEdit($id)
 {
     $category = Category::find($id);
