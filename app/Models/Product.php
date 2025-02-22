@@ -33,4 +33,17 @@ class Product extends Model
     {
         return $this->hasMany(Variant::class, 'id_product');
     }
+
+    /**
+     * Lấy ảnh đại diện của sản phẩm (ảnh đầu tiên của biến thể đầu tiên)
+     */
+    public function getThumbnailAttribute()
+    {
+        $firstVariant = $this->variants()->with('images')->first();
+        if ($firstVariant && $firstVariant->images->isNotEmpty()) {
+            return asset($firstVariant->images->first()->image_url);
+        }
+        return asset('default-image.jpg');
+    }
+
 }

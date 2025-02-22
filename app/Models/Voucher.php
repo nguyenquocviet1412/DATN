@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,35 @@ class Voucher extends Model
         'used_count',
         'status'
     ];
+
+    // Quan hệ với bảng user_voucher
+    public function userVouchers()
+    {
+        return $this->hasMany(User_voucher::class, 'id_voucher');
+    }
+
+    // Quan hệ với bảng user_voucher
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'id_voucher');
+    }
+
+    // Tính số lượt sử dụng
+    public function getUsageCountAttribute()
+    {
+        return $this->userVouchers()->where('is_used', 1)->count();
+    }
+
+    // Tự động hiển thị trangjt hái hết hạn khi end_date đã qua
+    public function getStatusAttribute($value)
+{
+    if (Carbon::now()->greaterThan($this->end_date)) {
+        return 0; // Hết hạn
+    }
+    return $value; // Giữ nguyên trạng thái cũ nếu chưa hết hạn
+}
+
+
 
     public function applyVoucher($voucherCode)
     {
