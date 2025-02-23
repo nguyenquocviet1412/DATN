@@ -90,16 +90,11 @@
                             <th><input type="checkbox" id="select-all"></th>
                             <th>ID</th>
                             <th>Username</th>
-                            <th>password</th>
-                            <th>role</th>
                             <th>fullname</th>
                             <th>email</th>
                             <th>phone</th>
                             <th>gender</th>
-                            <th>date_of_birth</th>
                             <th>address</th>
-                            <th>position</th>
-                            <th>salary</th>
                             <th>status</th>
                             <th>Action</th>
                         </tr>
@@ -112,25 +107,27 @@
                             </td>
                             <td class="text-center">{{ $employee->id }}</td>
                             <td>{{ $employee->username }}</td>
-                            <td>{{ $employee->password }}</td>
-                            <td>{{ $employee->role }}</td>
                             <td>{{ $employee->fullname }}</td>
                             <td>{{ $employee->email }}</td>
                             <td>{{ $employee->phone }}</td>
                             <td>{{ $employee->gender }}</td>
-                            <td>{{ $employee->date_of_birth }}</td>
                             <td>{{ $employee->address }}</td>
-                            <td>{{ $employee->position }}</td>
-                            <td>{{ $employee->salary }}</td>
                             <td class="text-center">
                                 <span class="badge {{ $employee->status ? 'bg-success' : 'bg-danger' }}">
                                     {{ $employee->status ? 'Hoạt động' : 'Hết hoạt động' }}
                                 </span>
                             </td>
+
                             <td class="text-center">
+                                <a href="{{ route('employee.show', $employee->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+
                                 <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
+
+
                                 <form action="{{ route('employee.delete', $employee->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
