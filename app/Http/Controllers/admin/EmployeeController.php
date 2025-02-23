@@ -80,8 +80,10 @@ class EmployeeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+        return view('admin.employee.show', compact('employee'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -129,7 +131,7 @@ class EmployeeController extends Controller
         $employee->position = $request->input('position');
         $employee->salary = $request->input('salary');
         $employee->status = $request->input('status');
-        
+
         $employee->save();
 
         return redirect()->route('employee.index')->with('success', 'Employee updated successfully');

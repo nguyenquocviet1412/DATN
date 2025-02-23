@@ -91,7 +91,6 @@
                             <th>ID</th>
                             <th>Fullname</th>
                             <th>Emaill</th>
-                            <th>Password</th>
                             <th>Phone</th>
                             <th>Address</th>
                             <th>Gender</th>
@@ -108,7 +107,6 @@
                             <td class="text-center">{{ $user->id }}</td>
                             <td class="text-center">{{ $user->fullname }}</td>
                             <td class="text-center">{{ $user->email }}</td>
-                            <td class="text-center">{{ $user->password }}</td>
                             <td class="text-center">{{ $user->phone }}</td>
                             <td class="text-center">{{ $user->address }}</td>
                             <td class="text-center">{{ $user->gender }}</td>
@@ -118,6 +116,9 @@
                                 </span>
                             </td>
                             <td class="text-center">
+                                <a href="{{ route('user.show', $user->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-eye"></i>
+                                </a>
                                 <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>

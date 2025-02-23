@@ -81,6 +81,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::put('/update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::get('/show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
         Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->name('employee.delete');
     });
 
@@ -91,6 +92,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/store', [UserController::class, 'store'])->name('user.store');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
 });
