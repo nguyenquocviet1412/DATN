@@ -95,7 +95,6 @@
                             <th>phone</th>
                             <th>gender</th>
                             <th>address</th>
-                            <th>salary</th>
                             <th>status</th>
                             <th>Action</th>
                         </tr>
@@ -113,7 +112,6 @@
                             <td>{{ $employee->phone }}</td>
                             <td>{{ $employee->gender }}</td>
                             <td>{{ $employee->address }}</td>
-                            <td>{{ $employee->salary }}$</td>
                             <td class="text-center">
                                 <span class="badge {{ $employee->status ? 'bg-success' : 'bg-danger' }}">
                                     {{ $employee->status ? 'Hoạt động' : 'Hết hoạt động' }}
