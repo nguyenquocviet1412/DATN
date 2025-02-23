@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\VariantConntroller;
 use App\Models\Employee;
 use App\Models\User;
@@ -59,7 +60,7 @@ Route::prefix('admin')->group(function () {
     //route voucher
     Route::prefix('voucher')->group(function () {
         Route::get('/', [VoucherController::class, 'voucherIndex'])->name('voucher.index');
-        Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
+Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
         Route::post('/store', [VoucherController::class, 'voucherStore'])->name('voucher.store');
         Route::get('/edit/{id}', [VoucherController::class, 'voucherEdit'])->name('voucher.edit');
         Route::put('/update/{id}', [VoucherController::class, 'voucherUpdate'])->name('voucher.update');
@@ -107,7 +108,7 @@ Route::prefix('admin')->group(function () {
 
 //route comment
 Route::prefix('comment')->group(function () {
-    Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
+Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
     Route::get('/create', [CommentController::class, 'createCMT'])->name('comment.create');
     Route::post('/store', [CommentController::class, 'storeCMT'])->name('comment.store');
     Route::get('/edit/{id}', [CommentController::class,'editCMT'])->name('comment.edit');
@@ -125,4 +126,12 @@ Route::prefix('rate')->group(function () {
     Route::put('/update/{id}', [RateController::class, 'Rupdate'])->name('rate.update');
     Route::delete('/delete/{id}', [RateController::class, 'Rdestroy'])->name('rate.destroy');
 });
+// ROute order
+Route::prefix('order')->group(function () {
+    Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
 
+Route::get('/order/{id}/restore',[OrderController::class, 'restore'])->name('order.restore');
+Route::get('/order/{id}/forceDelete',[OrderController::class, 'forceDelete'])->name('order.forceDelete');
+
+Route::resource('order', OrderController::class);
+});
