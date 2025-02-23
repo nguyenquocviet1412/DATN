@@ -3,6 +3,7 @@
 @section('title2', 'Danh sách sản phẩm')
 
 @section('content')
+
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
@@ -87,8 +88,8 @@
 
                     <table class="table table-hover table-bordered">
                         <thead>
-                            <tr>
-                                <th><input type="checkbox" id="all"></th>
+                            <tr class="text-center">
+                                <th><input type="checkbox" id="select-all"></th>
                                 <th>ID</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Ảnh</th>
@@ -101,31 +102,41 @@
                         </thead>
                         <tbody>
                             @foreach ($products as $product)
-                                <tr>
-                                    <td><input type="checkbox" name="check1" value="{{ $product->id }}"></td>
-                                    <td>{{ $product->id }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>
-                                        <img src="{{ $product->thumbnail }}" width="100px" alt="Ảnh sản phẩm">
+                                <tr class="align-middle">
+                                    <td class="text-center">
+                                        <input type="checkbox" name="check1" value="{{ $product->id }}">
                                     </td>
-                                    <td>{{ $product->variants->sum('quantity') }}</td>
-                                    <td>
+                                    <td class="text-center">{{ $product->id }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td class="text-center">
+                                        @php
+                                            $variant = $product->variants->first(); // Lấy biến thể đầu tiên
+                                            $image = optional($variant?->images->first())->image_url; // Lấy ảnh nếu có
+                                            $imageSrc = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
+                                        @endphp
+                                        <img src="{{ $image ? $imageSrc : asset('default-image.jpg') }}"
+                                             width="80px"
+                                             height="80px"
+                                             class="rounded shadow-sm"
+                                             alt="Ảnh sản phẩm">
+                                    </td>
+
+                                    <td class="text-center">{{ $product->variants->sum('quantity') }}</td>
+                                    <td class="text-center">
                                         <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}">
                                             {{ $product->status ? 'Còn hàng' : 'Hết hàng' }}
                                         </span>
                                     </td>
-                                    <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
-                                    <td>{{ $product->category->name ?? 'Không có danh mục' }}</td>
-                                    <td>
+                                    <td class="text-end">{{ number_format($product->price, 0, ',', '.') }} đ</td>
+                                    <td class="text-center">{{ $product->category->name ?? 'Không có danh mục' }}</td>
+                                    <td class="text-center">
                                         <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('product.delete', $product->id) }}" method="POST"
-                                            style="display:inline;">
+                                        <form action="{{ route('product.delete', $product->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger btn-sm" type="submit"
-                                                onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                            <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -139,6 +150,12 @@
                     <div class="pagination justify-content-center">
                         {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
+                    <script>
+                        document.getElementById('select-all').addEventListener('change', function() {
+                            let checkboxes = document.querySelectorAll('input[name="check1"]');
+                            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+                        });
+                    </script>
 
                 </div>
             </div>

@@ -49,6 +49,12 @@ class Order extends Model
     ];
     public function user()
     {
-        return $this->belongsTo(User::class);  // Mỗi đơn hàng thuộc về một người dùng
+
+        return $this->belongsTo(User::class, 'id_user'); // Giả sử cột khóa ngoại là id_user
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(Order_item::class, 'id_order');
     }
 }

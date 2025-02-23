@@ -178,14 +178,14 @@
         <hr>
         <ul class="app-menu">
 
-            <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-tachometer'></i><span
+            <li><a class="app-menu__item " href="{{ route('admin.reports.index') }}"><i class='app-menu__icon bx bx-tachometer'></i><span
                         class="app-menu__label">Bảng điều khiển</span></a></li>
             <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý danh
                         mục</span></a></li>
-            <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-id-card'></i> <span
+            <li><a class="app-menu__item " href="{{ route('employee.index') }}"><i class='app-menu__icon bx bx-id-card'></i> <span
                         class="app-menu__label">Quản lý nhân viên</span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-user-voice'></i><span
+            <li><a class="app-menu__item" href="{{ route('user.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
                         class="app-menu__label">Quản lý khách hàng</span></a></li>
             <li><a class="app-menu__item" href="{{ route('product.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
@@ -196,12 +196,18 @@
             <li><a class="app-menu__item" href="{{ route('voucher.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
                         voucher</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('comment.index') }}"><i
+                class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
+                CMT</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('rate.index') }}"><i
+                    class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
+                    Danh Gia</span></a></li>  
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-run'></i><span
                         class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
+            <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
                         class="app-menu__label">Báo cáo doanh thu</span></a>
             </li>
             <li><a class="app-menu__item" href="page-calendar.html"><i
@@ -238,7 +244,7 @@
             <p><b>Copyright
                     <script type="text/javascript">
                         document.write(new Date().getFullYear());
-                    </script> Phần mềm quản lý bán hàng | Quý Đại
+                    </script> Phần mềm quản lý bán hàng | WD-45
                 </b></p>
             {{-- <pre>
             {{ print_r(session()->all(), true) }}

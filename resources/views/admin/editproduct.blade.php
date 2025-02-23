@@ -14,98 +14,177 @@
         }
     </script>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Chỉnh sửa sản phẩm</h3>
-                <div class="tile-body">
-                    <form class="row" method="POST" action="{{ route('product.update', $product->id) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
+<script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
-                        <!-- Tên sản phẩm -->
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text" name="name"
-                                value="{{ old('name', $product->name) }}">
-                        </div>
+<style>
+    .variant-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .variant-images img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
-                        <!-- Giá bán -->
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Giá bán</label>
-                            <input class="form-control" type="number" name="price"
-                                value="{{ old('price', $product->price) }}">
-                        </div>
+<script>
+    $(document).ready(function () {
+        $(".Choicefile").click(function () {
+            $("#uploadfile").click();
+        });
+        $(".removeimg").click(function () {
+            $("#thumbimage").attr('src', '').hide();
+            $("#myfileupload").html('<input type="file" id="uploadfile" name="image" onchange="readURL(this);" />');
+            $(".removeimg").hide();
+            $(".Choicefile").css({'background': '#14142B', 'cursor': 'pointer'});
+        });
+    });
+</script>
 
-                        <!-- Tình trạng -->
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Tình trạng</label>
-                            <select class="form-control" name="status">
-                                <option value="1" {{ $product->status == 1 ? 'selected' : '' }}>Còn hàng</option>
-                                <option value="0" {{ $product->status == 0 ? 'selected' : '' }}>Hết hàng</option>
-                            </select>
-                        </div>
+{{-- thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
 
-                        <!-- Danh mục -->
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Danh mục</label>
-                            <select class="form-control" name="id_category">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ $product->id_category == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+{{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                showConfirmButton: true,  // Hiển thị nút đóng
+                confirmButtonText: 'Đóng',  // Nội dung nút đóng
+                backdrop: true  // Làm tối nền
+            });
+        </script>
+    @endif
 
-                        <!-- Biến thể sản phẩm -->
-                        <div class="col-md-12">
-                            <h4>Biến thể sản phẩm</h4>
-                            @foreach ($product->variants as $index => $variant)
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label class="control-label">Số lượng biến thể {{ $index + 1 }}</label>
-                                        <input type="number" class="form-control" name="variant_quantity[]"
-                                            value="{{ $variant->quantity }}">
-                                        <input type="hidden" name="variant_id[]" value="{{ $variant->id }}">
-                                    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <h3 class="tile-title">Chỉnh sửa sản phẩm</h3>
+            <div class="tile-body">
+                <form action="{{ route('product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
 
-                                    <div class="form-group col-md-4">
-                                        <label class="control-label">Giá biến thể</label>
-                                        <input type="number" class="form-control" name="variant_price[]"
-                                            value="{{ $variant->price }}">
-                                    </div>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" name="name" class="form-control" value="{{ $product->name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Danh mục</label>
+                        <select name="id_category" class="form-control">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ $product->id_category == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
                             @endforeach
-                        </div>
+                        </select>
+                    </div>
 
-                        <!-- Ảnh sản phẩm -->
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Ảnh sản phẩm</label>
-                            <input type="file" name="image" onchange="readURL(this);">
-                            <div id="thumbbox">
-                                @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" height="150" id="thumbimage" />
-                                @else
-                                    <img id="thumbimage" height="150" style="display: none;" />
-                                @endif
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Giá tiền</label>
+                        <input type="number" name="price" class="form-control" value="{{ $product->price }}" required>
+                    </div>
 
-                        <!-- Mô tả sản phẩm -->
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Mô tả sản phẩm</label>
-                            <textarea class="form-control" name="description">{{ old('description', $product->description) }}</textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tình trạng</label>
+                        <select name="status" class="form-control">
+                            <option value="1" {{ $product->status ? 'selected' : '' }}>Còn hàng</option>
+                            <option value="0" {{ !$product->status ? 'selected' : '' }}>Hết hàng</option>
+                        </select>
+                    </div>
 
-                        <!-- Nút hành động -->
-                        <button class="btn btn-save" type="submit">Cập nhật</button>
-                        <a class="btn btn-cancel" href="{{ route('product.index') }}">Hủy bỏ</a>
-                    </form>
-                </div>
+                    <h4 class="mt-4">Biến thể sản phẩm</h4>
+                    <div class="col-sm-6">
+                        <a class="btn btn-add btn-sm" href="{{ route('variant.create',$product->id) }}">
+                            <i class="fas fa-plus"></i> Tạo mới biến thể
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Màu sắc</th>
+                                    <th>Kích thước</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá tiền</th>
+                                    <th>Ảnh</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($product->variants as $variant)
+                                <tr>
+                                    <td>{{ $variant->color->name ?? 'Không có' }}</td>
+                                    <td>{{ $variant->size->size ?? 'Không có' }}</td>
+                                    <td>
+                                        <input type="number" name="variant_quantity[{{ $variant->id }}]" value="{{ $variant->quantity }}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="number" name="variant_price[{{ $variant->id }}]" value="{{ $variant->price }}" class="form-control">
+                                    </td>
+                                    <td>
+                                        @if ($variant->images->isNotEmpty())
+                                            @foreach ($variant->images as $image)
+                                                <div style="display: inline-block; position: relative;">
+                                                    <img src="{{ asset($image->image_url) }}" width="80px" height="80px" class="m-1">
+                                                    <form action="{{ route('variant.image.delete', $image->id) }}" method="POST" style="position: absolute; top: 5px; right: 5px;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa ảnh này?')">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>Không có ảnh</p>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('variant.delete', $variant->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xóa biến thể này?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                        <a href="{{ route('variant.edit', $variant->id) }}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Cập nhật</button>
+                    <a href="{{ route('product.index') }}" class="btn btn-secondary">Quay lại</a>
+                </form>
             </div>
         </div>
     </div>
+</div>
 @endsection
