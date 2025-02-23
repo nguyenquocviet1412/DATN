@@ -238,7 +238,7 @@
             <p><b>Copyright
                     <script type="text/javascript">
                         document.write(new Date().getFullYear());
-                    </script> Phần mềm quản lý bán hàng | Quý Đại
+                    </script> Phần mềm quản lý bán hàng | WD-45
                 </b></p>
             {{-- <pre>
             {{ print_r(session()->all(), true) }}

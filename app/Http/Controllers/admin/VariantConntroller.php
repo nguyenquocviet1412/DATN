@@ -36,35 +36,18 @@ class VariantConntroller extends Controller
         'id_size' => 'required|exists:sizes,id',
         'price' => 'required|numeric',
         'quantity' => 'required|integer|min:1',
-        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images' => 'required',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    $product = Product::find($productId);
-    if (!$product) {
-        return redirect()->route('product.edit', $productId)->with('error', 'Sản phẩm không tồn tại.');
+    $product = Product::findOrFail($productId);
+
+    // Kiểm tra biến thể đã tồn tại chưa
+    if ($product->variants()->where('id_color', $request->id_color)->where('id_size', $request->id_size)->exists()) {
+        return redirect()->route('product.edit', $productId)->with('error', 'Biến thể đã tồn tại.');
     }
 
-    // Kiểm tra xem biến thể với cùng size và color đã tồn tại chưa
-    $existingVariant = $product->variants()
-        ->where('id_color', $request->id_color)
-        ->where('id_size', $request->id_size)
-        ->first();
-
-    if ($existingVariant) {
-        return redirect()->route('product.edit', $productId)
-            ->with('error', 'Biến thể với màu sắc và kích thước này đã tồn tại.');
-    }
-
-    // Kiểm tra xem có ảnh không, nếu không có thì không cho lưu biến thể
-    if (!$request->hasFile('images')) {
-        return redirect()->route('product.edit', $productId)->with('error', 'Bạn cần tải lên ít nhất một ảnh.');
-    }
-
-    // Kiểm tra xem sản phẩm đã có biến thể nào chưa
-    $isFirstVariant = $product->variants()->count() == 0;
-    $hasPrimaryImage = false;
-
-    // Tạo biến thể mới
+    // Tạo biến thể
     $variant = Variant::create([
         'id_product' => $product->id,
         'id_color' => $request->id_color,
@@ -73,23 +56,29 @@ class VariantConntroller extends Controller
         'quantity' => $request->quantity,
     ]);
 
-    // Lưu ảnh từ file upload
-    foreach ($request->file('images') as $index => $image) {
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $imagePath = 'storage/product/' . $imageName;
-        $image->move(public_path('storage/product'), $imageName);
+    if (!$variant) {
+        return redirect()->route('product.edit', $productId)->with('error', 'Lỗi khi thêm biến thể.');
+    }
 
-        Product_image::create([
-            'id_variant' => $variant->id,
-            'image_url' => $imagePath,
-            'is_primary' => ($isFirstVariant && !$hasPrimaryImage) ? 1 : 0,
-        ]);
+    // Lưu ảnh biến thể
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $index => $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'storage/product/' . $imageName;
+            $image->move(public_path('storage/product'), $imageName);
 
-        $hasPrimaryImage = true; // Đánh dấu đã có ảnh chính
+            Product_image::create([
+                'id_variant' => $variant->id,
+                'image_url' => $imagePath,
+                'is_primary' => ($index === 0) ? 1 : 0,
+            ]);
+        }
     }
 
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể đã được thêm.');
 }
+
+
 
 
     //Hiển thị trang sửa biến thể cho sản phẩm
@@ -135,60 +124,72 @@ class VariantConntroller extends Controller
     ]);
 
     // Xử lý ảnh biến thể
-    if ($request->hasFile('image')) {
-        // Lấy ảnh cũ
-        $oldImage = $variant->images->first();
+        if ($request->hasFile('image')) {
+            // Lấy ảnh cũ
+            $oldImage = $variant->images->first();
 
-        // Nếu có ảnh cũ, xóa file ảnh khỏi thư mục và xóa bản ghi trong DB
-        if ($oldImage) {
-            $oldImagePath = public_path($oldImage->image_url);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
+            // Kiểm tra nếu ảnh cũ tồn tại và không phải là URL hoặc khoảng trắng
+            if ($oldImage && !filter_var($oldImage->image_url, FILTER_VALIDATE_URL) && trim($oldImage->image_url) !== '') {
+                $oldImagePath = public_path($oldImage->image_url);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+                $oldImage->delete();
             }
-            $oldImage->delete();
+
+            // Lưu ảnh mới
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'storage/product/' . $imageName;
+            $image->move(public_path('storage/product'), $imageName);
+
+            // Thêm ảnh mới vào DB
+            Product_image::create([
+                'id_variant' => $variant->id,
+                'image_url' => $imagePath,
+                'is_primary' => 1,
+            ]);
         }
-
-        // Lưu ảnh mới
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $imagePath = 'storage/product/' . $imageName;
-        $image->move(public_path('storage/product'), $imageName);
-
-        // Thêm ảnh mới vào DB
-        Product_image::create([
-            'id_variant' => $variant->id,
-            'image_url' => $imagePath,
-            'is_primary' => 1,
-        ]);
-    }
 
     return redirect()->back()->with('success', 'Biến thể đã được cập nhật.');
 }
 
     // Xóa ảnh biến thể cho sản phẩm
-    public function deleteImage($imageId)
-    {
-        $image = Product_image::findOrFail($imageId);
-        $variant = $image->variant;
+public function deleteImage($imageId)
+{
+    $image = Product_image::findOrFail($imageId);
+    $variant = $image->variant;
 
-        // Kiểm tra xem ảnh có tồn tại không
-        $imagePath = public_path($image->image_url);
-        if (file_exists($imagePath)) {
-            unlink($imagePath); // Xóa file ảnh khỏi thư mục
-        }
+    // Kiểm tra xem ảnh có phải ảnh chính không
+    $wasPrimary = $image->is_primary;
 
-        // Xóa ảnh khỏi cơ sở dữ liệu
-        $wasPrimary = $image->is_primary; // Kiểm tra xem ảnh có phải ảnh chính không
-        $image->delete();
+    if ($wasPrimary) {
+        // Lấy tất cả ảnh của biến thể (trừ ảnh đang xóa)
+        $remainingImages = $variant->images()->where('id', '!=', $imageId)->get();
 
-        // Nếu ảnh bị xóa là ảnh chính, chọn ảnh mới làm ảnh chính (nếu còn ảnh)
-        if ($wasPrimary && $variant->images()->count() > 0) {
-            $newPrimaryImage = $variant->images()->first();
+        if ($remainingImages->count() > 0) {
+            // Chọn ảnh thứ hai làm ảnh chính
+            $newPrimaryImage = $remainingImages->skip(0)->first(); // Ảnh thứ hai trong danh sách
             $newPrimaryImage->update(['is_primary' => 1]);
         }
-
-        return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
     }
+
+    // Kiểm tra nếu đường dẫn ảnh không phải URL và không rỗng thì xóa file
+    if (!filter_var($image->image_url, FILTER_VALIDATE_URL) && trim($image->image_url) !== '') {
+        $imagePath = public_path($image->image_url);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
+    // Xóa ảnh khỏi cơ sở dữ liệu
+    $image->delete();
+
+    return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
+}
+
+
+
     // Xóa biến thể cho sản phẩm
     public function variantDelete($variantId)
     {
