@@ -183,9 +183,9 @@
             <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý danh
                         mục</span></a></li>
-            <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-id-card'></i> <span
+            <li><a class="app-menu__item " href="{{ route('employee.index') }}"><i class='app-menu__icon bx bx-id-card'></i> <span
                         class="app-menu__label">Quản lý nhân viên</span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-user-voice'></i><span
+            <li><a class="app-menu__item" href="{{ route('user.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
                         class="app-menu__label">Quản lý khách hàng</span></a></li>
             <li><a class="app-menu__item" href="{{ route('product.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
