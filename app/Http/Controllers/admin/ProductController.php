@@ -48,15 +48,23 @@ class ProductController extends Controller
         'id_category' => 'required|exists:categories,id',
         'status' => 'required|boolean',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image_url' => 'nullable|url',
     ]);
 
     $product = Product::create($request->only(['name', 'description', 'id_category', 'price', 'status']));
 
+    // Lưu ảnh từ file hoặc link
     if ($request->hasFile('image')) {
         $imagePath = $request->file('image')->store('products', 'public');
         Product_image::create([
             'id_variant' => null,
-            'image_url' => 'storage/product/' . $imagePath,
+            'image_url' => 'storage/' . $imagePath,
+            'is_primary' => 1,
+        ]);
+    } elseif ($request->image_url) {
+        Product_image::create([
+            'id_variant' => null,
+            'image_url' => $request->image_url,
             'is_primary' => 1,
         ]);
     }
