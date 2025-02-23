@@ -49,6 +49,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}', [VariantConntroller::class, 'variantEdit'])->name('variant.edit');
         Route::put('/update/{id}', [VariantConntroller::class, 'variantUpdate'])->name('variant.update');
         Route::delete('/delete/{id}', [VariantConntroller::class, 'variantDelete'])->name('variant.delete');
+        Route::delete('/variant/image/{id}', [VariantConntroller::class, 'deleteImage'])->name('variant.image.delete');
+
     });
 
     //route voucher

@@ -110,15 +110,17 @@
                                     <td>{{ $product->name }}</td>
                                     <td class="text-center">
                                         @php
-                                            $image = optional($product->variants->first()->images->first())->image_url;
-                                            $imageSrc = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset( $image);
+                                            $variant = $product->variants->first(); // Lấy biến thể đầu tiên
+                                            $image = optional($variant?->images->first())->image_url; // Lấy ảnh nếu có
+                                            $imageSrc = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
                                         @endphp
-                                    <img src="{{ $image ? $imageSrc : asset('default-image.jpg') }}"
-                                         width="80px"
-                                         height="80px"
-                                         class="rounded shadow-sm"
-                                         alt="Ảnh sản phẩm">
+                                        <img src="{{ $image ? $imageSrc : asset('default-image.jpg') }}"
+                                             width="80px"
+                                             height="80px"
+                                             class="rounded shadow-sm"
+                                             alt="Ảnh sản phẩm">
                                     </td>
+
                                     <td class="text-center">{{ $product->variants->sum('quantity') }}</td>
                                     <td class="text-center">
                                         <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}">
