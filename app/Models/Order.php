@@ -19,4 +19,13 @@ class Order extends Model
         'shipping_address',
         'payment_status'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user'); // Giả sử cột khóa ngoại là id_user
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(Order_item::class, 'id_order');
+    }
 }

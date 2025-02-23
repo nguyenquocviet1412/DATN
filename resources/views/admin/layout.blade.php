@@ -178,7 +178,7 @@
         <hr>
         <ul class="app-menu">
 
-            <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-tachometer'></i><span
+            <li><a class="app-menu__item " href="{{ route('admin.reports.index') }}"><i class='app-menu__icon bx bx-tachometer'></i><span
                         class="app-menu__label">Bảng điều khiển</span></a></li>
             <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý danh
@@ -201,7 +201,7 @@
                     </span></a></li>
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
+            <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
                         class="app-menu__label">Báo cáo doanh thu</span></a>
             </li>
             <li><a class="app-menu__item" href="page-calendar.html"><i

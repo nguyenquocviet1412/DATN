@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VoucherController;
@@ -75,6 +76,8 @@ Route::prefix('admin')->group(function () {
         Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
     });
 
+    //route Report
+    Route::get('/report', [AdminReportController::class, 'index'])->name('admin.reports.index');
 
     //route Employee
     Route::prefix('employee')->group(function () {
