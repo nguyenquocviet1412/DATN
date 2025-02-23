@@ -196,6 +196,12 @@
             <li><a class="app-menu__item" href="{{ route('voucher.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
                         voucher</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('comment.index') }}"><i
+                class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
+                CMT</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('rate.index') }}"><i
+                    class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
+                    Danh Gia</span></a></li>  
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-run'></i><span
                         class="app-menu__label">Quản lý nội bộ
                     </span></a></li>

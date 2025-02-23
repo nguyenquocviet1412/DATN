@@ -3,10 +3,12 @@
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VariantConntroller;
 use App\Models\Employee;
@@ -101,3 +103,26 @@ Route::prefix('admin')->group(function () {
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
 });
+
+
+//route comment
+Route::prefix('comment')->group(function () {
+    Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
+    Route::get('/create', [CommentController::class, 'createCMT'])->name('comment.create');
+    Route::post('/store', [CommentController::class, 'storeCMT'])->name('comment.store');
+    Route::get('/edit/{id}', [CommentController::class,'editCMT'])->name('comment.edit');
+    Route::put('/update/{id}', [CommentController::class, 'updateCMT'])->name('comment.update');
+    Route::delete('/delete/{id}', [CommentController::class, 'destroyCMT'])->name('comment.destroy');
+    Route::patch('/hide/{id}', [CommentController::class, 'hideCMT'])->name('comment.hide');
+});
+
+ //route rate
+Route::prefix('rate')->group(function () {
+    Route::get('/', [RateController::class, 'Rindex'])->name('rate.index');
+    Route::get('/create', [RateController::class, 'Rcreate'])->name('rate.create');
+    Route::post('/store', [RateController::class, 'Rstore'])->name('rate.store');
+    Route::get('/edit/{id}', [RateController::class, 'Redit'])->name('rate.edit');
+    Route::put('/update/{id}', [RateController::class, 'Rupdate'])->name('rate.update');
+    Route::delete('/delete/{id}', [RateController::class, 'Rdestroy'])->name('rate.destroy');
+});
+
