@@ -63,8 +63,7 @@ Route::prefix('category')->group(function () {
 Route::prefix('order')->group(function () {
     Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
 
-Route::get('/order/{id}/restore',[OrderController::class, 'restore'])->name('order.restore');
-Route::get('/order/{id}/forceDelete',[OrderController::class, 'forceDelete'])->name('order.forceDelete');
-
-Route::resource('order', OrderController::class);
+    Route::get('/order/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/order/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
+    Route::resource('order', OrderController::class);
 });
