@@ -48,32 +48,43 @@
 
                 <div class="container">
                     <h1>User Details</h1>
-                    <div>
-                        <strong>Password:</strong> {{ $user->password }}
-                    </div>
-                    <div>
-                        <strong>Role:</strong> {{ $user->role }}
-                    </div>
-                    <div>
-                        <strong>Full Name:</strong> {{ $user->fullname }}
-                    </div>
-                    <div>
-                        <strong>Email:</strong> {{ $user->email }}
-                    </div>
-                    <div>
-                        <strong>Phone:</strong> {{ $user->phone }}
-                    </div>
-                    <div>
-                        <strong>Address:</strong> {{ $user->address }}
-                    </div>
-                    <div>
-                        <strong>Create date:</strong> {{ $user->created_at }}
-                    </div>
-                    <div>
-                        <strong>Status:</strong> {{ $user->status ? 'Active' : 'Inactive' }}
-                    </div>
+                    <table>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Details</th>
+                        </tr>
+                        <tr>
+                            <td>Role</td>
+                            <td>{{ $user->role }}</td>
+                        </tr>
+                        <tr>
+                            <td>Full Name</td>
+                            <td>{{ $user->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ $user->email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ $user->phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{ $user->address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Create date</td>
+                            <td>{{ $user->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
+                        </tr>
+                    </table>
                     <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
                 </div>
+
 
                 <!-- Phân trang -->
                 <script>
@@ -87,4 +98,50 @@
         </div>
     </div>
 </div>
+
+<style>
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 600px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        background-color: #007bff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 @endsection
