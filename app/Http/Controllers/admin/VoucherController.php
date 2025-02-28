@@ -38,24 +38,26 @@ class VoucherController extends Controller
         return view('admin.addvoucher');
     }
     // Xử lý lưu voucher vào database
-    public function voucherStore(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|unique:vouchers|max:255',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'min_order_value' => 'nullable|numeric|min:0',
-            'max_discount' => 'nullable|numeric|min:0',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'usage_limit' => 'nullable|integer|min:1',
-            'status' => 'required|boolean',
-        ]);
+    // Xử lý lưu voucher vào database
+public function voucherStore(Request $request)
+{
+    $request->validate([
+        'code' => 'required|unique:vouchers|max:255',
+        'discount_type' => 'required|in:percentage,fixed',
+        'discount_value' => 'required|numeric|min:0',
+        'min_order_value' => 'nullable|numeric|min:0',
+        'max_discount' => 'nullable|numeric|min:0',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after:start_date',
+        'usage_limit' => 'nullable|integer|min:1',
+        'quantity' => 'required|integer|min:1',
+        'status' => 'required|boolean',
+    ]);
 
-        Voucher::create($request->all());
+    Voucher::create($request->all());
 
-        return redirect()->route('voucher.index')->with('success', 'Voucher đã được tạo thành công.');
-    }
+    return redirect()->route('voucher.index')->with('success', 'Voucher đã được tạo thành công.');
+}
 
     //chuyển đến trang sửa voucher
     public function voucherEdit($id){
@@ -69,39 +71,41 @@ class VoucherController extends Controller
     }
 
     // Xử lý lưu thay đổi voucher vào database
-    public function voucherUpdate(Request $request, $id){
-        $request->validate([
-            'code' => 'required|string|unique:vouchers,code,'.$id,
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'min_order_value' => 'required|numeric|min:0',
-            'max_discount' => 'nullable|numeric|min:0',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'usage_limit' => 'required|integer|min:1',
-            'status' => 'required|boolean',
-        ]);
+public function voucherUpdate(Request $request, $id){
+    $request->validate([
+        'code' => 'required|string|unique:vouchers,code,'.$id,
+        'discount_type' => 'required|in:percentage,fixed',
+        'discount_value' => 'required|numeric|min:0',
+        'min_order_value' => 'required|numeric|min:0',
+        'max_discount' => 'nullable|numeric|min:0',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'usage_limit' => 'required|integer|min:1',
+        'quantity' => 'required|integer|min:1',
+        'status' => 'required|boolean',
+    ]);
 
-        $voucher = Voucher::find($id);
+    $voucher = Voucher::find($id);
 
-        if (!$voucher) {
-            return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
-        }
-
-        $voucher->update([
-            'code' => $request->code,
-            'discount_type' => $request->discount_type,
-            'discount_value' => $request->discount_value,
-            'min_order_value' => $request->min_order_value,
-            'max_discount' => $request->max_discount,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'usage_limit' => $request->usage_limit,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->route('voucher.index')->with('success', 'Voucher đã được cập nhật thành công!');
+    if (!$voucher) {
+        return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
+
+    $voucher->update([
+        'code' => $request->code,
+        'discount_type' => $request->discount_type,
+        'discount_value' => $request->discount_value,
+        'min_order_value' => $request->min_order_value,
+        'max_discount' => $request->max_discount,
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date,
+        'usage_limit' => $request->usage_limit,
+        'quantity' => $request->quantity,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('voucher.index')->with('success', 'Voucher đã được cập nhật thành công!');
+}
 
     //Thay đổi trạng thái hoạt động của voucher
     public function toggleStatus($id)

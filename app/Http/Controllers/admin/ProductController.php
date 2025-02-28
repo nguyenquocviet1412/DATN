@@ -29,7 +29,7 @@ class ProductController extends Controller
         // Thực hiện sắp xếp theo yêu cầu
         $products = Product::with(['category', 'variants.images'])->orderBy($sortBy, $sortOrder)->paginate(10);
 
-        return view('admin.product', compact('products', 'sortBy', 'sortOrder', 'search'));
+        return view('admin.product.product', compact('products', 'sortBy', 'sortOrder', 'search'));
     }
 
 
@@ -37,7 +37,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.addproduct', compact('categories'));
+        return view('admin.product.addproduct', compact('categories'));
     }
 
     public function store(Request $request)
@@ -77,7 +77,7 @@ public function edit($id)
 {
     $product = Product::with('variants')->findOrFail($id);
     $categories = Category::all();
-    return view('admin.editproduct', compact('product', 'categories'));
+    return view('admin.product.editproduct', compact('product', 'categories'));
 }
 
 
