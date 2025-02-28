@@ -6,7 +6,7 @@
 
 @section('content')
 
-{{-- thông báo thêm thành công --}}
+{{-- Thông báo bằng SweetAlert --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if(session('success'))
     <script>
@@ -16,26 +16,23 @@
             icon: 'success',
             showConfirmButton: false,
             timer: 4000,
-            backdrop: true  // Làm tối nền
+            backdrop: true  
         });
     </script>
 @endif
 
-
-{{-- Thông báo lỗi --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if(session('error'))
-        <script>
-            Swal.fire({
-                title: 'Lỗi!',
-                text: '{{ session("error") }}',
-                icon: 'error',
-                showConfirmButton: true,  // Hiển thị nút đóng
-                confirmButtonText: 'Đóng',  // Nội dung nút đóng
-                backdrop: true  // Làm tối nền
-            });
-        </script>
-    @endif
+@if(session('error'))
+    <script>
+        Swal.fire({
+            title: 'Lỗi!',
+            text: '{{ session("error") }}',
+            icon: 'error',
+            showConfirmButton: true,
+            confirmButtonText: 'Đóng',
+            backdrop: true  
+        });
+    </script>
+@endif
 
 <div class="row">
     <div class="col-md-12">
@@ -43,12 +40,20 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{route('category.create')}}" title="Thêm">
+                        <a class="btn btn-add btn-sm" href="{{ route('category.create') }}" title="Thêm">
                             <i class="fas fa-plus"></i> Tạo mới danh mục
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-warning btn-sm" href="{{ route('category.trash') }}" title="Thùng rác">
+                            <i class="fas fa-trash"></i> Thùng rác
                         </a>
                     </div>
                 </div>
 
+                @if($category->isEmpty())
+                    <p class="text-center mt-3">Không có danh mục nào.</p>
+                @else
                 <table class="table table-hover table-bordered" id="sampleTable">
                     <thead>
                         <tr>
@@ -65,29 +70,60 @@
                             <td width="10"><input type="checkbox" name="check1" value="{{ $item->id }}"></td>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->created_at }}</td>
+                            <td>{{ $item->created_at->format('d/m/Y') }}</td>
                             <td>
-                                <a href="{{ route('category.edit', $item->id) }}" class="btn btn-primary btn-sm edit" title="Sửa">
+                                <a href="{{ route('category.edit', $item->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('category.delete', $item->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('category.delete', $item->id) }}" method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm trash" type="submit" title="Xóa"
-                                        onclick="return confirm('Bạn có chắc muốn xóa danh mục này không?');">
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn" title="Xóa" data-id="{{ $item->id }}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
+                                
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                @endif
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Chọn tất cả checkbox
+        document.getElementById("all").addEventListener("change", function() {
+            document.querySelectorAll('input[name="check1"]').forEach(el => el.checked = this.checked);
+        });
+
+        // Xác nhận xóa bằng SweetAlert2
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                let form = this.closest("form");
+                Swal.fire({
+                    title: "Bạn có chắc chắn?",
+                    text: "Danh mục này sẽ bị xóa mềm và có thể khôi phục trong thùng rác.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 @endsection
