@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Rate;
 
@@ -11,7 +11,7 @@ class RateController extends Controller
     public function Rindex()
     {
         $rate = Rate::all();
-        return view('admin.rate', compact('rate'));
+        return view('admin.rate.rate', compact('rate'));
     }
 
     public function Rcreate()
@@ -35,7 +35,7 @@ class RateController extends Controller
     public function Redit($id)
     {
         $rate = Rate::findOrFail($id);
-        return view('admin.editrate', compact('rate'));
+        return view('admin.rate.editrate', compact('rate'));
     }
 
     public function Rupdate(Request $request, $id)
