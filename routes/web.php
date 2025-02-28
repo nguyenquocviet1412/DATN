@@ -60,7 +60,7 @@ Route::prefix('admin')->group(function () {
     //route voucher
     Route::prefix('voucher')->group(function () {
         Route::get('/', [VoucherController::class, 'voucherIndex'])->name('voucher.index');
-Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
+        Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
         Route::post('/store', [VoucherController::class, 'voucherStore'])->name('voucher.store');
         Route::get('/edit/{id}', [VoucherController::class, 'voucherEdit'])->name('voucher.edit');
         Route::put('/update/{id}', [VoucherController::class, 'voucherUpdate'])->name('voucher.update');
@@ -71,12 +71,19 @@ Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('vouche
 
     //route Category
     Route::prefix('category')->group(function () {
+
         Route::get('/', [CategoryController::class, 'categoryIndex'])->name('category.index');
         Route::get('/create', [CategoryController::class, 'categoryCreate'])->name('category.create');
         Route::post('/store', [CategoryController::class, 'categoryStore'])->name('category.store');
+
+        Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete'); // Xóa mềm
+        Route::get('/trash', [CategoryController::class, 'categoryTrash'])->name('category.trash'); // Danh mục đã xóa
+        Route::get('/restore/{id}', [CategoryController::class, 'categoryRestore'])->name('category.restore'); // Khôi phục
+        Route::delete('/force-delete/{id}', [CategoryController::class, 'categoryForceDelete'])->name('category.force-delete'); // Xóa vĩnh viễn
+
         Route::get('/edit/{id}', [CategoryController::class, 'categoryEdit'])->name('category.edit');
         Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
-        Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
+
     });
 
     //route Report
@@ -108,16 +115,16 @@ Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('vouche
 
 //route comment
 Route::prefix('comment')->group(function () {
-Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
+    Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
     Route::get('/create', [CommentController::class, 'createCMT'])->name('comment.create');
     Route::post('/store', [CommentController::class, 'storeCMT'])->name('comment.store');
-    Route::get('/edit/{id}', [CommentController::class,'editCMT'])->name('comment.edit');
+    Route::get('/edit/{id}', [CommentController::class, 'editCMT'])->name('comment.edit');
     Route::put('/update/{id}', [CommentController::class, 'updateCMT'])->name('comment.update');
     Route::delete('/delete/{id}', [CommentController::class, 'destroyCMT'])->name('comment.destroy');
     Route::patch('/hide/{id}', [CommentController::class, 'hideCMT'])->name('comment.hide');
 });
 
- //route rate
+//route rate
 Route::prefix('rate')->group(function () {
     Route::get('/', [RateController::class, 'Rindex'])->name('rate.index');
     Route::get('/create', [RateController::class, 'Rcreate'])->name('rate.create');
@@ -130,8 +137,8 @@ Route::prefix('rate')->group(function () {
 Route::prefix('order')->group(function () {
     Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
 
-Route::get('/order/{id}/restore',[OrderController::class, 'restore'])->name('order.restore');
-Route::get('/order/{id}/forceDelete',[OrderController::class, 'forceDelete'])->name('order.forceDelete');
+    Route::get('/order/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/order/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
 
-Route::resource('order', OrderController::class);
+    Route::resource('order', OrderController::class);
 });

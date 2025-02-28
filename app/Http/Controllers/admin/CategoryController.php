@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function categoryIndex()
     {
-        $category = Category::all();
+        $category = Category::whereNull('deleted_at')->get();
         return view('admin.category.category', compact('category'));
     }
 
@@ -29,57 +29,90 @@ class CategoryController extends Controller
             'name' => $request->name,
         ]);
 
-        $category = Category::all(); // Lấy lại danh sách danh mục sau khi thêm mới
+        $category = Category::whereNull('deleted_at')->get(); // Lấy lại danh sách danh mục sau khi thêm mới
 
         return redirect()->route('category.index')->with('success', 'Thêm mới danh mục thành công');
     }
+
+    // 🗑 Xóa mềm danh mục (Cập nhật deleted_at)
     public function categoryDelete($id)
-{
-    $category = Category::find($id);
+    {
+        $category = Category::find($id);
 
-    if (!$category) {
-        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại!');
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại!');
+        }
+
+        $category->delete(); // Xóa mềm (Cập nhật deleted_at)
+
+        return redirect()->route('category.index')->with('success', 'Danh mục đã được đưa vào thùng rác!');
+    }
+    // Lấy danh sách danh mục đã bị xóa mềm
+    public function categoryTrash()
+    {
+        $categories = Category::onlyTrashed()->get();
+        return view('admin.category.trash', compact('categories'));
     }
 
-    // Kiểm tra nếu danh mục có sản phẩm liên kết
-    if ($category->products()->exists()) {
-        return redirect()->route('category.index')->with('error', 'Không thể xóa! Danh mục này có sản phẩm liên quan liên quan.');
+    // Khôi phục danh mục đã xóa mềm
+    public function categoryRestore($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
+
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại trong thùng rác');
+        }
+
+        $category->restore();
+
+        return redirect()->route('category.index')->with('success', 'Danh mục đã được khôi phục!');
     }
 
-    $category->delete();
+    // Xóa vĩnh viễn danh mục
+    public function categoryForceDelete($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
 
-    return redirect()->route('category.index')->with('success', 'Xóa danh mục thành công!');
-}
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        }
+
+        $category->forceDelete(); // Xóa vĩnh viễn
+
+        return redirect()->route('category.index')->with('success', 'Danh mục đã bị xóa vĩnh viễn!');
+    }
+
+
 
     public function categoryEdit($id)
-{
-    $category = Category::find($id);
+    {
+        $category = Category::find($id);
 
-    if (!$category) {
-        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        }
+
+        return view('admin.category.editcategory', compact('category'));
     }
 
-    return view('admin.category.editcategory', compact('category'));
-}
+    public function categoryUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
 
-public function categoryUpdate(Request $request, $id)
-{
-    $request->validate([
-        'name' => 'required|max:255',
-    ]);
+        $category = Category::find($id);
 
-    $category = Category::find($id);
+        if (!$category) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        }
 
-    if (!$category) {
-        return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
+        $category->update([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('category.index')->with('success', 'Cập nhật danh mục thành công');
     }
-
-    $category->update([
-        'name' => $request->name,
-    ]);
-
-    return redirect()->route('category.index')->with('success', 'Cập nhật danh mục thành công');
-}
 
 
 }
