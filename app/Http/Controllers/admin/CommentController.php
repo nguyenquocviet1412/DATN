@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 
@@ -11,7 +11,7 @@ class CommentController extends Controller
     public function indexCMT()
     {
         $comment = Comment::all();
-        return view('admin.comment', compact('comment'));
+        return view('admin.comment.comment', compact('comment'));
     }
 
     public function createCMT()
@@ -35,7 +35,7 @@ class CommentController extends Controller
     public function editCMT($id)
     {
         $comment = Comment::findOrFail($id);
-        return view('admin.editcomment', compact('comment'));
+        return view('admin.comment.editcomment', compact('comment'));
     }
 
 
