@@ -25,7 +25,7 @@ class VariantConntroller extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
-        return view('admin.addvariant',compact('product', 'colors','sizes'));
+        return view('admin.product.addvariant',compact('product', 'colors','sizes'));
     }
 
     // Thêm biến thể mới vào sản phẩm
