@@ -41,22 +41,18 @@ class UserController extends Controller
         //
         $request->validate([
             'password' => 'required|string|max:255',
-            'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|numeric|unique:users,phone',
             'address' => 'required|string',
-            'status' => 'required|boolean',
         ]);
 
         $users = User::create([
             'password' => Hash::make($request->input('password')),
-            'role' => $request->input('role'),
             'fullname' => $request->input('fullname'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
-            'status' => $request->input('status')
         ]);
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
@@ -90,8 +86,8 @@ class UserController extends Controller
             'password' => 'nullable|string|max:255',
             'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'required|numeric|unique:users,phone,' . $id,
             'address' => 'required|string',
             'status' => 'required|boolean',
         ]);
