@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,25 +30,13 @@ class PostController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'required|string|max:255',
-            'status' => 'required|boolean',
-        ]);
+        if ($request->isMethod('POST')) {
+            # code...
+            $params = $request->except('_token');
+            Post::create($params);
 
-
-        $posts = Post::create([
-            'username' => $request->input('username'),
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'image' => $request->input('image'),
-            'status' => $request->input('status'),
-
-        ]);
-
-        return redirect()->route('post.index')->with('success', 'Post created successfully');
+            return redirect()->route('post.index');
+        }
     }
     public function show(string $id)
     {
@@ -70,18 +59,16 @@ class PostController extends Controller
             'image' => 'required|string|max:255',
             'status' => 'required|boolean',
         ]);
+        
 
-        $post = Post::findOrFail($id);
-        $post->employee->username = $request->input('username');
-        $post->title = $request->input('title');
-        $post->content = $request->input('content');
-        $post->salary = $request->input('image');
-        $post->status = $request->input('status');
+        if ($request->isMethod('PUT')) {
 
-        $post->save();
-
-        return redirect()->route('post.index')->with('success', 'Post updated successfully');
+            $params = $request->except('_token', '_method');
+            $post = Post::query()->findOrFail($id);
+            $post->update($params);
+            return redirect()->route('products.index')->with('success', 'Cập nhật sản phầm thành công!');
     }
+}
 
     /**
      * Remove the specified resource from storage.

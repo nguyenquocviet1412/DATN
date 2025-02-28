@@ -41,12 +41,6 @@
 
 
                     <div class="row element-button">
-                        <div class="col-sm-6">
-                            <a class="btn btn-add btn-sm" href="" title="Thêm">
-                                <i class="fas fa-plus"></i> Tạo mới đơn hàng
-                            </a>
-                        </div>
-
                         <div class="col-md-6">
                             <form action="{{ route('order.index') }}" method="GET">
                                 <div class="input-group">

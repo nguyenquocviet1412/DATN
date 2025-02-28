@@ -133,8 +133,7 @@ Route::prefix('order')->group(function () {
     Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
     Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
-    Route::get('/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
-
+    Route::delete('/delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
 });
 //route Post
 Route::prefix('post')->group(function () {
@@ -146,3 +145,4 @@ Route::prefix('post')->group(function () {
     Route::get('/show/{id}', [PostController::class, 'show'])->name('post.show');
     Route::delete('/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
 });
+

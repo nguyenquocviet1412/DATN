@@ -48,7 +48,10 @@
                 <div class="container">
                     <h1>Post Details</h1>
                     <div>
-                        <strong>Username:</strong> {{ $post->employee->username }}
+                        <strong>Username:</strong>
+                        @if (isset($post->employee->username))
+                        {{ $post->employee->username }}
+                    @endif
                     </div>
                     <div>
                         <strong>Title:</strong> {{ $post->title }}

@@ -41,12 +41,6 @@
 
 
                     <div class="row element-button">
-                        <div class="col-sm-6">
-                            <a class="btn btn-add btn-sm" href="" title="Thêm">
-                                <i class="fas fa-plus"></i> Tạo mới đơn hàng
-                            </a>
-                        </div>
-
                         <div class="col-md-6">
                             <form action="{{ route('order.index') }}" method="GET">
                                 <div class="input-group">
@@ -59,82 +53,79 @@
                             </form>
                         </div>
                     </div>
-                        <div class="tile-body">
-                            <form action="{{ route('order.edit', $product->id) }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
+                    <form action="{{ route('order.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Thông tin khách hàng</h3>
+                                <table class="table">
+                                    <thead>
 
-                                <div class="card-body">
-                                    <table id="datatablesSimple">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên</th>
-                                                <th>Email</th>
-                                                <th>Điện thoại</th>
-                                                <th>Trạng thái</th>
-                                                <th>Ngày mua</th>
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên</th>
-                                                <th>Email</th>
-                                                <th>Điện thoại</th>
-                                                <th>Trạng thái</th>
-                                                <th>Ngày mua</th>
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                            @foreach ($order as $item)
-                                                <tr>
-                                                    <td>{{ $item->id }}</td>
-                                                    <td>{{ $item->name }}</td>
-                                                    <td>{{ $item->email }}</td>
-                                                    <td>{{ $item->phone }}</td>
-                                                    <td
-                                                        class="badge rounded-lg rounded-pill py-3 px-4 mb-0 border-0 text-capitalize fs-12">
-                                                        @if ($item->status == 0)
-                                                            <span
-                                                                class="badge rounded-lg rounded-pill alert alert-warning">Chưa
-                                                                xác nhận</span>
-                                                        @elseif ($item->status == 1)
-                                                            <span
-                                                                class="badge rounded-lg rounded-pill alert alert-success">Đã
-                                                                xác nhận</span>
-                                                        @elseif ($item->status == 2)
-                                                            <span
-                                                                class="badge rounded-lg rounded-pill alert alert-success">Đã
-                                                                thanh toán</span>
-                                                        @else
-                                                            <span
-                                                                class="badge rounded-lg rounded-pill alert alert-danger">Đã
-                                                                Hủy</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                                                    <td>
-                                                        <a href="{{ route('order.restore', $item->id) }}"
-                                                            class="btn btn-warning"><i class="fa fa-trash-restore"></i></a>
-                                                        <a href="{{ route('order.forceDelete', $item->id) }}"
-                                                            onclick="return confirm('Bạn có muốn xóa không?')"
-                                                            class="btn btn-danger"><i class="fa fa-trash"></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    <button type="submit" class="btn btn-success">Cập nhật</button>
+                                        <tr>
+                                            <th>Họ tên: </th>
+                                            <td>{{ $order->user->fullname }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Phone: </th>
+                                            <td>{{ $order->user->phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Địa chỉ: </th>
+                                            <td><input type="text" value="{{ $order->shipping_address }}" name="shipping_address"></td>
+                                        </tr>
 
-                                    <a href="{{ route('order.index') }}" class="btn btn-primary">Trở lại</a>
-                                </div>
-                            </form>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
-                </div>
-            </div>
-        </div>
-    @endsection
+                        <h3>Thông tin sản phẩm</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                    <th>Tổng</th>
+                                    <th>Hoạt Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($order->orderItems as $index => $item)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $item->variant->id_product }}</td>
+                                        <td>
+                                            @if (isset($item->variant->product))
+                                                {{ $item->variant->product->name }}
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            @foreach ($item->variant->images as $img)
+                                                <img src="{{ $img->image_url }}" alt="">
+                                            @endforeach
+                                        </td>
+                                        <td>{{ number_format($item->quantity) }}</td>
+                                        <td>{{ number_format($item->price) }}</td>
+                                        <td>{{ number_format($item->subtotal) }}</td>
+                                        <td>
+                                            <form action="{{ route('order.delete', $order->id) }}" method="POSt"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('PUT')
+                                                <button class="btn btn-danger btn-sm" type="submit"
+                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </form>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                @endsection

@@ -87,7 +87,11 @@
                                         <input type="checkbox" name="check1" value="{{ $post->id }}">
                                     </td>
                                     <td class="text-center">{{ $post->id }}</td>
-                                    <td>{{ $post->employee->username }}</td>
+                                    <td>
+                                        @if (isset($post->employee->username))
+                                            {{ $post->employee->username }}
+                                        @endif
+                                    </td>
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->content }}</td>
                                     <td class="text-center">

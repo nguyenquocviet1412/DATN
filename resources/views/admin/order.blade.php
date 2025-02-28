@@ -72,14 +72,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listOrder as $item)
+                            @foreach ($listOrder as $item )
                                 <tr>
                                     <td width="10"><input type="checkbox" name="check1" value="{{ $item->id }}">
                                     </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->id_user }}</td>
+                                    <td>{{ $item->user->fullname}}</td>
                                     <td>Ghế ăn gỗ Lucy màu trắng</td>
-                                    <td>1</td>
+                                    <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->total_price }}</td>
                                     <td>
                                         @if ($item->payment_status == "pending")

@@ -11,12 +11,12 @@ class CategoryController extends Controller
     public function categoryIndex()
     {
         $category = Category::all();
-        return view('admin.category', compact('category'));
+        return view('admin.category.category', compact('category'));
     }
 
     public function categoryCreate()
     {
-        return view('admin.addcategory');
+        return view('admin.category.addcategory');
     }
 
     public function categoryStore(Request $request)
@@ -59,7 +59,7 @@ class CategoryController extends Controller
         return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại');
     }
 
-    return view('admin.editcategory', compact('category'));
+    return view('admin.category.editcategory', compact('category'));
 }
 
 public function categoryUpdate(Request $request, $id)

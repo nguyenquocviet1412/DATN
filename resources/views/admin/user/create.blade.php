@@ -3,7 +3,7 @@
 Thêm người dùng | Quản trị Admin
 @endsection
 @section('title2')
-Thêm người dùng 
+Thêm người dùng
 @endsection
 @section('content')
 <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
@@ -51,6 +51,15 @@ Thêm người dùng
                                 <option value="Disable">Disable</option>
                             </select>
                         </div>
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                     </div>
                     <button class="btn btn-save" type="submit">Lưu lại</button>
                     <a class="btn btn-cancel" href="{{ route('user.index') }}">Hủy bỏ</a>

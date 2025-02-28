@@ -11,7 +11,7 @@ Thêm Bài Viết
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
-                <h3 class="tile-title">Tạo mới nhân viên</h3>
+                <h3 class="tile-title">Tạo mới bài viết</h3>
                 <div class="tile-body">
                     <div class="row">
                         <div class="form-group col-md-3">
