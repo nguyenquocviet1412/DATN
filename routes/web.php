@@ -71,12 +71,19 @@ Route::prefix('admin')->group(function () {
 
     //route Category
     Route::prefix('category')->group(function () {
+
         Route::get('/', [CategoryController::class, 'categoryIndex'])->name('category.index');
         Route::get('/create', [CategoryController::class, 'categoryCreate'])->name('category.create');
         Route::post('/store', [CategoryController::class, 'categoryStore'])->name('category.store');
+
+        Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete'); // Xóa mềm
+        Route::get('/trash', [CategoryController::class, 'categoryTrash'])->name('category.trash'); // Danh mục đã xóa
+        Route::get('/restore/{id}', [CategoryController::class, 'categoryRestore'])->name('category.restore'); // Khôi phục
+        Route::delete('/force-delete/{id}', [CategoryController::class, 'categoryForceDelete'])->name('category.force-delete'); // Xóa vĩnh viễn
+
         Route::get('/edit/{id}', [CategoryController::class, 'categoryEdit'])->name('category.edit');
         Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
-        Route::delete('/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
+
     });
 
     //route Report
@@ -146,3 +153,11 @@ Route::prefix('post')->group(function () {
     Route::delete('/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
 });
 
+=======
+    Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
+
+    Route::get('/order/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/order/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
+
+    Route::resource('order', OrderController::class);
+});

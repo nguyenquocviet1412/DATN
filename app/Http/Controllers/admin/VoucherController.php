@@ -11,7 +11,7 @@ class VoucherController extends Controller
     public function voucherIndex(){
         //Lấy danh sách voucher
         $vouchers = Voucher::query()->get();
-        return view('admin.voucher',compact('vouchers'));
+        return view('admin.voucher.voucher',compact('vouchers'));
     }
 
     //Xóa voucher
@@ -35,7 +35,7 @@ class VoucherController extends Controller
 
     // Hiển thị form thêm mới voucher
     public function voucherCreate(){
-        return view('admin.addvoucher');
+        return view('admin.voucher.addvoucher');
     }
     // Xử lý lưu voucher vào database
     // Xử lý lưu voucher vào database
@@ -67,7 +67,7 @@ public function voucherStore(Request $request)
         return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
 
-    return view('admin.editvoucher', compact('voucher'));
+    return view('admin.voucher.editvoucher', compact('voucher'));
     }
 
     // Xử lý lưu thay đổi voucher vào database
