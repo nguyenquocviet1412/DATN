@@ -40,6 +40,7 @@ Chỉnh sửa Nhân Viên
                             <select class="form-control" name="role" required>
                                 <option value="">-- Choose role --</option>
                                 <option value="employee" @if($employee->role == 'employee') selected @endif>Employee</option>
+                                <option value="user" @if($employee->role == 'user') selected @endif>User</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
@@ -74,10 +75,19 @@ Chỉnh sửa Nhân Viên
                             <label class="control-label">Status</label>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Choose status --</option>
-                                <option value="Activity" @if($employee->status == 'Activity') selected @endif>Activity</option>
-                                <option value="Disable" @if($employee->status == 'Disable') selected @endif>Disable</option>
+                                <option value="1" @if($employee->status == 1) selected @endif>Activity</option>
+                                <option value="0" @if($employee->status == 0) selected @endif>Disable</option>
                             </select>
                         </div>
+                        <!-- @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif -->
                     </div>
                     <button class="btn btn-save" type="submit">Lưu lại</button>
                     <a class="btn btn-cancel" href="{{ route('employee.index') }}">Hủy bỏ</a>

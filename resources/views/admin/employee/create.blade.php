@@ -60,13 +60,30 @@ Thêm Nhân Viên
                             <input class="form-control" type="number" name="salary" required>
                         </div>
                         <div class="form-group col-md-3">
+                            <label class="control-label">Role</label>
+                            <select class="form-control" name="role" required>
+                                <option value="">-- Choose status --</option>
+                                <option value="1">User</option>
+                                <option value="0">Employee</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
                             <label class="control-label">Status</label>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Choose status --</option>
-                                <option value="Activity">Activity</option>
-                                <option value="Disable">Disable</option>
+                                <option value="1">Activity</option>
+                                <option value="0">Disable</option>
                             </select>
                         </div>
+                        <!-- @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif -->
                     </div>
                     <button class="btn btn-save" type="submit">Lưu lại</button>
                     <a class="btn btn-cancel" href="{{ route('employee.index') }}">Hủy bỏ</a>
