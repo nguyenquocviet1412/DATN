@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //
-    public function orderIndex()
+    public function index()
     {
         $listOrder = Order::query()->orderByDesc('id')->get();
 
@@ -38,9 +38,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show($id)
     {
-        $auth = $order->user;
+        $order = Order::query()->findOrFail($id);
+        $auth = $order->users;
         return view('admin.detailorder', compact('auth','order'));
     }
 
@@ -48,13 +49,15 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        $orders = Order::query()->findOrFail($id);
-        if (!$orders) {
+    {   
+        
+        $product = Product::query()->findOrFail($id);
+        $order = Order::query()->findOrFail($id);
+        if (!$order) {
             return redirect()->route('order.index');
         }
 
-        return view('admin.detailorder', compact('orders'));
+        return view('admin.editorder', compact('order','product'));
     }
 
     /**
@@ -85,12 +88,6 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    
-    public function trash()
-    {
-        $listOrd = Order::onlyTrashed()->get();
-        return view('admin.trashorder',compact('listOrd'));
-    }
 
     public function restore($id)
     {

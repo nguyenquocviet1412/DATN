@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\Admin\AdminReportController;
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\CommentController;
-use App\Http\Controllers\admin\EmployeeController;
-use App\Http\Controllers\admin\VoucherController;
+use App\Models\User;
+use App\Models\Employee;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\CommentController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VariantConntroller;
-use App\Models\Employee;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,13 +55,12 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{id}', [VariantConntroller::class, 'variantUpdate'])->name('variant.update');
         Route::delete('/delete/{id}', [VariantConntroller::class, 'variantDelete'])->name('variant.delete');
         Route::delete('/variant/image/{id}', [VariantConntroller::class, 'deleteImage'])->name('variant.image.delete');
-
     });
 
     //route voucher
     Route::prefix('voucher')->group(function () {
         Route::get('/', [VoucherController::class, 'voucherIndex'])->name('voucher.index');
-Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
+        Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('voucher.create');
         Route::post('/store', [VoucherController::class, 'voucherStore'])->name('voucher.store');
         Route::get('/edit/{id}', [VoucherController::class, 'voucherEdit'])->name('voucher.edit');
         Route::put('/update/{id}', [VoucherController::class, 'voucherUpdate'])->name('voucher.update');
@@ -108,16 +108,16 @@ Route::get('/create', [VoucherController::class, 'voucherCreate'])->name('vouche
 
 //route comment
 Route::prefix('comment')->group(function () {
-Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
+    Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
     Route::get('/create', [CommentController::class, 'createCMT'])->name('comment.create');
     Route::post('/store', [CommentController::class, 'storeCMT'])->name('comment.store');
-    Route::get('/edit/{id}', [CommentController::class,'editCMT'])->name('comment.edit');
+    Route::get('/edit/{id}', [CommentController::class, 'editCMT'])->name('comment.edit');
     Route::put('/update/{id}', [CommentController::class, 'updateCMT'])->name('comment.update');
     Route::delete('/delete/{id}', [CommentController::class, 'destroyCMT'])->name('comment.destroy');
     Route::patch('/hide/{id}', [CommentController::class, 'hideCMT'])->name('comment.hide');
 });
 
- //route rate
+//route rate
 Route::prefix('rate')->group(function () {
     Route::get('/', [RateController::class, 'Rindex'])->name('rate.index');
     Route::get('/create', [RateController::class, 'Rcreate'])->name('rate.create');
@@ -128,10 +128,21 @@ Route::prefix('rate')->group(function () {
 });
 // ROute order
 Route::prefix('order')->group(function () {
-    Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
+    Route::get('/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
 
-Route::get('/order/{id}/restore',[OrderController::class, 'restore'])->name('order.restore');
-Route::get('/order/{id}/forceDelete',[OrderController::class, 'forceDelete'])->name('order.forceDelete');
-
-Route::resource('order', OrderController::class);
+});
+//route Post
+Route::prefix('post')->group(function () {
+    Route::get('/', [PostController::class, 'index'])->name('post.index');
+    Route::get('/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/store', [PostController::class, 'store'])->name('post.store');
+    Route::get('/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
+    Route::put('/update/{id}', [PostController::class, 'update'])->name('post.update');
+    Route::get('/show/{id}', [PostController::class, 'show'])->name('post.show');
+    Route::delete('/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
 });
