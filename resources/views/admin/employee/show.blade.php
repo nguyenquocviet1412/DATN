@@ -24,7 +24,6 @@
                 </script>
                 @endif
 
-
                 {{-- Thông báo lỗi --}}
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 @if(session('error'))
@@ -39,70 +38,103 @@
                     });
                 </script>
                 @endif
-                <!-- Tím kiếm  -->
 
-
+                <!-- Tìm kiếm -->
 
                 <!-- Dropdown sắp xếp -->
 
-                <div class="container">
-                    <h1>Employee Details</h1>
-                    <table>
-                        <tr>
-                            <th>Attribute</th>
-                            <th>Details</th>
-                        </tr>
-                        <tr>
-                            <td>Username</td>
-                            <td>{{ $employee->username }}</td>
-                        </tr>
-                        <tr>
-                            <td>Role</td>
-                            <td>{{ $employee->role }}</td>
-                        </tr>
-                        <tr>
-                            <td>Full Name</td>
-                            <td>{{ $employee->fullname }}</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>{{ $employee->email }}</td>
-                        </tr>
-                        <tr>
-                            <td>Phone</td>
-                            <td>{{ $employee->phone }}</td>
-                        </tr>
-                        <tr>
-                            <td>Gender</td>
-                            <td>{{ $employee->gender }}</td>
-                        </tr>
-                        <tr>
-                            <td>Date of Birth</td>
-                            <td>{{ $employee->date_of_birth }}</td>
-                        </tr>
-                        <tr>
-                            <td>Address</td>
-                            <td>{{ $employee->address }}</td>
-                        </tr>
-                        <tr>
-                            <td>Position</td>
-                            <td>{{ $employee->position }}</td>
-                        </tr>
-                        <tr>
-                            <td>Salary</td>
-                            <td>{{ $employee->salary }}</td>
-                        </tr>
-                        <tr>
-                            <td>Create date</td>
-                            <td>{{ $employee->created_at }}</td>
-                        </tr>
-                        <tr>
-                            <td>Status</td>
-                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                        </tr>
-                    </table>
-                    <a href="{{ route('employee.index') }}" class="btn btn-primary">Back to Employee List</a>
+                <div class="father">
+
+                    <div class="container">
+                        <h1>Employee Details</h1>
+                        <table>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Details</th>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td>{{ $employee->username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Role</td>
+                                <td>{{ $employee->role }}</td>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td>{{ $employee->fullname }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ $employee->email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{ $employee->phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>{{ $employee->gender }}</td>
+                            </tr>
+                            <tr>
+                                <td>Date of Birth</td>
+                                <td>{{ $employee->date_of_birth }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>{{ $employee->address }}</td>
+                            </tr>
+                            <tr>
+                                <td>Position</td>
+                                <td>{{ $employee->position }}</td>
+                            </tr>
+                            <tr>
+                                <td>Salary</td>
+                                <td>{{ $employee->salary }}</td>
+                            </tr>
+                            <tr>
+                                <td>Create date</td>
+                                <td>{{ $employee->created_at }}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="container">
+                        <h2>Employee Log</h2>
+                        <table>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                            <tr>
+                                <td>Date/Time</td>
+                                <td>{{ $employee->created_at }}</td>
+                            </tr>
+                            <tr>
+                                <td>Contact Method</td>
+                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Contact Status</td>
+                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Customer Feedback</td>
+                                <td>customer_feedback</td>
+                            </tr>
+                            <tr>
+                                <td>Notes</td>
+                                <td>notes</td>
+                            </tr>
+                        </table>
+
+                    </div>
                 </div>
+                <a href="{{ route('employee.index') }}" class="btn btn-primary">Back to Employee List</a>
 
                 <!-- Phân trang -->
                 <script>
@@ -118,18 +150,16 @@
 </div>
 
 <style>
-    .container {
-        margin: 20px auto;
-        padding: 20px;
-        max-width: 600px;
-        background-color: #f9f9f9;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .father {
+        display: flex;
+        justify-content: space-between;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        max-width: 600px;
     }
 
     th,
