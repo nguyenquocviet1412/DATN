@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //
-    public function orderIndex()
+    public function index()
     {
         $listOrder = Order::query()->orderByDesc('id')->get();
 
@@ -38,9 +38,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show($id)
     {
-        $auth = $order->user;
+        $order = Order::query()->findOrFail($id);
+        $auth = $order->users;
         return view('admin.detailorder', compact('auth','order'));
     }
 
@@ -48,13 +49,14 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        $orders = Order::query()->findOrFail($id);
-        if (!$orders) {
+    {   
+        
+        $order = Order::query()->findOrFail($id);
+        if (!$order) {
             return redirect()->route('order.index');
         }
 
-        return view('admin.detailorder', compact('orders'));
+        return view('admin.editorder', compact('order'));
     }
 
     /**
@@ -64,19 +66,12 @@ class OrderController extends Controller
     {
         $orDer = Order::query()->findOrFail($id);
 
-        $currentStatus = $orDer->status;
 
-        $newStatus = $request->input('status');
+        $newStatus = $request->input('payment_status');
 
-        $statuss = array_keys(Order::TRANG_THAI_DON_HANG);
-        if ($currentStatus === Order::HUY_DON_HANG) {
-            return redirect()->route('admin.order')->with('error', 'Đơn hàng đã hủy không thể thay đổi trạng thái');
-        }
-        if (array_search($newStatus, $statuss) < array_search($currentStatus, $statuss)) {
-            return redirect()->route('admin.order')->with('error', 'Không thể cập nhật ngược trạng thái đơn hàng');
-        }
+       
 
-        $orDer->status = $newStatus;
+        $orDer->payment_status = $newStatus;
 
         $orDer->save();
         return redirect()->route('admin.order')->with('success', 'Cập nhật trạng thái thành công');
@@ -85,30 +80,12 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    
-    public function trash()
+
+    public function delete($id)
     {
-        $listOrd = Order::onlyTrashed()->get();
-        return view('admin.trashorder',compact('listOrd'));
-    }
-
-    public function restore($id)
-    {
-        $order = Order::withTrashed()->find($id);
-
-        if ($order) {
-            $order->restore();
-            $order->details()->withTrashed()->restore();
-
-            // Khôi phục các sản phẩm liên quan nếu cần
-            foreach ($order->details as $item) {
-                $product = Product::withTrashed()->find($item->product_id);
-                if ($product) {
-                    $product->restore();
-                }
-            }
-            return redirect()->route('admin.order')->with('success', 'Khôi phục đơn hàng thành công!');
-        }
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return redirect()->route('admin.order')->with('success', 'Order deleted successfully.');
     }
    
 }
