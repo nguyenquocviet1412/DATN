@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VariantConntroller;
+use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Http\Controllers\Admin\AdminReportController;
 
 /*
@@ -37,6 +38,7 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 // ----------------------------------------------------------------
 //Route Admin
 Route::prefix('admin')->group(function () {
+   
     //route product
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
@@ -110,6 +112,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
+    //route wallet_transactions
+    Route::resource('wallet_transactions', WalletTransactionController::class);
+    Route::get('wallet_transactions', [WalletTransactionController::class, 'index'])->name('admin.wallet_transactions.index');
+    Route::get('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'show'])->name('admin.wallet_transactions.show');
+    Route::delete('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'destroy'])->name('admin.wallet_transactions.destroy');
+
+
+
 });
 
 
@@ -135,6 +145,13 @@ Route::prefix('rate')->group(function () {
 });
 // ROute order
 Route::prefix('order')->group(function () {
+    Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
+
+    Route::get('/order/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/order/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
+
+    Route::resource('order', OrderController::class);
+});
     Route::get('/', [OrderController::class, 'index'])->name('order.index');
     Route::get('/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
     Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');

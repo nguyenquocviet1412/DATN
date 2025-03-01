@@ -204,8 +204,8 @@
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
                         CMT</span></a></li>
             <li><a class="app-menu__item" href="{{ route('rate.index') }}"><i
-                    class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                    Danh Gia</span></a></li>
+                        class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
+                        Danh Gia</span></a></li>
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-run'></i><span
                         class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
@@ -217,6 +217,14 @@
             <li><a class="app-menu__item" href="{{ route('post.index') }}"><i
                         class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài Viết</span></a>
             </li>
+
+            <li>
+                <a class="app-menu__item" href="{{ route('admin.wallet_transactions.index') }}">
+                    <i class="app-menu__icon bx bx-purchase-tag-alt"></i>
+                    <span class="app-menu__label">Lịch sử giao dịch</span>
+                </a>
+            </li>
+
             <li><a class="app-menu__item" href="page-calendar.html"><i
                         class='app-menu__icon bx bx-calendar-check'></i><span class="app-menu__label">Lịch công tác
                     </span></a></li>
