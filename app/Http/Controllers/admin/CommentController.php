@@ -58,14 +58,16 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         $comment->delete();
 
-        return redirect()->route('comment.index')->with('success', 'Comment deleted successfully.');
+        return redirect()->route('comment.index')->with('success', 'Xóa thành côngcông.');
     }
 
     public function hideCMT($id)
     {
         $comment = Comment::findOrFail($id);
-        $comment->update(['note' => '[hidden]']);
-
-        return redirect()->route('comment.index')->with('success', 'Comment hidden successfully.');
+        $comment->update(['is_hidden' => !$comment->is_hidden]);
+    
+        $message = $comment->is_hidden ? 'Comment hidden successfully.' : 'Comment unhidden successfully.';
+        return redirect()->route('comment.index')->with('success', $message);
     }
+
 }

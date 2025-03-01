@@ -1,3 +1,4 @@
+// filepath: /c:/laragon/www/DATN/resources/views/admin/comment/comment.blade.php
 @extends('admin.layout')
 @section('title')
 Danh sách bình luận | Quản trị Admin
@@ -90,7 +91,7 @@ Danh sách bình luận
                         <td>{{ $comment->id }}</td>
                         <td>{{ $comment->id_user }}</td>
                         <td>{{ $comment->id_product }}</td>
-                        <td>{{ $comment->note }}</td>
+                        <td>{{ $comment->is_hidden ? 'Hidden' : $comment->note }}</td>
                         <td>{{ $comment->created_at }}</td>
                         <td>{{ $comment->updated_at }}</td>
                         <td>
@@ -103,7 +104,9 @@ Danh sách bình luận
                             <form action="{{ route('comment.hide', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-sm btn-secondary">Hide</button>
+                                <button type="submit" class="btn btn-sm btn-secondary">
+                                    {{ $comment->is_hidden ? 'Unhide' : 'Hide' }}
+                                </button>
                             </form>
                         </td>
                     </tr>
