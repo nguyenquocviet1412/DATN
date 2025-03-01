@@ -38,7 +38,7 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 // ----------------------------------------------------------------
 //Route Admin
 Route::prefix('admin')->group(function () {
-   
+
     //route product
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
@@ -145,13 +145,6 @@ Route::prefix('rate')->group(function () {
 });
 // ROute order
 Route::prefix('order')->group(function () {
-    Route::get('/', [OrderController::class, 'orderIndex'])->name('order.index');
-
-    Route::get('/order/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
-    Route::get('/order/{id}/forceDelete', [OrderController::class, 'forceDelete'])->name('order.forceDelete');
-
-    Route::resource('order', OrderController::class);
-});
     Route::get('/', [OrderController::class, 'index'])->name('order.index');
     Route::get('/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
     Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
