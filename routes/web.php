@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\VariantConntroller;
+use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 // ----------------------------------------------------------------
 //Route Admin
 Route::prefix('admin')->group(function () {
+   
     //route product
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
@@ -110,6 +112,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
+    //route wallet_transactions
+    Route::resource('wallet_transactions', WalletTransactionController::class);
+    Route::get('wallet_transactions', [WalletTransactionController::class, 'index'])->name('admin.wallet_transactions.index');
+    Route::get('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'show'])->name('admin.wallet_transactions.show');
+    Route::delete('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'destroy'])->name('admin.wallet_transactions.destroy');
+
+
+
 });
 
 
@@ -142,3 +152,7 @@ Route::prefix('order')->group(function () {
 
     Route::resource('order', OrderController::class);
 });
+
+
+
+
