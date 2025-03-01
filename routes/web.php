@@ -1,21 +1,22 @@
 <?php
 
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\Admin\AdminReportController;
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\CommentController;
-use App\Http\Controllers\admin\EmployeeController;
-use App\Http\Controllers\admin\VoucherController;
+use App\Models\User;
+use App\Models\Employee;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\CommentController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VariantConntroller;
 use App\Http\Controllers\Admin\WalletTransactionController;
-use App\Models\Employee;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +57,6 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{id}', [VariantConntroller::class, 'variantUpdate'])->name('variant.update');
         Route::delete('/delete/{id}', [VariantConntroller::class, 'variantDelete'])->name('variant.delete');
         Route::delete('/variant/image/{id}', [VariantConntroller::class, 'deleteImage'])->name('variant.image.delete');
-
     });
 
     //route voucher
@@ -152,7 +152,20 @@ Route::prefix('order')->group(function () {
 
     Route::resource('order', OrderController::class);
 });
-
-
-
-
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/{id}/restore', [OrderController::class, 'restore'])->name('order.restore');
+    Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
+    Route::delete('/delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+});
+//route Post
+Route::prefix('post')->group(function () {
+    Route::get('/', [PostController::class, 'index'])->name('post.index');
+    Route::get('/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/store', [PostController::class, 'store'])->name('post.store');
+    Route::get('/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
+    Route::put('/update/{id}', [PostController::class, 'update'])->name('post.update');
+    Route::get('/show/{id}', [PostController::class, 'show'])->name('post.show');
+    Route::delete('/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
+});

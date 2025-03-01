@@ -41,12 +41,6 @@
 
 
                     <div class="row element-button">
-                        <div class="col-sm-6">
-                            <a class="btn btn-add btn-sm" href="{{ route('order.create') }}" title="Thêm">
-                                <i class="fas fa-plus"></i> Tạo mới đơn hàng
-                            </a>
-                        </div>
-
                         <div class="col-md-6">
                             <form action="{{ route('order.index') }}" method="GET">
                                 <div class="input-group">
@@ -67,36 +61,15 @@
 
                                     <tr>
                                         <th>Họ tên: </th>
-                                        <td>{{ $orders->name }}</td>
+                                        <td>{{ $order->user->fullname }}</td>
                                     </tr>
                                     <tr>
                                         <th>Phone: </th>
-                                        <td>{{ $orders->phone }}</td>
+                                        <td>{{ $order->user->phone }}</td>
                                     </tr>
                                     <tr>
                                         <th>Địa chỉ: </th>
-                                        <td>{{ $orders->address }}</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Thông tin giao hàng</h3>
-                            <table class="table">
-                                <thead>
-
-                                    <tr>
-                                        <th>Họ tên: </th>
-                                        <td>{{ $orders->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Phone: </th>
-                                        <td>{{ $orders->phone }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Địa chỉ: </th>
-                                        <td>{{ $orders->address }}</td>
+                                        <td>{{ $order->shipping_address }}</td>
                                     </tr>
 
                                 </thead>
@@ -109,20 +82,32 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Mã sản phẩm</th>
-                                <th>Ảnh</th>
                                 <th>Tên sản phẩm</th>
+                                <th>Hình ảnh</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Tổng</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders->details as $index => $item)
+                            @foreach ($order->orderItems as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->products->id }}</td>
-                                    <td>{{ $item->products->name }}</td>
+                                    <td>{{ $item->variant->id_product }}</td>
+                                    <td>
+                                        @if (isset($item->variant->product))
+                                            {{ $item->variant->product->name }}
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        @foreach ($item->variant->images as $img)
+                                            <img src="{{ $img->image_url }}" alt="">
+                                        @endforeach
+                                    </td>
+                                    <td>{{ number_format($item->quantity) }}</td>
                                     <td>{{ number_format($item->price) }}</td>
+                                    <td>{{ number_format($item->subtotal) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

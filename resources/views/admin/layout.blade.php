@@ -212,8 +212,10 @@
             <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
             <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i
-                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
-                        thu</span></a>
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+            </li>
+            <li><a class="app-menu__item" href="{{ route('post.index') }}"><i
+                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài Viết</span></a>
             </li>
 
             <li>
