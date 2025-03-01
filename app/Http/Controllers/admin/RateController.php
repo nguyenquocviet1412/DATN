@@ -11,7 +11,8 @@ class RateController extends Controller
     public function Rindex()
     {
         $rate = Rate::all();
-        return view('admin.rate.rate', compact('rate'));
+        $average = Rate::avg('rating');
+        return view('admin.rate.rate', compact('rate', 'average'));
     }
 
     public function Rcreate()
