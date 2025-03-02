@@ -66,6 +66,37 @@
         </div>
     </div>
 </div>
+<form method="GET" action="{{ route('admin.reports.index') }}" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="month" class="col-form-label">Chọn tháng:</label>
+        </div>
+        <div class="col-auto">
+            <input type="month" id="month" name="month" class="form-control" value="{{ request('month') }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Ngày</th>
+            <th>Doanh thu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($revenues as $date => $revenue)
+            <tr>
+                <td>{{ $date }}</td>
+                <td>{{ number_format($revenue, 0, ',', '.') }} đ</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
 <!-- SẢN PHẨM BÁN CHẠY -->
 <div class="row">
     <div class="col-md-12">
@@ -80,6 +111,7 @@
                             <th>Mã sản phẩm</th>
                             <th>Tên sản phẩm</th>
                             <th>Giá tiền</th>
+                            <th>Danh mục</th>
                             <th>Số lượng đã bán</th>
                         </tr>
                     </thead>
@@ -89,7 +121,8 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->product_name }}</td>
                             <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
-                            <td>{{ $product->quantity }}</td>
+                            <td>{{ $product->category_name}}</td>
+                            <td>{{ $product->total_quantity }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -101,16 +134,10 @@
 
 <!-- BIỂU ĐỒ THỐNG KÊ -->
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="tile">
             <h3 class="tile-title">DOANH THU HÀNG THÁNG</h3>
             <canvas id="lineChart"></canvas>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="tile">
-            <h3 class="tile-title">SẢN PHẨM BÁN CHẠY</h3>
-            <canvas id="barChart"></canvas>
         </div>
     </div>
 </div>
@@ -135,20 +162,5 @@
         }
     });
 
-    var bestSellingLabels = @json($bestSellingProducts->pluck('variant.name'));
-    var bestSellingData = @json($bestSellingProducts->pluck('total_sold'));
-
-    var ctxBar = document.getElementById("barChart").getContext("2d");
-    var barChart = new Chart(ctxBar, {
-        type: "bar",
-        data: {
-            labels: bestSellingLabels,
-            datasets: [{
-                label: "Số lượng bán",
-                data: bestSellingData,
-                backgroundColor: "rgba(255, 99, 132, 0.5)"
-            }]
-        }
-    });
 </script>
 @endsection
