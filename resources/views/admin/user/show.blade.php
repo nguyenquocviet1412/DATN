@@ -74,6 +74,10 @@
                                 <td>{{ $user->address }}</td>
                             </tr>
                             <tr>
+                                <th>Wallet</th>
+                                <th>{{ $wallet->balance }} VNĐ</th>
+                            </tr>
+                            <tr>
                                 <td>Create date</td>
                                 <td>{{ $user->created_at }}</td>
                             </tr>
@@ -83,15 +87,30 @@
                             </tr>
                         </table>
                     </div>
-
-                    <div class="container">
-                        <table>
-                            <tr>
-                                <th>Attribute</th>
-                                <th>Details</th>
-                            </tr>
+                        <div class="container">
+                        <h3>History Transactions</h3>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="align-middle">
+                                    <td class="text-center">{{ $wallet_transactions->id }}</td>
+                                    <td>{{ $wallet_transactions->amount }}</td>
+                                    <td>{{ $wallet_transactions->transaction_type }}</td>
+                                    <td>{{ $wallet_transactions->status }}</td>
+                                    <td>{{ $wallet_transactions->created_at }}</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
+                    
                 </div>
                 <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
                 <!-- Phân trang -->

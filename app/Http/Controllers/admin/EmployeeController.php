@@ -144,4 +144,18 @@ class EmployeeController extends Controller
 
         return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
     }
+
+    public function deleted()
+    {
+        $deletedEmployees = Employee::onlyTrashed()->get();
+        return view('admin.employee.deleted', compact('deletedEmployees'));
+    }
+
+    public function restore($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $employee->restore();
+
+        return redirect()->route('employee.deleted')->with('success', 'Employee restored successfully.');
+    }
 }

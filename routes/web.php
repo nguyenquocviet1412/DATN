@@ -87,7 +87,6 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/edit/{id}', [CategoryController::class, 'categoryEdit'])->name('category.edit');
         Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
-
     });
 
     //route Wallet
@@ -114,6 +113,8 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('/show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
         Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->name('employee.delete');
+        Route::get('admin/employee/deleted', [EmployeeController::class, 'deleted'])->name('employee.deleted');
+        Route::patch('admin/employee/restore/{id}', [EmployeeController::class, 'restore'])->name('employee.restore');
     });
 
     //route User
@@ -125,15 +126,14 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+        Route::get('admin/user/deleted', [UserController::class, 'deleted'])->name('user.deleted');
+        Route::patch('admin/user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
     });
     //route wallet_transactions
     Route::resource('wallet_transactions', WalletTransactionController::class);
     Route::get('wallet_transactions', [WalletTransactionController::class, 'index'])->name('admin.wallet_transactions.index');
     Route::get('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'show'])->name('admin.wallet_transactions.show');
     Route::delete('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'destroy'])->name('admin.wallet_transactions.destroy');
-
-
-
 });
 
 
