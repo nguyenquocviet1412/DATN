@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\admin\Wallet_Transaction;
+use App\Http\Controllers\Admin\WalletController;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +89,18 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
 
     });
+
+    //route Wallet
+
+
+    Route::get('/wallets', [WalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallets/{id}/toggle', [WalletController::class, 'toggleStatus'])->name('wallet.toggleStatus');
+
+    //route Wallet_Transaction
+    Route::get('admin/wallet/{id}/transactions', [Wallet_Transaction::class, 'show'])->name('wallet.transactions');
+
+
+
 
     //route Report
     Route::get('/report', [AdminReportController::class, 'index'])->name('admin.reports.index');

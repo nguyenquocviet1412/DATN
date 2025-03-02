@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller; // Thêm dòng này
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product_image;
+use App\Models\Size;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -37,40 +40,68 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.product.addproduct', compact('categories'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        return view('admin.product.addproduct', compact('categories', 'colors', 'sizes'));
     }
 
+    // Thêm sản phẩm
     public function store(Request $request)
 {
     $request->validate([
         'name' => 'required|string|max:255',
-        'price' => 'required|numeric',
+        'description' => 'required|string',
         'id_category' => 'required|exists:categories,id',
-        'status' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'image_url' => 'nullable|url',
+        'price' => 'required|numeric|min:0',
+        'status' => ['required', Rule::in(['active','inactive'])], // Cập nhật trạng thái
     ]);
 
-    $product = Product::create($request->only(['name', 'description', 'id_category', 'price', 'status']));
+    // Tạo sản phẩm mới
+    $product = Product::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'id_category' => $request->id_category,
+        'price' => $request->price,
+        'status' => $request->status,
+    ]);
 
-    // Lưu ảnh từ file hoặc link
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('products', 'public');
-        Product_image::create([
-            'id_variant' => null,
-            'image_url' => 'storage/' . $imagePath,
-            'is_primary' => 1,
-        ]);
-    } elseif ($request->image_url) {
-        Product_image::create([
-            'id_variant' => null,
-            'image_url' => $request->image_url,
-            'is_primary' => 1,
-        ]);
+    // Kiểm tra xem có biến thể nào được gửi lên không
+    if ($request->has('variants')) {
+        foreach ($request->variants as $variantData) {
+            if (!isset($variantData['id_color'], $variantData['id_size'], $variantData['price'], $variantData['quantity'])) {
+                continue;
+            }
+
+            // Thêm biến thể mới
+            $variant = Variant::create([
+                'id_product' => $product->id,
+                'id_color' => $variantData['id_color'],
+                'id_size' => $variantData['id_size'],
+                'price' => $variantData['price'],
+                'quantity' => $variantData['quantity'],
+            ]);
+
+            // Kiểm tra nếu có ảnh được tải lên
+            if ($variant && isset($variantData['images'])) {
+                foreach ($variantData['images'] as $index => $image) {
+                    if ($image->isValid()) {
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('storage/product'), $imageName);
+
+                        Product_image::create([
+                            'id_variant' => $variant->id,
+                            'image_url' => 'storage/product/' . $imageName,
+                            'is_primary' => ($index === 0) ? 1 : 0,
+                        ]);
+                    }
+                }
+            }
+        }
     }
 
-    return redirect()->route('product.index')->with('success', 'Sản phẩm đã được thêm.');
+    return redirect()->route('product.index')->with('success', 'Sản phẩm và biến thể đã được thêm.');
 }
+
 
 // Hiển thị form sửa
 public function edit($id)
