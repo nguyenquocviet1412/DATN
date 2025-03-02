@@ -82,7 +82,7 @@
                     <thead>
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
-                            <th>#</th>
+                            <th>ID</th>
                             <th>User ID</th>
                             <th>Số Dư</th>
                             <th>Loại Tiền</th>
@@ -99,14 +99,18 @@
                             <td>{{ number_format($wallet->balance, 0, ',', '.') }} {{ $wallet->currency }}</td>
                             <td>{{ strtoupper($wallet->currency) }}</td>
                             <td>{{ \Carbon\Carbon::parse($wallet->created_at)->format('d/m/Y H:i') }}</td>
-                            <td>
-                                <form action="{{ route('wallet.toggleStatus', $wallet->id) }}" method="POST">
+                            <td class="d-flex align-items-center">
+                                <form action="{{ route('wallet.toggleStatus', $wallet->id) }}" method="POST" class="me-3">
                                     @csrf
                                     <input type="checkbox" class="toggle-status"
                                            {{ $wallet->status === 'active' ? 'checked' : '' }}
                                            onchange="this.form.submit()">
                                 </form>
+                                <a href="{{ route('wallet.transactions', $wallet->id) }}" class="text-primary" style="font-size: 1.8rem; margin-left: 10px;">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
                             </td>
+                            
                             
                             
                         </tr>
