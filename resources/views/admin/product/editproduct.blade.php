@@ -115,7 +115,12 @@
                         </select>
                     </div>
 
-                    <h4 class="mt-4">Biến thể sản phẩm</h4>
+
+
+                    <button type="submit" class="btn btn-success">Cập nhật</button>
+
+                </form>
+                <h4 class="mt-4">Biến thể sản phẩm</h4>
                     <div class="col-sm-6">
                         <a class="btn btn-add btn-sm" href="{{ route('variant.create',$product->id) }}">
                             <i class="fas fa-plus"></i> Tạo mới biến thể
@@ -186,10 +191,7 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <button type="submit" class="btn btn-success">Cập nhật</button>
                     <a href="{{ route('product.index') }}" class="btn btn-secondary">Quay lại</a>
-                </form>
             </div>
         </div>
     </div>
