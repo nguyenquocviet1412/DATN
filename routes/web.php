@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\Wallet_Transaction;
 use App\Http\Controllers\Admin\WalletController;
 use App\Models\User;
 use App\Models\Employee;
@@ -89,10 +90,15 @@ Route::prefix('admin')->group(function () {
 
     });
 
+    //route Wallet
 
 
     Route::get('/wallets', [WalletController::class, 'index'])->name('wallet.index');
     Route::post('/wallets/{id}/toggle', [WalletController::class, 'toggleStatus'])->name('wallet.toggleStatus');
+
+    //route Wallet_Transaction
+    Route::get('admin/wallet/{id}/transactions', [Wallet_Transaction::class, 'show'])->name('wallet.transactions');
+
 
 
 
