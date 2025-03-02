@@ -70,7 +70,6 @@ class VariantConntroller extends Controller
             Product_image::create([
                 'id_variant' => $variant->id,
                 'image_url' => $imagePath,
-                'is_primary' => ($index === 0) ? 1 : 0,
             ]);
         }
     }
@@ -90,7 +89,7 @@ class VariantConntroller extends Controller
     }
 
     // Cập nhật biến thể cho sản phẩm
-    public function variantUpdate(Request $request, $variantId)
+public function variantUpdate(Request $request, $variantId)
 {
     $variant = Variant::findOrFail($variantId);
 
@@ -100,14 +99,14 @@ class VariantConntroller extends Controller
         'price' => 'required|numeric',
         'quantity' => 'required|integer|min:1',
         'status' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Hỗ trợ nhiều ảnh
     ]);
 
-    // Kiểm tra xem có biến thể khác đã tồn tại với id_color & id_size hay không
+    // Kiểm tra xem biến thể khác đã tồn tại chưa
     $existingVariant = Variant::where('id_product', $variant->id_product)
         ->where('id_color', $request->id_color)
         ->where('id_size', $request->id_size)
-        ->where('id', '!=', $variantId) // Loại trừ chính biến thể đang sửa
+        ->where('id', '!=', $variantId)
         ->first();
 
     if ($existingVariant) {
@@ -123,22 +122,9 @@ class VariantConntroller extends Controller
         'status' => $request->status,
     ]);
 
-    // Xử lý ảnh biến thể
-        if ($request->hasFile('image')) {
-            // Lấy ảnh cũ
-            $oldImage = $variant->images->first();
-
-            // Kiểm tra nếu ảnh cũ tồn tại và không phải là URL hoặc khoảng trắng
-            if ($oldImage && !filter_var($oldImage->image_url, FILTER_VALIDATE_URL) && trim($oldImage->image_url) !== '') {
-                $oldImagePath = public_path($oldImage->image_url);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-                $oldImage->delete();
-            }
-
-            // Lưu ảnh mới
-            $image = $request->file('image');
+    // Xử lý nhiều ảnh
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = 'storage/product/' . $imageName;
             $image->move(public_path('storage/product'), $imageName);
@@ -147,12 +133,13 @@ class VariantConntroller extends Controller
             Product_image::create([
                 'id_variant' => $variant->id,
                 'image_url' => $imagePath,
-                'is_primary' => 1,
             ]);
         }
+    }
 
     return redirect()->back()->with('success', 'Biến thể đã được cập nhật.');
 }
+
 
     // Xóa ảnh biến thể cho sản phẩm
 public function deleteImage($imageId)
