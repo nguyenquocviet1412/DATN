@@ -146,20 +146,27 @@
                                     </td>
                                     <td>
                                         @if ($variant->images->isNotEmpty())
-                                            @foreach ($variant->images as $image)
-                                                <div style="display: inline-block; position: relative;">
-                                                    <img src="{{ asset($image->image_url) }}" width="80px" height="80px" class="m-1">
-                                                    <form action="{{ route('variant.image.delete', $image->id) }}" method="POST" style="position: absolute; top: 5px; right: 5px;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa ảnh này?')">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            @endforeach
+                                            <div class="d-flex flex-wrap">
+                                                @foreach ($variant->images as $image)
+                                                    <div class="position-relative m-1" style="display: inline-block;">
+                                                        <img src="{{ asset($image->image_url) }}" width="80px" height="80px" class="rounded border shadow-sm">
+
+                                                        <!-- Nút xóa ảnh -->
+                                                        <form action="{{ route('variant.image.delete', $image->id) }}" method="POST"
+                                                              class="position-absolute" style="top: 3px; right: 3px;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger p-0"
+                                                                    style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;"
+                                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa ảnh này?')">
+                                                                <i class="fas fa-trash-alt" style="font-size: 12px;"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         @else
-                                            <p>Không có ảnh</p>
+                                            <p class="text-muted">Không có ảnh</p>
                                         @endif
                                     </td>
                                     <td>
