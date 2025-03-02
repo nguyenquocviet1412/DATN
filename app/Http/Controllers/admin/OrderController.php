@@ -9,48 +9,28 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    //
+    //hiển thị danh sách đơn hàng
     public function index()
-    {
-        $listOrder = Order::query()->orderByDesc('id')->get();
+{
+    $listOrder = Order::with('orderItems.variant.product')->orderByDesc('id')->get();
 
-        $status = Order::TRANG_THAI_DON_HANG;
-        
-        return view('admin.order', compact('listOrder','status'));
-    }
+    return view('admin.order', compact('listOrder'));
+}
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
+    //Trang hiện thị đơn hàng chi tiết
     public function show($id)
-    {
-        $order = Order::query()->findOrFail($id);
-        $auth = $order->users;
-        return view('admin.detailorder', compact('auth','order'));
-    }
+{
+    $order = Order::with(['user', 'voucher', 'orderItems.variant.product', 'orderItems.variant.color', 'orderItems.variant.size'])->findOrFail($id);
+
+    return view('admin.detailorder', compact('order'));
+}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {   
-        
+    {
+
         $order = Order::query()->findOrFail($id);
         if (!$order) {
             return redirect()->route('order.index');
@@ -69,7 +49,7 @@ class OrderController extends Controller
 
         $newStatus = $request->input('payment_status');
 
-       
+
 
         $orDer->payment_status = $newStatus;
 
@@ -79,7 +59,7 @@ class OrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     */
+    */
 
     public function delete($id)
     {
@@ -87,6 +67,6 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('admin.order')->with('success', 'Order deleted successfully.');
     }
-   
+
 }
 

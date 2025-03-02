@@ -128,7 +128,7 @@
                                 <form action="{{ route('user.delete', $user->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                    <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản khách hàng này?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
