@@ -46,6 +46,9 @@
                         <a class="btn btn-add btn-sm" href="{{ route('employee.create') }}" title="Thêm">
                             <i class="fas fa-plus"></i> Tạo mới Nhân viên
                         </a>
+                        <a class="btn btn-danger btn-sm" href="{{ route('employee.deleted') }}" title="Lịch sử xóa">
+                            <i class="fas fa-history"></i> Lịch sử nhân viên đã bị xóa
+                        </a>
                     </div>
 
                     <div class="col-md-6">

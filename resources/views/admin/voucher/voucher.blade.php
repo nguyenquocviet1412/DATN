@@ -81,6 +81,7 @@ Danh sách Voucher
                         <th>Ngày Kết Thúc</th>
                         <th>Giới Hạn Sử Dụng</th>
                         <th>Đã Sử Dụng</th>
+                        <th>Số Lượng</th>
                         <th>Trạng Thái</th>
                         <th>Hành Động</th>
                     </tr>
@@ -104,18 +105,13 @@ Danh sách Voucher
                         <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</td>
                         <td>{{ $voucher->usage_limit }}</td>
                         <td>{{ $voucher->used_count }}</td>
+                        <td>{{ $voucher->quantity }}</td>
                         <td>
                             <form action="{{ route('voucher.toggleStatus', $voucher->id) }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="status" value="{{ $voucher->status == 'active' ? 'disabled' : 'active' }}">
-                                <input type="checkbox" class="toggle-status"
-                                       data-toggle="toggle"
-                                       data-on="Hoạt động"
-                                       data-off="Vô hiệu hóa"
-                                       data-onstyle="success"
-                                       data-offstyle="danger"
-                                       {{ $voucher->status == 'active' ? 'checked' : '' }}
-                                       onchange="this.form.submit()">
+                                <button type="submit" class="btn btn-sm {{ $voucher->status == 'active' ? 'btn-success' : 'btn-danger' }}">
+                                    {{ $voucher->status == 'active' ? 'Hoạt động' : 'Vô hiệu hóa' }}
+                                </button>
                             </form>
                         </td>
                         <td>
@@ -132,7 +128,6 @@ Danh sách Voucher
                             </form>
                         </td>
                     </tr>
-
                     @endforeach
                 </tbody>
               </table>
@@ -144,28 +139,6 @@ Danh sách Voucher
 
 
 </div>
-
-<script>
-    <script>
-        $(document).ready(function () {
-    console.log("Khởi tạo DataTable...");
-
-    var table = $('#sampleTable').DataTable();
-
-    // Khởi tạo toggle sau khi DataTable đã load xong
-    $('.toggle-status').bootstrapToggle();
-
-    table.on('draw', function () {
-        console.log("Cập nhật lại Bootstrap Toggle...");
-        $('.toggle-status').bootstrapToggle('destroy');
-        $('.toggle-status').bootstrapToggle();
-    });
-});
-
-</script>
-
-
-
 
 <!--
   MODAL

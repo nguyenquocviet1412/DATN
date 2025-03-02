@@ -25,7 +25,7 @@ class VariantConntroller extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
-        return view('admin.addvariant',compact('product', 'colors','sizes'));
+        return view('admin.product.addvariant',compact('product', 'colors','sizes'));
     }
 
     // Thêm biến thể mới vào sản phẩm
@@ -36,35 +36,18 @@ class VariantConntroller extends Controller
         'id_size' => 'required|exists:sizes,id',
         'price' => 'required|numeric',
         'quantity' => 'required|integer|min:1',
-        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images' => 'required',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    $product = Product::find($productId);
-    if (!$product) {
-        return redirect()->route('product.edit', $productId)->with('error', 'Sản phẩm không tồn tại.');
+    $product = Product::findOrFail($productId);
+
+    // Kiểm tra biến thể đã tồn tại chưa
+    if ($product->variants()->where('id_color', $request->id_color)->where('id_size', $request->id_size)->exists()) {
+        return redirect()->route('product.edit', $productId)->with('error', 'Biến thể đã tồn tại.');
     }
 
-    // Kiểm tra xem biến thể với cùng size và color đã tồn tại chưa
-    $existingVariant = $product->variants()
-        ->where('id_color', $request->id_color)
-        ->where('id_size', $request->id_size)
-        ->first();
-
-    if ($existingVariant) {
-        return redirect()->route('product.edit', $productId)
-            ->with('error', 'Biến thể với màu sắc và kích thước này đã tồn tại.');
-    }
-
-    // Kiểm tra xem có ảnh không, nếu không có thì không cho lưu biến thể
-    if (!$request->hasFile('images')) {
-        return redirect()->route('product.edit', $productId)->with('error', 'Bạn cần tải lên ít nhất một ảnh.');
-    }
-
-    // Kiểm tra xem sản phẩm đã có biến thể nào chưa
-    $isFirstVariant = $product->variants()->count() == 0;
-    $hasPrimaryImage = false;
-
-    // Tạo biến thể mới
+    // Tạo biến thể
     $variant = Variant::create([
         'id_product' => $product->id,
         'id_color' => $request->id_color,
@@ -73,23 +56,28 @@ class VariantConntroller extends Controller
         'quantity' => $request->quantity,
     ]);
 
-    // Lưu ảnh từ file upload
-    foreach ($request->file('images') as $index => $image) {
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $imagePath = 'storage/product/' . $imageName;
-        $image->move(public_path('storage/product'), $imageName);
+    if (!$variant) {
+        return redirect()->route('product.edit', $productId)->with('error', 'Lỗi khi thêm biến thể.');
+    }
 
-        Product_image::create([
-            'id_variant' => $variant->id,
-            'image_url' => $imagePath,
-            'is_primary' => ($isFirstVariant && !$hasPrimaryImage) ? 1 : 0,
-        ]);
+    // Lưu ảnh biến thể
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $index => $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'storage/product/' . $imageName;
+            $image->move(public_path('storage/product'), $imageName);
 
-        $hasPrimaryImage = true; // Đánh dấu đã có ảnh chính
+            Product_image::create([
+                'id_variant' => $variant->id,
+                'image_url' => $imagePath,
+            ]);
+        }
     }
 
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể đã được thêm.');
 }
+
+
 
 
     //Hiển thị trang sửa biến thể cho sản phẩm
@@ -97,11 +85,11 @@ class VariantConntroller extends Controller
         $variant = Variant::with('product', 'color','size', 'images')->findOrFail($variantId);
         $colors= Color::get();
         $sizes = Size::get();
-        return view('admin.editvariant',compact('variant', 'colors','sizes'));
+        return view('admin.product.editvariant',compact('variant', 'colors','sizes'));
     }
 
     // Cập nhật biến thể cho sản phẩm
-    public function variantUpdate(Request $request, $variantId)
+public function variantUpdate(Request $request, $variantId)
 {
     $variant = Variant::findOrFail($variantId);
 
@@ -111,14 +99,14 @@ class VariantConntroller extends Controller
         'price' => 'required|numeric',
         'quantity' => 'required|integer|min:1',
         'status' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Hỗ trợ nhiều ảnh
     ]);
 
-    // Kiểm tra xem có biến thể khác đã tồn tại với id_color & id_size hay không
+    // Kiểm tra xem biến thể khác đã tồn tại chưa
     $existingVariant = Variant::where('id_product', $variant->id_product)
         ->where('id_color', $request->id_color)
         ->where('id_size', $request->id_size)
-        ->where('id', '!=', $variantId) // Loại trừ chính biến thể đang sửa
+        ->where('id', '!=', $variantId)
         ->first();
 
     if ($existingVariant) {
@@ -134,61 +122,46 @@ class VariantConntroller extends Controller
         'status' => $request->status,
     ]);
 
-    // Xử lý ảnh biến thể
-    if ($request->hasFile('image')) {
-        // Lấy ảnh cũ
-        $oldImage = $variant->images->first();
+    // Xử lý nhiều ảnh
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'storage/product/' . $imageName;
+            $image->move(public_path('storage/product'), $imageName);
 
-        // Nếu có ảnh cũ, xóa file ảnh khỏi thư mục và xóa bản ghi trong DB
-        if ($oldImage) {
-            $oldImagePath = public_path($oldImage->image_url);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
-            }
-            $oldImage->delete();
+            // Thêm ảnh mới vào DB
+            Product_image::create([
+                'id_variant' => $variant->id,
+                'image_url' => $imagePath,
+            ]);
         }
-
-        // Lưu ảnh mới
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $imagePath = 'storage/product/' . $imageName;
-        $image->move(public_path('storage/product'), $imageName);
-
-        // Thêm ảnh mới vào DB
-        Product_image::create([
-            'id_variant' => $variant->id,
-            'image_url' => $imagePath,
-            'is_primary' => 1,
-        ]);
     }
 
     return redirect()->back()->with('success', 'Biến thể đã được cập nhật.');
 }
 
-    // Xóa ảnh biến thể cho sản phẩm
-    public function deleteImage($imageId)
-    {
-        $image = Product_image::findOrFail($imageId);
-        $variant = $image->variant;
 
-        // Kiểm tra xem ảnh có tồn tại không
+    // Xóa ảnh biến thể cho sản phẩm
+public function deleteImage($imageId)
+{
+    $image = Product_image::findOrFail($imageId);
+
+    // Kiểm tra nếu đường dẫn ảnh không phải URL và không rỗng thì xóa file
+    if (!filter_var($image->image_url, FILTER_VALIDATE_URL) && trim($image->image_url) !== '') {
         $imagePath = public_path($image->image_url);
         if (file_exists($imagePath)) {
-            unlink($imagePath); // Xóa file ảnh khỏi thư mục
+            unlink($imagePath);
         }
-
-        // Xóa ảnh khỏi cơ sở dữ liệu
-        $wasPrimary = $image->is_primary; // Kiểm tra xem ảnh có phải ảnh chính không
-        $image->delete();
-
-        // Nếu ảnh bị xóa là ảnh chính, chọn ảnh mới làm ảnh chính (nếu còn ảnh)
-        if ($wasPrimary && $variant->images()->count() > 0) {
-            $newPrimaryImage = $variant->images()->first();
-            $newPrimaryImage->update(['is_primary' => 1]);
-        }
-
-        return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
     }
+
+    // Xóa ảnh khỏi cơ sở dữ liệu
+    $image->delete();
+
+    return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
+}
+
+
+
     // Xóa biến thể cho sản phẩm
     public function variantDelete($variantId)
     {

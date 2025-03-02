@@ -19,6 +19,7 @@ class Voucher extends Model
         'start_date',
         'end_date',
         'usage_limit',
+        'quantity',
         'used_count',
         'status'
     ];

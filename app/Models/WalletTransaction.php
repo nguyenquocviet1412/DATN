@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Wallet_transaction extends Model
+class WalletTransaction extends Model
 {
     use HasFactory;
+
+    protected $table = 'wallet_transactions'; // Tên bảng
 
     protected $fillable = [
         'id_wallet',
@@ -16,12 +18,19 @@ class Wallet_transaction extends Model
         'balance_before',
         'balance_after',
         'description',
-        'status',
+        'status'
     ];
 
-    // Quan hệ với bảng Wallet
+    /**
+     * Định nghĩa quan hệ với bảng Wallet
+     */
     public function wallet()
     {
         return $this->belongsTo(Wallet::class, 'id_wallet');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -45,36 +45,74 @@
 
 
                 <!-- Dropdown sắp xếp -->
-
-                <div class="container">
-                    <h1>User Details</h1>
-                    <div>
-                        <strong>Password:</strong> {{ $user->password }}
+                <h1>User Details</h1>
+                <div class="father">
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Details</th>
+                            </tr>
+                            <tr>
+                                <td>Role</td>
+                                <td>{{ $user->role }}</td>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td>{{ $user->fullname }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ $user->email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{ $user->phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>{{ $user->address }}</td>
+                            </tr>
+                            <tr>
+                                <th>Wallet</th>
+                                <th>{{ $wallet->balance }} VNĐ</th>
+                            </tr>
+                            <tr>
+                                <td>Create date</td>
+                                <td>{{ $user->created_at }}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
+                            </tr>
+                        </table>
                     </div>
-                    <div>
-                        <strong>Role:</strong> {{ $user->role }}
+                        <div class="container">
+                        <h3>History Transactions</h3>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="align-middle">
+                                    <td class="text-center">{{ $wallet_transactions->id }}</td>
+                                    <td>{{ $wallet_transactions->amount }}</td>
+                                    <td>{{ $wallet_transactions->transaction_type }}</td>
+                                    <td>{{ $wallet_transactions->status }}</td>
+                                    <td>{{ $wallet_transactions->created_at }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div>
-                        <strong>Full Name:</strong> {{ $user->fullname }}
-                    </div>
-                    <div>
-                        <strong>Email:</strong> {{ $user->email }}
-                    </div>
-                    <div>
-                        <strong>Phone:</strong> {{ $user->phone }}
-                    </div>
-                    <div>
-                        <strong>Address:</strong> {{ $user->address }}
-                    </div>
-                    <div>
-                        <strong>Create date:</strong> {{ $user->created_at }}
-                    </div>
-                    <div>
-                        <strong>Status:</strong> {{ $user->status ? 'Active' : 'Inactive' }}
-                    </div>
-                    <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
+                    
                 </div>
-
+                <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
                 <!-- Phân trang -->
                 <script>
                     document.getElementById('select-all').addEventListener('change', function() {
@@ -87,4 +125,47 @@
         </div>
     </div>
 </div>
+
+<style>
+    .father {
+        display: flex;
+        justify-content: between;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        background-color: #007bff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 @endsection

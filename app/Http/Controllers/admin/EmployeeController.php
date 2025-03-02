@@ -41,12 +41,12 @@ class EmployeeController extends Controller
     {
         //
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:employees,username',
             'password' => 'required|string|max:255',
             'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:employees,email',
+            'phone' => 'required|numeric|unique:employees,phone',
             'gender' => 'required|string',
             'date_of_birth' => 'required|date',
             'address' => 'required|string',
@@ -54,7 +54,6 @@ class EmployeeController extends Controller
             'salary' => 'required|numeric',
             'status' => 'required|boolean',
         ]);
-
 
         $employees = Employee::create([
             'username' => $request->input('username'),
@@ -69,7 +68,6 @@ class EmployeeController extends Controller
             'position' => $request->input('position'),
             'salary' => $request->input('salary'),
             'status' => $request->input('status'),
-
         ]);
 
         return redirect()->route('employee.index')->with('success', 'Employee created successfully');
@@ -100,14 +98,13 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:employees,username,' . $id,
             'password' => 'nullable|string|max:255',
             'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:employees,email,' . $id,
+            'phone' => 'required|numeric|unique:employees,phone,' . $id,
             'gender' => 'required|string',
             'date_of_birth' => 'required|date',
             'address' => 'required|string',
@@ -146,5 +143,19 @@ class EmployeeController extends Controller
         $employee->delete();
 
         return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
+    }
+
+    public function deleted()
+    {
+        $deletedEmployees = Employee::onlyTrashed()->get();
+        return view('admin.employee.deleted', compact('deletedEmployees'));
+    }
+
+    public function restore($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $employee->restore();
+
+        return redirect()->route('employee.deleted')->with('success', 'Employee restored successfully.');
     }
 }

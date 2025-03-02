@@ -46,6 +46,9 @@
                         <a class="btn btn-add btn-sm" href="{{ route('user.create') }}" title="Thêm">
                             <i class="fas fa-plus"></i> Tạo mới người dùng
                         </a>
+                        <a class="btn  btn-danger btn-sm" href="{{ route('user.deleted') }}" title="Thêm">
+                            <i class="fas fa-history"></i> Lịch sử người dùng đã bị xóa
+                        </a>
                     </div>
 
                     <div class="col-md-6">

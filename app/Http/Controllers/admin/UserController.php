@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +22,9 @@ class UserController extends Controller
         $search = $request->input('search');
 
         $users = User::all();
-        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search'));
+        $wallets = Wallet::all();
+        $wallet_transactions = WalletTransaction::all();
+        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search', 'wallets', 'wallet_transactions'));
     }
 
     /**
@@ -41,22 +45,18 @@ class UserController extends Controller
         //
         $request->validate([
             'password' => 'required|string|max:255',
-            'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|numeric|unique:users,phone',
             'address' => 'required|string',
-            'status' => 'required|boolean',
         ]);
 
         $users = User::create([
             'password' => Hash::make($request->input('password')),
-            'role' => $request->input('role'),
             'fullname' => $request->input('fullname'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
-            'status' => $request->input('status')
         ]);
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
@@ -68,7 +68,9 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        return view('admin.user.show', compact('user'));
+        $wallet = Wallet::findOrFail($id);
+        $wallet_transactions = WalletTransaction::findOrFail($id);;
+        return view('admin.user.show', compact('wallet', 'user', 'wallet_transactions'));
     }
 
     /**
@@ -90,8 +92,8 @@ class UserController extends Controller
             'password' => 'nullable|string|max:255',
             'role' => 'required|string',
             'fullname' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'required|numeric|unique:users,phone,' . $id,
             'address' => 'required|string',
             'status' => 'required|boolean',
         ]);
@@ -121,5 +123,19 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function deleted()
+    {
+        $deletedUsers = User::onlyTrashed()->get();
+        return view('admin.user.deleted', compact('deletedUsers'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
+
+        return redirect()->route('user.deleted')->with('success', 'Employee restored successfully.');
     }
 }

@@ -30,7 +30,7 @@
             <h4>Thêm Biến Thể Sản Phẩm</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('variant.store', $product->id) }}" method="POST">
+            <form action="{{ route('variant.store', $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="image" class="form-label">Ảnh biến thể</label><br>
-                        <input type="file" class="form-control mt-2" name="image">
+                        <input type="file" class="form-control mt-2" name="images[]" multiple>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between">
