@@ -90,6 +90,10 @@
                                 <th>Attribute</th>
                                 <th>Details</th>
                             </tr>
+                            <tr>
+                                <th>Wallet</th>
+                                <th>Details</th>
+                            </tr>
                         </table>
                     </div>
                 </div>

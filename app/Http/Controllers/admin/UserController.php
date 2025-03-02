@@ -118,4 +118,18 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
+
+    public function deleted()
+    {
+        $deletedUsers = User::onlyTrashed()->get();
+        return view('admin.user.deleted', compact('deletedUsers'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
+
+        return redirect()->route('user.deleted')->with('success', 'Employee restored successfully.');
+    }
 }

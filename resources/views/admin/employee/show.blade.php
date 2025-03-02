@@ -89,10 +89,6 @@
                                 <td>{{ $employee->position }}</td>
                             </tr>
                             <tr>
-                                <td>Salary</td>
-                                <td>{{ $employee->salary }}</td>
-                            </tr>
-                            <tr>
                                 <td>Create date</td>
                                 <td>{{ $employee->created_at }}</td>
                             </tr>
