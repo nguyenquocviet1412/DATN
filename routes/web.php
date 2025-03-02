@@ -20,7 +20,6 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VariantConntroller;
 use App\Http\Controllers\Admin\WalletTransactionController;
-use App\Http\Controllers\Admin\AdminReportController;
 
 /*
 |--------------------------------------------------------------------------

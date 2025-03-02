@@ -1,6 +1,6 @@
 @extends('admin.layout')
-@section('title', 'Danh sách đơn hàng | Quản trị Admin')
-@section('title2', 'Danh sách đơn hàng')
+@section('title', 'Chi tiết đơn hàng | Quản trị Admin')
+@section('title2', 'Chi tiết đơn hàng')
 
 @section('content')
     <div class="row">
@@ -8,7 +8,7 @@
             <div class="tile">
                 <div class="tile-body">
 
-                    {{-- thông báo thêm thành công --}}
+                    {{-- Hiển thị thông báo --}}
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     @if (session('success'))
                         <script>
@@ -17,65 +17,71 @@
                                 text: '{{ session('success') }}',
                                 icon: 'success',
                                 showConfirmButton: false,
-                                timer: 4000,
-                                backdrop: true // Làm tối nền
+                                timer: 4000
                             });
                         </script>
                     @endif
 
-
-                    {{-- Thông báo lỗi --}}
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     @if (session('error'))
                         <script>
                             Swal.fire({
                                 title: 'Lỗi!',
                                 text: '{{ session('error') }}',
                                 icon: 'error',
-                                showConfirmButton: true, // Hiển thị nút đóng
-                                confirmButtonText: 'Đóng', // Nội dung nút đóng
-                                backdrop: true // Làm tối nền
+                                showConfirmButton: true,
+                                confirmButtonText: 'Đóng'
                             });
                         </script>
                     @endif
 
-
-                    <div class="row element-button">
-                        <div class="col-md-6">
-                            <form action="{{ route('order.index') }}" method="GET">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control"
-                                        placeholder="Tìm kiếm đơn hàng..." value="{{ request('search') }}">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Tìm kiếm
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <h3>Thông tin khách hàng</h3>
                             <table class="table">
-                                <thead>
+                                <tr>
+                                    <th>Họ tên:</th>
+                                    <td>{{ $order->user->fullname }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone:</th>
+                                    <td>{{ $order->user->phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Địa chỉ:</th>
+                                    <td>{{ $order->shipping_address }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ngày đặt:</th>
+                                    <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mã khuyến mại:</th>
+                                    <td>
+                                        @if ($order->voucher)
+                                            {{ $order->voucher->code }}
+                                            (Giảm:
+                                            @if ($order->voucher->discount_type === 'percentage')
+                                                {{ $order->voucher->discount_value }}%
+                                                - {{ number_format($order->discount_amount) }} VNĐ
+                                            @else
+                                                {{ number_format($order->discount_amount) }} VNĐ
+                                            @endif
+                                            )
+                                        @else
+                                            Không có
+                                        @endif
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <th>Họ tên: </th>
-                                        <td>{{ $order->user->fullname }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Phone: </th>
-                                        <td>{{ $order->user->phone }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Địa chỉ: </th>
-                                        <td>{{ $order->shipping_address }}</td>
-                                    </tr>
-
-                                </thead>
+                                <tr>
+                                    <th>Tổng tiền:</th>
+                                    <td>{{ number_format($order->total_price) }} VNĐ</td>
+                                </tr>
                             </table>
                         </div>
                     </div>
+
+
                     <h3>Thông tin sản phẩm</h3>
                     <table class="table">
                         <thead>
@@ -84,6 +90,8 @@
                                 <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Hình ảnh</th>
+                                <th>Size</th>
+                                <th>Màu sắc</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Tổng</th>
@@ -94,22 +102,27 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->variant->id_product }}</td>
+                                    <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
                                     <td>
-                                        @if (isset($item->variant->product))
-                                            {{ $item->variant->product->name }}
+                                        @if ($item->variant->images->isNotEmpty())
+                                            <img src="{{ asset($item->variant->images->first()->image_url) }}" alt="Ảnh sản phẩm" width="50">
+                                        @else
+                                            <img src="{{ asset('default-image.jpg') }}" alt="Ảnh mặc định" width="50">
                                         @endif
                                     </td>
-
-                                    <td>
-                                        @foreach ($item->variant->images as $img)
-                                            <img src="{{ $img->image_url }}" alt="">
-                                        @endforeach
-                                    </td>
+                                    <td>{{ $item->variant->size->name ?? 'Không có' }}</td>
+                                    <td>{{ $item->variant->color->name ?? 'Không có' }}</td>
                                     <td>{{ number_format($item->quantity) }}</td>
-                                    <td>{{ number_format($item->price) }}</td>
-                                    <td>{{ number_format($item->subtotal) }}</td>
+                                    <td>{{ number_format($item->price) }} VNĐ</td>
+                                    <td>{{ number_format($item->subtotal) }} VNĐ</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                @endsection
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
