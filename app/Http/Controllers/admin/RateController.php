@@ -10,9 +10,16 @@ class RateController extends Controller
 {
     public function Rindex()
     {
-        $rate = Rate::all();
-        $average = Rate::avg('rating');
-        return view('admin.rate.rate', compact('rate', 'average'));
+        $rates = Rate::selectRaw('id_product, MAX(id) as id, MAX(id_order_item) as id_order_item, AVG(rating) as average_rating')
+                    ->groupBy('id_product')
+                    ->get();
+        return view('admin.rate.rate', compact('rates'));
+    }
+
+    public function show($id_product)
+    {
+        $rates = Rate::where('id_product', $id_product)->get();
+        return view('admin.rate.show', compact('rates', 'id_product'));
     }
 
     public function Rcreate()
@@ -53,7 +60,7 @@ class RateController extends Controller
         $rate = Rate::findOrFail($id);
         $rate->update($request->all());
 
-        return redirect()->route('rate.index')->with('success', 'Rate updated successfully.');
+        return redirect()->route('rate.show', $rate->id_product)->with('success', 'Rate updated successfully.');
     }
 
     public function Rdestroy($id)
@@ -63,5 +70,4 @@ class RateController extends Controller
 
         return redirect()->route('rate.index')->with('success', 'Rate deleted successfully.');
     }
-
 }

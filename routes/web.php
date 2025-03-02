@@ -151,6 +151,7 @@ Route::prefix('comment')->group(function () {
 //route rate
 Route::prefix('rate')->group(function () {
     Route::get('/', [RateController::class, 'Rindex'])->name('rate.index');
+    Route::get('/{id_product}', [RateController::class, 'show'])->name('rate.show');
     Route::get('/create', [RateController::class, 'Rcreate'])->name('rate.create');
     Route::post('/store', [RateController::class, 'Rstore'])->name('rate.store');
     Route::get('/edit/{id}', [RateController::class, 'Redit'])->name('rate.edit');
