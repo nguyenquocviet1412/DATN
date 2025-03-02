@@ -55,16 +55,28 @@
                                     <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Tổng tiền trước giảm giá:</th>
+                                    <td>{{ number_format($order->orderItems->sum('subtotal')) }} VNĐ</td>
+                                </tr>
+                                <tr>
                                     <th>Mã khuyến mại:</th>
                                     <td>
                                         @if ($order->voucher)
                                             {{ $order->voucher->code }}
                                             (Giảm:
                                             @if ($order->voucher->discount_type === 'percentage')
+                                                {{-- Tính số tiền giảm giá --}}
+                                                @php
+                                                    $cartTotal = $order->orderItems->sum('subtotal');
+                                                    $discountValue = ($cartTotal * $order->voucher->discount_value) / 100;
+                                                    if ($order->voucher->max_discount) {
+                                                        $discountValue = min($discountValue, $order->voucher->max_discount);
+                                                    }
+                                                @endphp
                                                 {{ $order->voucher->discount_value }}%
-                                                - {{ number_format($order->discount_amount) }} VNĐ
+                                                - {{ number_format($discountValue) }} VNĐ
                                             @else
-                                                {{ number_format($order->discount_amount) }} VNĐ
+                                                {{ number_format($order->voucher->discount_value) }} VNĐ
                                             @endif
                                             )
                                         @else
@@ -72,15 +84,13 @@
                                         @endif
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <th>Tổng tiền:</th>
-                                    <td>{{ number_format($order->total_price) }} VNĐ</td>
+                                    <th>Tổng tiền sau giảm giá:</th>
+                                    <td>{{ number_format($order->total_price_after_discount) }} VNĐ</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-
 
                     <h3>Thông tin sản phẩm</h3>
                     <table class="table">
@@ -119,8 +129,6 @@
                             @endforeach
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </div>
