@@ -31,6 +31,11 @@ class User extends Authenticatable
 
 
     protected $dates = ['deleted_at'];
+
+    public function wallet_transactions()
+    {
+        return $this->hasMany(WalletTransaction::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

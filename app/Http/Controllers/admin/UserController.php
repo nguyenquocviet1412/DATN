@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +22,9 @@ class UserController extends Controller
         $search = $request->input('search');
 
         $users = User::all();
-        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search'));
+        $wallets = Wallet::all();
+        $wallet_transactions = WalletTransaction::all();
+        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search', 'wallets', 'wallet_transactions'));
     }
 
     /**
@@ -64,7 +68,9 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        return view('admin.user.show', compact('user'));
+        $wallet = Wallet::findOrFail($id);
+        $wallet_transactions = WalletTransaction::findOrFail($id);;
+        return view('admin.user.show', compact('wallet', 'user', 'wallet_transactions'));
     }
 
     /**
