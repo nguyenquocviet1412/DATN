@@ -10,6 +10,8 @@ use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\RateController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
@@ -40,6 +42,9 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 // ----------------------------------------------------------------
 //Route Admin
 Route::prefix('admin')->group(function () {
+    //route dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
 
     //route product
     Route::prefix('product')->group(function () {
