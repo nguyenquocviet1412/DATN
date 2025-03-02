@@ -86,7 +86,7 @@ class VariantConntroller extends Controller
         $variant = Variant::with('product', 'color','size', 'images')->findOrFail($variantId);
         $colors= Color::get();
         $sizes = Size::get();
-        return view('admin.editvariant',compact('variant', 'colors','sizes'));
+        return view('admin.product.editvariant',compact('variant', 'colors','sizes'));
     }
 
     // Cập nhật biến thể cho sản phẩm
@@ -158,21 +158,6 @@ class VariantConntroller extends Controller
 public function deleteImage($imageId)
 {
     $image = Product_image::findOrFail($imageId);
-    $variant = $image->variant;
-
-    // Kiểm tra xem ảnh có phải ảnh chính không
-    $wasPrimary = $image->is_primary;
-
-    if ($wasPrimary) {
-        // Lấy tất cả ảnh của biến thể (trừ ảnh đang xóa)
-        $remainingImages = $variant->images()->where('id', '!=', $imageId)->get();
-
-        if ($remainingImages->count() > 0) {
-            // Chọn ảnh thứ hai làm ảnh chính
-            $newPrimaryImage = $remainingImages->skip(0)->first(); // Ảnh thứ hai trong danh sách
-            $newPrimaryImage->update(['is_primary' => 1]);
-        }
-    }
 
     // Kiểm tra nếu đường dẫn ảnh không phải URL và không rỗng thì xóa file
     if (!filter_var($image->image_url, FILTER_VALIDATE_URL) && trim($image->image_url) !== '') {

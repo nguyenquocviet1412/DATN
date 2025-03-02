@@ -66,6 +66,7 @@
                 <button type="button" id="add-variant" class="btn btn-secondary">Thêm biến thể</button>
             </div>
             <button type="submit" class="btn btn-success">Lưu</button>
+            <a href="{{ route('product.index') }}" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
 </div>
