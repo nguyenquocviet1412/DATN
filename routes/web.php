@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EmployeeController;
@@ -33,6 +34,9 @@ Route::get('/register', [HomeController::class, 'register'])->name('home.registe
 // ----------------------------------------------------------------
 //Route Admin
 Route::prefix('admin')->group(function () {
+    //route dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
     //route product
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
