@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -70,6 +71,8 @@ class AdminDashboardController extends Controller
             ->groupBy(DB::raw('MONTH(orders.created_at)'))
             ->orderBy(DB::raw('MONTH(orders.created_at)'))
             ->get();
+            // Ghi log
+        LogHelper::logAction('hiển thị trang dashboard');
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalProducts',

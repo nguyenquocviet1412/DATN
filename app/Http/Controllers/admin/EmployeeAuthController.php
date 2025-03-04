@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +24,10 @@ class EmployeeAuthController extends Controller
 
             // Lưu toàn bộ thông tin của nhân viên vào session
             session(['employee' => $employee]);
+            // Ghi log
+            LogHelper::logAction('đăng nhập vào hệ thống');
             return redirect()->route('admin.dashboard');
         }
-
         return back()->with('message', 'Email hoặc mật khẩu không chính xác.');
     }
 
@@ -37,7 +39,8 @@ class EmployeeAuthController extends Controller
 
     // Đăng xuất tài khoản
     Auth::guard('employee')->logout();
-
+    // Ghi log
+    LogHelper::logAction('đăng xuất khỏi hệ thống');
     // Chuyển hướng về trang đăng nhập kèm thông báo
     return redirect()->route('admin.login')->with('logout_success', true);
 }
