@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Models\Order_item;
@@ -25,6 +26,8 @@ class VariantConntroller extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
+        // Ghi log
+        LogHelper::logAction('Vào trang thêm biến thể cho sản phẩm có ID: ' . $productId);
         return view('admin.product.addvariant',compact('product', 'colors','sizes'));
     }
 
@@ -74,6 +77,9 @@ class VariantConntroller extends Controller
         }
     }
 
+        // Ghi log
+        LogHelper::logAction('Thêm biến thể có ID:' .$variant->id. ' cho sản phẩm có ID: ' . $productId);
+
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể đã được thêm.');
 }
 
@@ -85,6 +91,9 @@ class VariantConntroller extends Controller
         $variant = Variant::with('product', 'color','size', 'images')->findOrFail($variantId);
         $colors= Color::get();
         $sizes = Size::get();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang chỉnh sửa biến thể có ID: ' . $variantId);
         return view('admin.product.editvariant',compact('variant', 'colors','sizes'));
     }
 
@@ -136,7 +145,8 @@ public function variantUpdate(Request $request, $variantId)
             ]);
         }
     }
-
+    // Ghi log
+    LogHelper::logAction('Cập nhật biến thể có ID:' .$variantId. ' cho sản phẩm có ID: '. $variant->id_product);
     return redirect()->back()->with('success', 'Biến thể đã được cập nhật.');
 }
 
@@ -157,6 +167,8 @@ public function deleteImage($imageId)
     // Xóa ảnh khỏi cơ sở dữ liệu
     $image->delete();
 
+        // Ghi log
+        LogHelper::logAction('Xóa ảnh biến thể có ID: ' . $image->id_variant);
     return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
 }
 
@@ -189,7 +201,8 @@ public function deleteImage($imageId)
 
     // Xóa biến thể
     $variant->delete();
-
+    // Ghi log
+    LogHelper::logAction('Xóa biến thể có ID: ' . $variantId . ' của sản phẩm có ID: ' . $productId);
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể và ảnh liên quan đã được xóa.');
     }
 }

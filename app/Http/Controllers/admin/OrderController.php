@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
@@ -14,6 +15,8 @@ class OrderController extends Controller
 {
     $listOrder = Order::with('orderItems.variant.product')->orderByDesc('id')->get();
 
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách đơn hàng');
     return view('admin.order', compact('listOrder'));
 }
 
@@ -21,7 +24,8 @@ class OrderController extends Controller
     public function show($id)
 {
     $order = Order::with(['user', 'voucher', 'orderItems.variant.product', 'orderItems.variant.color', 'orderItems.variant.size'])->findOrFail($id);
-
+    // Ghi log
+    LogHelper::logAction('Xem chi tiết đơn hàng: ' . $order->id);
     return view('admin.detailorder', compact('order'));
 }
 

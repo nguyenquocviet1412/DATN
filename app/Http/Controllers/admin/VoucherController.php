@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
@@ -12,6 +13,9 @@ class VoucherController extends Controller
     public function voucherIndex(){
         //Lấy danh sách voucher
         $vouchers = Voucher::query()->get();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách voucher');
         return view('admin.voucher.voucher',compact('vouchers'));
     }
 
@@ -30,12 +34,16 @@ class VoucherController extends Controller
     }
 
     $voucher->delete();
-
+    // Ghi log
+    LogHelper::logAction('Xóa voucher có id: ' . $voucher->id);
     return redirect()->route('voucher.index')->with('success', 'Voucher đã được xóa thành công!');
 }
 
     // Hiển thị form thêm mới voucher
     public function voucherCreate(){
+
+        // Ghi log
+        LogHelper::logAction('Vào trang thêm voucher');
         return view('admin.voucher.addvoucher');
     }
 
@@ -62,8 +70,9 @@ public function voucherStore(Request $request)
         return back()->withErrors(['discount_value' => 'Giá trị giảm không được quá 2 triệu']);
     }
 
-    Voucher::create($request->all());
-
+    $voucher=Voucher::create($request->all());
+    // Ghi log
+    LogHelper::logAction('Tạo voucher mới có id: ' . $voucher->id);
     return redirect()->route('voucher.index')->with('success', 'Voucher đã được tạo thành công.');
 }
 
@@ -76,6 +85,8 @@ public function voucherStore(Request $request)
         return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
 
+        // Ghi log
+        LogHelper::logAction('Vào trang chỉnh sửa voucher có ID: ' . $id);
     return view('admin.voucher.editvoucher', compact('voucher'));
     }
 
@@ -127,7 +138,8 @@ public function voucherStore(Request $request)
             'quantity' => $request->quantity,
             'status' => $request->status,
         ]);
-
+        // Ghi log
+        LogHelper::logAction('Cập nhật voucher có ID: ' . $id);
         return redirect()->route('voucher.index')->with('success', 'Voucher đã được cập nhật thành công!');
     }
 
@@ -144,7 +156,8 @@ public function voucherStore(Request $request)
         // Đảo trạng thái giữa 'active' và 'disabled'
         $voucher->status = $voucher->status == 'active' ? 'disabled' : 'active';
         $voucher->save();
-
+        // Ghi log
+        LogHelper::logAction('Thay đổi trạng thái voucher có ID: ' . $id);
         return redirect()->route('voucher.index')->with('success', 'Trạng thái voucher đã được cập nhật.');
     }
 
