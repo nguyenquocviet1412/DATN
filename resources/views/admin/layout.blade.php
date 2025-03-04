@@ -182,7 +182,7 @@
 
 
             <!-- User Menu-->
-            <li><a class="app-nav__item" href=""><i class='bx bx-log-out bx-rotate-180'></i> </a>
+            <li><a class="app-nav__item" href="{{route('admin.logout')}}"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
             </li>
         </ul>
@@ -200,16 +200,16 @@
     <aside class="app-sidebar">
         <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('storage') . '/' . $anh }}"
                 width="50px" alt="User Image">
-            <div>
-                <p class="app-sidebar__user-name">
-                    <b>
-                        @if (session('user'))
-                            {{ session('user')['Fullname'] }}
-                        @endif
-                    </b>
-                </p>
-                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-            </div>
+                <div>
+                    <p class="app-sidebar__user-name">
+                        <b>
+                            @if (session('employee'))
+                                {{ session('employee')['username'] }}
+                            @endif
+                        </b>
+                    </p>
+                    <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+                </div>
         </div>
         <hr>
         <ul class="app-menu">
