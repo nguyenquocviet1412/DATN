@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\client;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,26 +13,7 @@ class HomeController extends Controller
     public function index()
     {
         //
-        return view("home.index");
-    }
-
-
-    public function login()
-    {
-        //
-        return view("home.login");
-    }
-
-    public function register()
-    {
-        //
-        return view("home.register");
-    }
-
-    public function cart()
-    {
-        //
-        return view("home.cart");
+        
     }
 
     /**
