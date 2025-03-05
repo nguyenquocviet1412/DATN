@@ -49,6 +49,12 @@ Route::get('/admin/login', [EmployeeAuthController::class, 'getLogin'])->name('a
 Route::post('/admin/login', [EmployeeAuthController::class, 'postLogin'])->name('admin.postLogin');
 Route::get('/admin/logout', [EmployeeAuthController::class, 'logout'])->name('admin.logout');
 //Route Admin
+
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/cart', [HomeController::class, 'cart'])->name('home.cart');
+Route::get('/login', [HomeController::class, 'login'])->name('home.login');
+Route::get('/register', [HomeController::class, 'register'])->name('home.register');
+
 Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
     //route dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
