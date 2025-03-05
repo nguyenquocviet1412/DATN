@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wallet;
@@ -24,6 +25,9 @@ class UserController extends Controller
         $users = User::all();
         $wallets = Wallet::all();
         $wallet_transactions = WalletTransaction::all();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách tài khoản người dùng');
         return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search', 'wallets', 'wallet_transactions'));
     }
 
@@ -34,6 +38,8 @@ class UserController extends Controller
     {
         //
         $users = User::all();
+        // Ghi log
+        LogHelper::logAction('Vào trang tạo mới tài khoản người dùng');
         return view('admin.user.create', compact('users'));
     }
 
@@ -58,6 +64,8 @@ class UserController extends Controller
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
         ]);
+        // Ghi log
+        LogHelper::logAction('Tạo mới tài khoản người dùng có id: ' . $users->id);
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
     }
@@ -69,7 +77,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $wallet = Wallet::findOrFail($id);
-        $wallet_transactions = WalletTransaction::findOrFail($id);;
+        $wallet_transactions = WalletTransaction::findOrFail($id);
+        // Ghi log
+        LogHelper::logAction('Xem chi tiết tài khoản người dùng có id: ' . $user->id);
         return view('admin.user.show', compact('wallet', 'user', 'wallet_transactions'));
     }
 
@@ -79,6 +89,8 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+        // Ghi log
+        LogHelper::logAction('Vào trang chỉnh sửa tài khoản người dùng có id: ' . $user->id);
         return view('admin.user.edit', compact('user'));
     }
 
@@ -109,6 +121,8 @@ class UserController extends Controller
             'address' => $request->input('address'),
             'status' => $request->input('status')
         ]);
+        // Ghi log
+        LogHelper::logAction('Cập nhật tài khoản người dùng có id: ' . $user->id);
 
         return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
@@ -122,12 +136,16 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
+        // Ghi log
+        LogHelper::logAction('Xóa tài khoản người dùng có id: ' . $user->id);
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 
     public function deleted()
     {
         $deletedUsers = User::onlyTrashed()->get();
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách tài khoản người dùng đã xóa');
         return view('admin.user.deleted', compact('deletedUsers'));
     }
 
@@ -135,7 +153,8 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->findOrFail($id);
         $user->restore();
-
+        // Ghi log
+        LogHelper::logAction('Khôi phục tài khoản người dùng có id: ' . $user->id);
         return redirect()->route('user.deleted')->with('success', 'Employee restored successfully.');
     }
 }
