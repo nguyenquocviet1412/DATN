@@ -38,6 +38,8 @@ use App\Http\Controllers\admin\EmployeeAuthController;
 // Routes đăng ký đăng nhập cho khách hàng
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+Route::post('/logout', [AuthController::class, 'logoutUser'])->name('logout');
+
 
 Route::get('/register', [AuthController::class, 'getRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');

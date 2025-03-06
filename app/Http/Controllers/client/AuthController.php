@@ -16,13 +16,27 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Xác thực dữ liệu đầu vào
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
 
-        if (Auth::guard('web')->attempt($credentials)) {
-            return redirect()->route('/');
+        // Lấy thông tin đăng nhập
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // Kiểm tra checkbox Remember Me
+
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
+            return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!');
         }
 
-        return back()->with('message', 'Email hoặc mật khẩu không chính xác.');
+        return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
+    }
+
+    public function logoutUser()
+    {
+        Auth::guard('web')->logout();
+        return redirect()->route('login')->with('success', 'Bạn đã đăng xuất thành công!');
     }
 
     public function getRegister()
