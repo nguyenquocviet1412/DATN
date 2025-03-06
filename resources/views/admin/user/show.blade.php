@@ -1,6 +1,6 @@
 @extends('admin.layout')
-@section('title', 'Danh sách Nhân viên | Quản trị Admin')
-@section('title2', 'Danh sách Nhân viên')
+@section('title', 'Chi tiết Nhân viên | Quản trị Admin')
+@section('title2', 'Chi tiết Nhân viên')
 
 @section('content')
 
@@ -9,7 +9,6 @@
         <div class="tile">
             <div class="tile-body">
 
-                {{-- thông báo thêm thành công --}}
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 @if(session('success'))
                 <script>
@@ -19,153 +18,134 @@
                         icon: 'success',
                         showConfirmButton: false,
                         timer: 4000,
-                        backdrop: true // Làm tối nền
+                        backdrop: true
                     });
                 </script>
                 @endif
 
-
-                {{-- Thông báo lỗi --}}
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 @if(session('error'))
                 <script>
                     Swal.fire({
                         title: 'Lỗi!',
                         text: '{{ session("error") }}',
                         icon: 'error',
-                        showConfirmButton: true, // Hiển thị nút đóng
-                        confirmButtonText: 'Đóng', // Nội dung nút đóng
-                        backdrop: true // Làm tối nền
+                        showConfirmButton: true,
+                        confirmButtonText: 'Đóng',
+                        backdrop: true
                     });
                 </script>
                 @endif
 
-                <!-- Tím kiếm  -->
-
-
-
-                <!-- Dropdown sắp xếp -->
-                <h1>User Details</h1>
-                <div class="father">
-                    <div class="container">
-                        <table>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Thông Tin Người Dùng</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr><th>Vai trò:</th><td>{{ $user->role ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Họ và Tên:</th><td>{{ $user->fullname ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Email:</th><td>{{ $user->email ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Số điện thoại:</th><td>{{ $user->phone ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Địa chỉ:</th><td>{{ $user->address ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Ngày tạo:</th><td>{{ $user->created_at ?? 'Không có dữ liệu' }}</td></tr>
                             <tr>
-                                <th>Attribute</th>
-                                <th>Details</th>
-                            </tr>
-                            <tr>
-                                <td>Role</td>
-                                <td>{{ $user->role }}</td>
-                            </tr>
-                            <tr>
-                                <td>Full Name</td>
-                                <td>{{ $user->fullname }}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{{ $user->email }}</td>
-                            </tr>
-                            <tr>
-                                <td>Phone</td>
-                                <td>{{ $user->phone }}</td>
-                            </tr>
-                            <tr>
-                                <td>Address</td>
-                                <td>{{ $user->address }}</td>
-                            </tr>
-                            <tr>
-                                <th>Wallet</th>
-                                <th>{{ $wallet->balance }} VNĐ</th>
-                            </tr>
-                            <tr>
-                                <td>Create date</td>
-                                <td>{{ $user->created_at }}</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
+                                <th>Trạng thái:</th>
+                                <td>
+                                    <span class="badge {{ $user->status ? 'badge-success' : 'badge-danger' }}">
+                                        {{ $user->status ? 'Hoạt động' : 'Không hoạt động' }}
+                                    </span>
+                                </td>
                             </tr>
                         </table>
                     </div>
-                    <div class="container">
-                        <h3>History Transactions</h3>
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>Transaction Type</th>
-                                    <th>Amount</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="align-middle">
-                                    <td>{{ $wallet_transactions->transaction_type }}</td>
-                                    <td>{{ $wallet_transactions->amount }}</td>
-                                    <td>{{ $wallet_transactions->description }}</td>
-                                    <td>{{ $wallet_transactions->status }}</td>
-                                    <td>{{ $wallet_transactions->created_at }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
-                <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
-                <!-- Phân trang -->
-                <script>
-                    document.getElementById('select-all').addEventListener('change', function() {
-                        let checkboxes = document.querySelectorAll('input[name="check1"]');
-                        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-                    });
-                </script>
 
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Thông Tin Ví Tiền</h4>
+                    </div>
+                    <div class="card-body">
+                        @if($wallet)
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Số dư:</th>
+                                    <td><strong>{{ number_format($wallet->balance, 0, ',', '.') }} VNĐ</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Trạng thái ví:</th>
+                                    <td>
+                                        <span class="badge {{ $wallet->status ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $wallet->status ? 'Đang hoạt động' : 'Bị khóa' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        @else
+                            <p class="text-danger">Người dùng chưa có ví.</p>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Lịch Sử Giao Dịch</h4>
+                    </div>
+                    <div class="card-body">
+                        @if($wallet && $wallet_transactions->isNotEmpty())
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>Loại giao dịch</th>
+                                        <th>Số tiền</th>
+                                        <th>Mô tả</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($wallet_transactions as $transaction)
+                                    <tr class="align-middle text-center">
+                                        <td>
+                                            <span class="badge badge-{{ $transaction->transaction_type == 'deposit' ? 'success' : ($transaction->transaction_type == 'withdrawal' ? 'danger' : ($transaction->transaction_type == 'purchase' ? 'primary' : 'warning')) }}">
+                                                {{ ucfirst($transaction->transaction_type) }}
+                                            </span>
+                                        </td>
+                                        <td><strong>{{ number_format($transaction->amount, 0, ',', '.') }} VNĐ</strong></td>
+                                        <td>{{ $transaction->description ?? 'Không có mô tả' }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ $transaction->status == 'success' ? 'success' : ($transaction->status == 'pending' ? 'warning' : 'danger') }}">
+                                                {{ ucfirst($transaction->status) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $transaction->created_at }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p class="text-muted text-center">Chưa có giao dịch nào</p>
+                        @endif
+                    </div>
+                </div>
+
+                <a href="{{ route('user.index') }}" class="btn btn-primary mt-3">Quay lại danh sách</a>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .father {
-        display: flex;
-        justify-content: between;
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
     }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
+    .table th {
+        background-color: #f8f9fa;
     }
-
-    th,
-    td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .btn-primary {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
-        background-color: #007bff;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 4px;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
+    .badge {
+        font-size: 14px;
+        padding: 5px 10px;
     }
 </style>
+
 @endsection

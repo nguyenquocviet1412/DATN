@@ -39,6 +39,31 @@
 
 <body>
 
+    <!-- Bootstrap Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    @if(session('success'))
+        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    🎉 {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ❌ {{ session('error') }}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+</div>
+
        <!-- Start Header Area -->
        <header class="header-area header-wide">
         <!-- main header start -->
@@ -468,6 +493,16 @@
     <!-- end Header Area -->
 
     @yield('main')
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let toastElements = document.querySelectorAll(".toast");
+            toastElements.forEach(function (toastEl) {
+                let toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+                toast.show();
+            });
+        });
+    </script>
+
 </body>
 
 
