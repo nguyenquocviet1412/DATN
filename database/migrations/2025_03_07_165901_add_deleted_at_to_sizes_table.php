@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('colors', function (Blueprint $table) {
-            $table->id(); // Khóa chính tự động tăng
-            $table->string('name')->unique(); // Tên màu, không trùng lặp
-            $table->timestamps(); // created_at & updated_at
-            $table->softDeletes(); // Xóa mềm
+        Schema::table('sizes', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('colors');
+        Schema::table('sizes', function (Blueprint $table) {
+            //
+        });
     }
 };

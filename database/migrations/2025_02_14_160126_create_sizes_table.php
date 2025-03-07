@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('size')->unique(); // Đảm bảo mỗi size là duy nhất
             $table->timestamps();
+            $table->softDeletes(); // Xóa mềm
         });
     }
 
