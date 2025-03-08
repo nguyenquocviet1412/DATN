@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\Category;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,8 +20,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        //
-    }
+    public function boot()
+{
+    //Sử dụng dữ liệu cho tất cả view
+    view()->composer("*",function ($view){
+        //Lấy danh sách
+        $categories =DB::table('categories')->get();
+        $view->with(compact('categories'));
+    });
 }
+}
+
