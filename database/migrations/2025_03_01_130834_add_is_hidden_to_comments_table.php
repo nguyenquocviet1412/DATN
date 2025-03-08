@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->boolean('is_hidden')->default(false);
+            if (!Schema::hasColumn('comments', 'is_hidden')) {
+                $table->boolean('is_hidden')->default(0);
+            }
         });
     }
-    
-    public function down()
+
+    public function down(): void
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('is_hidden');
+            if (Schema::hasColumn('comments', 'is_hidden')) {
+                $table->dropColumn('is_hidden');
+            }
         });
     }
 };

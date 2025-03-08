@@ -137,6 +137,7 @@
             transform: rotate(-45deg);
             margin-top: -2px;
         }
+
         .chart-container {
             background: #fff;
             border-radius: 8px;
@@ -151,8 +152,10 @@
             font-weight: bold;
             color: #333;
             padding-bottom: 10px;
-            border-bottom: 3px solid #facc15; /* Gạch vàng dưới tiêu đề */
+            border-bottom: 3px solid #facc15;
+            /* Gạch vàng dưới tiêu đề */
         }
+
         .status-label {
             display: inline-block;
             padding: 5px 10px;
@@ -162,10 +165,24 @@
             min-width: 100px;
         }
 
-        .status-pending { background-color: #757de8; color: white; }  /* Chờ xử lý - Màu tím */
-        .status-completed { background-color: #81c784; color: white; }  /* Hoàn thành - Màu xanh lá */
-        .status-failed { background-color: #e57373; color: white; }  /* Thất bại - Màu đỏ */
+        .status-pending {
+            background-color: #757de8;
+            color: white;
+        }
 
+        /* Chờ xử lý - Màu tím */
+        .status-completed {
+            background-color: #81c784;
+            color: white;
+        }
+
+        /* Hoàn thành - Màu xanh lá */
+        .status-failed {
+            background-color: #e57373;
+            color: white;
+        }
+
+        /* Thất bại - Màu đỏ */
     </style>
 
 
@@ -182,7 +199,8 @@
 
 
             <!-- User Menu-->
-            <li><a class="app-nav__item" href="{{route('admin.logout')}}"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+            <li><a class="app-nav__item" href="{{ route('admin.logout') }}"><i class='bx bx-log-out bx-rotate-180'></i>
+                </a>
 
             </li>
         </ul>
@@ -200,28 +218,29 @@
     <aside class="app-sidebar">
         <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('storage') . '/' . $anh }}"
                 width="50px" alt="User Image">
-                <div>
-                    <p class="app-sidebar__user-name">
-                        <b>
-                            @if (session('employee'))
-                                {{ session('employee')['username'] }}
-                            @endif
-                        </b>
-                    </p>
-                    <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-                </div>
+            <div>
+                <p class="app-sidebar__user-name">
+                    <b>
+                        @if (session('employee'))
+                            {{ session('employee')['username'] }}
+                        @endif
+                    </b>
+                </p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
         </div>
         <hr>
         <ul class="app-menu">
 
-            <li><a class="app-menu__item " href="{{ route('admin.dashboard') }}"><i class='app-menu__icon bx bx-tachometer'></i><span
-                        class="app-menu__label">Bảng điều khiển</span></a></li>
+            <li><a class="app-menu__item " href="{{ route('admin.dashboard') }}"><i
+                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+                        khiển</span></a></li>
             <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý danh
                         mục</span></a></li>
             <li><a class="app-menu__item " href="{{ route('wallet.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý ví tiền
-                        </span></a></li>
+                    </span></a></li>
             <li><a class="app-menu__item " href="{{ route('employee.index') }}"><i
                         class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
                         viên</span></a></li>
@@ -232,6 +251,14 @@
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
                         phẩm</span></a>
             </li>
+
+            <li><a class="app-menu__item" href="{{ route('admin.size.index') }}"><i
+                        class="app-menu__icon bx bx-shape-square"></i><span class="app-menu__label">Quản lý
+                        Size</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('admin.color.index') }}"><i
+                        class="app-menu__icon bx bx-palette"></i><span class="app-menu__label">Quản lý Màu
+                        sắc</span></a></li>
+
             <li><a class="app-menu__item" href="{{ route('order.index') }}"><i
                         class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản lý đơn hàng</span></a>
             </li>
@@ -245,10 +272,12 @@
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
                         Đánh giá</span></a></li>
             <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i
-                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
             </li>
             <li><a class="app-menu__item" href="{{ route('post.index') }}"><i
-                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài Viết</span></a>
+                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài
+                        Viết</span></a>
             </li>
             <li>
                 <a class="app-menu__item" href="{{ route('admin.wallet_transactions.index') }}">

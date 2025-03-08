@@ -22,7 +22,8 @@ use App\Http\Controllers\admin\VariantConntroller;
 use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Http\Controllers\client\AuthController;
 use App\Http\Controllers\admin\EmployeeAuthController;
-
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -116,6 +117,36 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
 
     //route Wallet_Transaction
     Route::get('admin/wallet/{id}/transactions', [Wallet_Transaction::class, 'show'])->name('wallet.transactions');
+
+    /// Route quản lý Color
+    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('admin/color', ColorController::class);
+    Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+    Route::get('/color/create', [ColorController::class, 'create'])->name('color.create');
+    Route::post('/color/store', [ColorController::class, 'store'])->name('color.store');
+    Route::get('/color/edit/{id}', [ColorController::class, 'edit'])->name('color.edit');
+    Route::put('/color/update/{id}', [ColorController::class, 'update'])->name('color.update');
+    Route::get('/colortrash', [ColorController::class, 'trash'])->name('color.trash');
+    Route::get('/color/delete/{id}', [ColorController::class, 'softDelete'])->name('color.softDelete');
+    Route::get('/color/restore/{id}', [ColorController::class, 'restore'])->name('color.restore');
+    Route::delete('/color/destroy/{id}', [ColorController::class, 'destroy'])->name('color.destroy');
+     });
+
+    // Route quản lý Size
+    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('size', SizeController::class);
+    Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+    Route::get('/size/create', [SizeController::class, 'create'])->name('size.create');
+    Route::post('/size/store', [SizeController::class, 'store'])->name('size.store');
+    Route::get('/size/edit/{id}', [SizeController::class, 'edit'])->name('size.edit');
+    Route::put('/size/update/{id}', [SizeController::class, 'update'])->name('size.update');
+    Route::get('/size/trash', [SizeController::class, 'trash'])->name('size.trash');
+    Route::get('/size/delete/{id}', [SizeController::class, 'softDelete'])->name('size.softDelete');
+    Route::get('/size/restore/{id}', [SizeController::class, 'restore'])->name('size.restore');
+    Route::delete('/size/destroy/{id}', [SizeController::class, 'destroy'])->name('size.destroy');
+    });
+    
+
 
     //route Report
     Route::get('/report', [AdminReportController::class, 'index'])->name('admin.reports.index');
