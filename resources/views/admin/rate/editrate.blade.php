@@ -82,14 +82,6 @@ Danh sách bình luận
                     <label for="review" class="form-label">review</label>
                     <textarea class="form-control" id="review" name="review" value="{{ $rate->review}}" rows="3" required></textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status" required>
-                        <option value="approved" {{ $rate->status == 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="pending" {{ $rate->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="rejected" {{ $rate->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                    </select>
-                </div>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>

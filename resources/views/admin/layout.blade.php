@@ -19,10 +19,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    {{-- <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {{-- css và js chp form add và update --}}
-
     <script>
         function readURL(input, thumbimage) {
             if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
@@ -131,7 +137,54 @@
             transform: rotate(-45deg);
             margin-top: -2px;
         }
+
+        .chart-container {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #facc15;
+            /* Gạch vàng dưới tiêu đề */
+        }
+
+        .status-label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .status-pending {
+            background-color: #757de8;
+            color: white;
+        }
+
+        /* Chờ xử lý - Màu tím */
+        .status-completed {
+            background-color: #81c784;
+            color: white;
+        }
+
+        /* Hoàn thành - Màu xanh lá */
+        .status-failed {
+            background-color: #e57373;
+            color: white;
+        }
+
+        /* Thất bại - Màu đỏ */
     </style>
+
 
 
 </head>
@@ -146,7 +199,8 @@
 
 
             <!-- User Menu-->
-            <li><a class="app-nav__item" href=""><i class='bx bx-log-out bx-rotate-180'></i> </a>
+            <li><a class="app-nav__item" href="{{ route('admin.logout') }}"><i class='bx bx-log-out bx-rotate-180'></i>
+                </a>
 
             </li>
         </ul>
@@ -167,8 +221,8 @@
             <div>
                 <p class="app-sidebar__user-name">
                     <b>
-                        @if (session('user'))
-                            {{ session('user')['Fullname'] }}
+                        @if (session('employee'))
+                            {{ session('employee')['username'] }}
                         @endif
                     </b>
                 </p>
@@ -178,7 +232,7 @@
         <hr>
         <ul class="app-menu">
 
-            <li><a class="app-menu__item " href="{{ route('admin.reports.index') }}"><i
+            <li><a class="app-menu__item " href="{{ route('admin.dashboard') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
                         khiển</span></a></li>
             <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
@@ -186,7 +240,7 @@
                         mục</span></a></li>
             <li><a class="app-menu__item " href="{{ route('wallet.index') }}"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý ví tiền
-                        </span></a></li>
+                    </span></a></li>
             <li><a class="app-menu__item " href="{{ route('employee.index') }}"><i
                         class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
                         viên</span></a></li>
@@ -197,43 +251,40 @@
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
                         phẩm</span></a>
             </li>
+
+            <li><a class="app-menu__item" href="{{ route('admin.size.index') }}"><i
+                        class="app-menu__icon bx bx-shape-square"></i><span class="app-menu__label">Quản lý
+                        Size</span></a></li>
+            <li><a class="app-menu__item" href="{{ route('admin.color.index') }}"><i
+                        class="app-menu__icon bx bx-palette"></i><span class="app-menu__label">Quản lý Màu
+                        sắc</span></a></li>
+
             <li><a class="app-menu__item" href="{{ route('order.index') }}"><i
                         class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản lý đơn hàng</span></a>
             </li>
             <li><a class="app-menu__item" href="{{ route('voucher.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        voucher</span></a></li>
+                        Khuyến mãi</span></a></li>
             <li><a class="app-menu__item" href="{{ route('comment.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        CMT</span></a></li>
+                        Bình luận</span></a></li>
             <li><a class="app-menu__item" href="{{ route('rate.index') }}"><i
                         class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        Danh Gia</span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-run'></i><span
-                        class="app-menu__label">Quản lý nội bộ
-                    </span></a></li>
-            <li><a class="app-menu__item" href=""><i class='app-menu__icon bx bx-dollar'></i><span
-                        class="app-menu__label">Bảng kê lương</span></a></li>
+                        Đánh giá</span></a></li>
             <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i
-                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
             </li>
             <li><a class="app-menu__item" href="{{ route('post.index') }}"><i
-                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài Viết</span></a>
+                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài
+                        Viết</span></a>
             </li>
-
             <li>
                 <a class="app-menu__item" href="{{ route('admin.wallet_transactions.index') }}">
                     <i class="app-menu__icon bx bx-purchase-tag-alt"></i>
                     <span class="app-menu__label">Lịch sử giao dịch</span>
                 </a>
             </li>
-
-            <li><a class="app-menu__item" href="page-calendar.html"><i
-                        class='app-menu__icon bx bx-calendar-check'></i><span class="app-menu__label">Lịch công tác
-                    </span></a></li>
-            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-cog'></i><span
-                        class="app-menu__label">Cài
-                        đặt hệ thống</span></a></li>
         </ul>
     </aside>
     <main class="app-content">
@@ -270,6 +321,7 @@
         </div>
 
     </main>
+
     <script src="{{ asset('admin/doc/js/jquery-3.2.1.min.js') }}"></script>
     <!--===============================================================================================-->
     <script src="{{ asset('admin/doc/js/popper.min.js') }}"></script>
@@ -327,7 +379,7 @@
         }
     </script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Essential javascripts for application to work-->
     <script src="{{ asset('admin/doc/js/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('admin/doc/js/popper.min.js') }}"></script>
@@ -345,6 +397,7 @@
     <script type="text/javascript">
         $('#sampleTable').DataTable();
     </script>
+
 </body>
 
 </html>

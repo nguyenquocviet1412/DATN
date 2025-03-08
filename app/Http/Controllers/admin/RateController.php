@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Rate;
@@ -10,50 +11,23 @@ class RateController extends Controller
 {
     public function Rindex()
     {
-        $rate = Rate::all();
-        return view('admin.rate.rate', compact('rate'));
+        $rates = Rate::selectRaw('id_product, MAX(id) as id, MAX(id_order_item) as id_order_item, AVG(rating) as average_rating')
+                    ->groupBy('id_product')
+                    ->get();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách đánh giá');
+        return view('admin.rate.rate', compact('rates'));
     }
 
-    public function Rcreate()
+    public function show($id_product)
     {
-        return view('admin.addrate');
+        $rates = Rate::where('id_product', $id_product)->get();
+        // Ghi log
+        LogHelper::logAction('Xem chi tiết đánh giá sản phẩm có id: ' . $id_product);
+        return view('admin.rate.show', compact('rates', 'id_product'));
     }
 
-    public function Rstore(Request $request)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required',
-            'status' => 'required',
-        ]);
-
-        Rate::create($request->all());
-
-        return redirect()->route('rate.index')->with('success', 'Rate created successfully.');
-    }
-
-    public function Redit($id)
-    {
-        $rate = Rate::findOrFail($id);
-        return view('admin.rate.editrate', compact('rate'));
-    }
-
-    public function Rupdate(Request $request, $id)
-    {
-        $request->validate([
-            'id_user' => 'required',
-            'id_product' => 'required',
-            'id_order_item' => 'required',
-            'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required',
-            'status' => 'required',
-        ]);
-
-        $rate = Rate::findOrFail($id);
-        $rate->update($request->all());
-
-        return redirect()->route('rate.index')->with('success', 'Rate updated successfully.');
-    }
 
     public function Rdestroy($id)
     {
@@ -62,5 +36,4 @@ class RateController extends Controller
 
         return redirect()->route('rate.index')->with('success', 'Rate deleted successfully.');
     }
-
 }

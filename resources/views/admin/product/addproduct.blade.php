@@ -58,6 +58,34 @@
                 <button type="submit" class="btn btn-success me-2">Lưu lại</button>
                 <a href="{{ route('product.index') }}" class="btn btn-secondary">Hủy bỏ</a>
             </div>
+<<<<<<< HEAD
+=======
+            <div class="mb-3">
+                <label class="form-label">Danh mục</label>
+                <select name="id_category" class="form-select">
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Giá</label>
+                <input type="number" name="price" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Trạng thái</label>
+                <select name="status" class="form-select">
+                    <option value="active">Hoạt động</option>
+                    <option value="inactive">Ngừng hoạt động</option>
+                </select>
+            </div>
+            <h4>Biến thể</h4>
+            <div id="variant-container" class="mb-3">
+                <button type="button" id="add-variant" class="btn btn-secondary">Thêm biến thể</button>
+            </div>
+            <button type="submit" class="btn btn-success">Lưu</button>
+            <a href="{{ route('product.index') }}" class="btn btn-secondary">Quay lại</a>
+>>>>>>> ec63204bb6e264bb3e6d3bccdde10ed7c439cbd2
         </form>
     </div>
 </div>

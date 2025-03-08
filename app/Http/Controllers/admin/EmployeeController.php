@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -21,6 +22,9 @@ class EmployeeController extends Controller
         $search = $request->input('search');
 
         $employees = Employee::all();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách nhân viên');
         return view('admin.employee.index', compact('employees', 'sortBy', 'sortOrder', 'search'));
     }
 
@@ -31,6 +35,8 @@ class EmployeeController extends Controller
     {
         //
         $employees = Employee::all();
+        // Ghi log
+        LogHelper::logAction('Vào trang thêm nhân viên');
         return view('admin.employee.create', compact('employees'));
     }
 
@@ -70,6 +76,9 @@ class EmployeeController extends Controller
             'status' => $request->input('status'),
         ]);
 
+        // Ghi log
+        LogHelper::logAction('Tạo mới nhân viên có id: '. $employees->id);
+
         return redirect()->route('employee.index')->with('success', 'Employee created successfully');
     }
 
@@ -79,6 +88,9 @@ class EmployeeController extends Controller
     public function show(string $id)
     {
         $employee = Employee::findOrFail($id);
+
+        // Ghi log
+        LogHelper::logAction('Xem thông tin nhân viên có id: ' . $employee->id);
         return view('admin.employee.show', compact('employee'));
     }
 
@@ -90,6 +102,9 @@ class EmployeeController extends Controller
     {
         //
         $employee = Employee::findOrFail($id);
+
+        // Ghi log
+        LogHelper::logAction('Vào trang chỉnh sửa nhân viên có id: ' . $employee->id);
         return view('admin.employee.edit', compact('employee'));
     }
 
@@ -131,6 +146,8 @@ class EmployeeController extends Controller
 
         $employee->save();
 
+        // Ghi log
+        LogHelper::logAction('Cập nhật thông tin nhân viên có id: ' . $employee->id);
         return redirect()->route('employee.index')->with('success', 'Employee updated successfully');
     }
 
@@ -141,7 +158,25 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
         $employee->delete();
-
+        // Ghi log
+        LogHelper::logAction('Xóa nhân viên có id: ' . $employee->id);
         return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
+    }
+
+    public function deleted()
+    {
+        $deletedEmployees = Employee::onlyTrashed()->get();
+        // Ghi log
+        LogHelper::logAction('Vào trang danh sách nhân viên đã xóa');
+        return view('admin.employee.deleted', compact('deletedEmployees'));
+    }
+
+    public function restore($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $employee->restore();
+        // Ghi log
+        LogHelper::logAction('Khôi phục nhân viên có id: ' . $employee->id);
+        return redirect()->route('employee.deleted')->with('success', 'Employee restored successfully.');
     }
 }

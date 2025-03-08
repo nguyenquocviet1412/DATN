@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -45,7 +46,8 @@ class AdminReportController extends Controller
             'variants.id',
             'products.name AS product_name', // Lấy tên sản phẩm từ bảng products
             'variants.price',
-            'categories.name AS category_name'
+            'categories.name AS category_name',
+            DB::raw('SUM(order_items.quantity) as total_quantity')
             )
             ->join('variants', 'order_items.id_variant', '=', 'variants.id')
             ->join('products', 'variants.id_product', '=', 'products.id') // Join bảng products
@@ -77,6 +79,17 @@ class AdminReportController extends Controller
             ->pluck('revenue', 'month')
             ->toArray();
 
+        $month = $request->input('month', date('Y-m'));
+        $startDate = Carbon::parse($month . '-01')->startOfMonth();
+        $endDate = Carbon::parse($month . '-01')->endOfMonth();
+
+        $revenues = Order_item::whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(price * quantity) as revenue'))
+            ->pluck('revenue', 'date');
+
+            // Ghi log
+            LogHelper::logAction('Vào trang doanh thu');
         // Trả dữ liệu ra view
         return view('admin.reports', compact(
             'totalEmployees',
@@ -89,7 +102,8 @@ class AdminReportController extends Controller
             'bestSellingProducts',
             'outOfStockList',
             'recentOrders',
-            'monthlyRevenue'
+            'monthlyRevenue',
+            'revenues'
         ));
     }
 }

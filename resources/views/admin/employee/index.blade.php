@@ -46,6 +46,9 @@
                         <a class="btn btn-add btn-sm" href="{{ route('employee.create') }}" title="Thêm">
                             <i class="fas fa-plus"></i> Tạo mới Nhân viên
                         </a>
+                        <a class="btn btn-danger btn-sm" href="{{ route('employee.deleted') }}" title="Lịch sử xóa">
+                            <i class="fas fa-history"></i> Lịch sử nhân viên đã bị xóa
+                        </a>
                     </div>
 
                     <div class="col-md-6">
@@ -131,7 +134,7 @@
                                 <form action="{{ route('employee.delete', $employee->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                    <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản nhân viên này?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>

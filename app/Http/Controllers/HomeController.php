@@ -28,6 +28,11 @@ class HomeController extends Controller
         return view("home.register");
     }
 
+    public function cart()
+    {
+        //
+        return view("home.cart");
+    }
 
     /**
      * Show the form for creating a new resource.

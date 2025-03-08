@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Models\Order_item;
@@ -25,6 +26,8 @@ class VariantConntroller extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
+        // Ghi log
+        LogHelper::logAction('Vào trang thêm biến thể cho sản phẩm có ID: ' . $productId);
         return view('admin.product.addvariant',compact('product', 'colors','sizes'));
     }
 
@@ -70,10 +73,12 @@ class VariantConntroller extends Controller
             Product_image::create([
                 'id_variant' => $variant->id,
                 'image_url' => $imagePath,
-                'is_primary' => ($index === 0) ? 1 : 0,
             ]);
         }
     }
+
+        // Ghi log
+        LogHelper::logAction('Thêm biến thể có ID:' .$variant->id. ' cho sản phẩm có ID: ' . $productId);
 
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể đã được thêm.');
 }
@@ -86,11 +91,14 @@ class VariantConntroller extends Controller
         $variant = Variant::with('product', 'color','size', 'images')->findOrFail($variantId);
         $colors= Color::get();
         $sizes = Size::get();
-        return view('admin.editvariant',compact('variant', 'colors','sizes'));
+
+        // Ghi log
+        LogHelper::logAction('Vào trang chỉnh sửa biến thể có ID: ' . $variantId);
+        return view('admin.product.editvariant',compact('variant', 'colors','sizes'));
     }
 
     // Cập nhật biến thể cho sản phẩm
-    public function variantUpdate(Request $request, $variantId)
+public function variantUpdate(Request $request, $variantId)
 {
     $variant = Variant::findOrFail($variantId);
 
@@ -100,14 +108,14 @@ class VariantConntroller extends Controller
         'price' => 'required|numeric',
         'quantity' => 'required|integer|min:1',
         'status' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Hỗ trợ nhiều ảnh
     ]);
 
-    // Kiểm tra xem có biến thể khác đã tồn tại với id_color & id_size hay không
+    // Kiểm tra xem biến thể khác đã tồn tại chưa
     $existingVariant = Variant::where('id_product', $variant->id_product)
         ->where('id_color', $request->id_color)
         ->where('id_size', $request->id_size)
-        ->where('id', '!=', $variantId) // Loại trừ chính biến thể đang sửa
+        ->where('id', '!=', $variantId)
         ->first();
 
     if ($existingVariant) {
@@ -123,22 +131,9 @@ class VariantConntroller extends Controller
         'status' => $request->status,
     ]);
 
-    // Xử lý ảnh biến thể
-        if ($request->hasFile('image')) {
-            // Lấy ảnh cũ
-            $oldImage = $variant->images->first();
-
-            // Kiểm tra nếu ảnh cũ tồn tại và không phải là URL hoặc khoảng trắng
-            if ($oldImage && !filter_var($oldImage->image_url, FILTER_VALIDATE_URL) && trim($oldImage->image_url) !== '') {
-                $oldImagePath = public_path($oldImage->image_url);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-                $oldImage->delete();
-            }
-
-            // Lưu ảnh mới
-            $image = $request->file('image');
+    // Xử lý nhiều ảnh
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = 'storage/product/' . $imageName;
             $image->move(public_path('storage/product'), $imageName);
@@ -147,32 +142,19 @@ class VariantConntroller extends Controller
             Product_image::create([
                 'id_variant' => $variant->id,
                 'image_url' => $imagePath,
-                'is_primary' => 1,
             ]);
         }
-
+    }
+    // Ghi log
+    LogHelper::logAction('Cập nhật biến thể có ID:' .$variantId. ' cho sản phẩm có ID: '. $variant->id_product);
     return redirect()->back()->with('success', 'Biến thể đã được cập nhật.');
 }
+
 
     // Xóa ảnh biến thể cho sản phẩm
 public function deleteImage($imageId)
 {
     $image = Product_image::findOrFail($imageId);
-    $variant = $image->variant;
-
-    // Kiểm tra xem ảnh có phải ảnh chính không
-    $wasPrimary = $image->is_primary;
-
-    if ($wasPrimary) {
-        // Lấy tất cả ảnh của biến thể (trừ ảnh đang xóa)
-        $remainingImages = $variant->images()->where('id', '!=', $imageId)->get();
-
-        if ($remainingImages->count() > 0) {
-            // Chọn ảnh thứ hai làm ảnh chính
-            $newPrimaryImage = $remainingImages->skip(0)->first(); // Ảnh thứ hai trong danh sách
-            $newPrimaryImage->update(['is_primary' => 1]);
-        }
-    }
 
     // Kiểm tra nếu đường dẫn ảnh không phải URL và không rỗng thì xóa file
     if (!filter_var($image->image_url, FILTER_VALIDATE_URL) && trim($image->image_url) !== '') {
@@ -185,6 +167,8 @@ public function deleteImage($imageId)
     // Xóa ảnh khỏi cơ sở dữ liệu
     $image->delete();
 
+        // Ghi log
+        LogHelper::logAction('Xóa ảnh biến thể có ID: ' . $image->id_variant);
     return redirect()->back()->with('success', 'Ảnh biến thể đã được xóa.');
 }
 
@@ -217,7 +201,8 @@ public function deleteImage($imageId)
 
     // Xóa biến thể
     $variant->delete();
-
+    // Ghi log
+    LogHelper::logAction('Xóa biến thể có ID: ' . $variantId . ' của sản phẩm có ID: ' . $productId);
     return redirect()->route('product.edit', $productId)->with('success', 'Biến thể và ảnh liên quan đã được xóa.');
     }
 }

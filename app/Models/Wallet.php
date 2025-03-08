@@ -20,4 +20,9 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+    public function transactions()
+{
+    return $this->hasMany(WalletTransaction::class, 'id_wallet');
+}
+
 }

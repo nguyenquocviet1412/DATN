@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employee extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class Employee extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'username',
@@ -23,4 +27,9 @@ class Employee extends Model
         'salary',
         'status'
     ];
+    protected $hidden = ['password', 'remember_token'];
+
+    protected $casts = ['email_verified_at' => 'datetime'];
+
+    protected $dates = ['deleted_at'];
 }

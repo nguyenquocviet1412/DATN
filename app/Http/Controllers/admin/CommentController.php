@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
@@ -11,6 +12,8 @@ class CommentController extends Controller
     public function indexCMT()
     {
         $comment = Comment::all();
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách bình luận');
         return view('admin.comment.comment', compact('comment'));
     }
 
@@ -65,8 +68,10 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($id);
         $comment->update(['is_hidden' => !$comment->is_hidden]);
-    
+
         $message = $comment->is_hidden ? 'Comment hidden successfully.' : 'Comment unhidden successfully.';
+        // Ghi log
+        LogHelper::logAction('Ẩn bình luận: ' . $comment->note);
         return redirect()->route('comment.index')->with('success', $message);
     }
 
