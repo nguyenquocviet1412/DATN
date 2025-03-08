@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Color;
@@ -11,11 +12,15 @@ class ColorController extends Controller
     public function index()
     {
         $colors = Color::withTrashed()->paginate(10);
+        // Ghi log
+        LogHelper::logAction('Vào trang danh sách màu');
         return view('admin.color.index', compact('colors'));
     }
 
     public function create()
     {
+        // Ghi log
+        LogHelper::logAction('Vào trang tạo màu');
         return view('admin.color.create');
     }
 
@@ -24,14 +29,14 @@ class ColorController extends Controller
         $request->validate([
             'name' => 'required|string|unique:colors,name', // Kiểm tra không được trùng tên
         ]);
-    
+
         Color::create([
             'name' => $request->name,
         ]);
-    
+
         return redirect()->route('admin.color.index')->with('success', 'Màu đã được thêm thành công.');
     }
-    
+
     public function edit($id)
     {
         $color = Color::findOrFail($id);
