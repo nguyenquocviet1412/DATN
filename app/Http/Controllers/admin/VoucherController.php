@@ -82,7 +82,7 @@ public function voucherStore(Request $request)
         $voucher = Voucher::find($id);
 
     if (!$voucher) {
-        return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
+return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
 
         // Ghi log
@@ -147,8 +147,7 @@ public function voucherStore(Request $request)
     public function toggleStatus($id)
     {
         $voucher = Voucher::findOrFail($id);
-
-        // Nếu voucher hết hạn, không cho phép kích hoạt
+// Nếu voucher hết hạn, không cho phép kích hoạt
         if (\Carbon\Carbon::now()->greaterThan($voucher->end_date)) {
             return redirect()->route('voucher.index')->with('error', 'Không thể kích hoạt voucher đã hết hạn.');
         }
