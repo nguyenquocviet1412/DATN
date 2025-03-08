@@ -225,4 +225,11 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
 
 });
 
+//Route home
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+// Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.details');
+
+
+
+
 
