@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\admin\Wallet_Transaction;
 use App\Http\Controllers\Admin\WalletController;
-use App\Http\Controllers\FilterProductController;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
