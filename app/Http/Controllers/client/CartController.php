@@ -43,6 +43,30 @@ class CartController extends Controller
         return redirect()->route('cart.index');
     }
 
+
+    public function addToCart(Request $request)
+    {
+        $product = Product::find($request->product_id);
+
+        if ($product) {
+            $cartItem = Cart::where('product_id', $product->id)->first();
+            if ($cartItem) {
+                // If the product is already in the cart, increase the quantity
+                $cartItem->quantity += $request->quantity;
+            } else {
+                // If the product is not in the cart, add it
+                $cartItem = new Cart();
+                $cartItem->product_id = $product->id;
+                $cartItem->name = $product->name;
+                $cartItem->price = $product->price;
+                $cartItem->quantity = $request->quantity;
+                $cartItem->image = $product->image;
+            }
+            $cartItem->save();
+        }
+
+        return redirect()->route('home.index');
+    }
     /**
      * Update the specified resource in storage.
      */

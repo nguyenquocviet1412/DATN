@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,9 @@ class HomeController extends Controller
     {
         // Lấy 8 sản phẩm mới nhất có ảnh
         $products = Product::with(['variants.images'])->latest()->take(8)->get();
+        $cartItems = Cart::take(3)->get(); // Lấy tất cả các mục trong giỏ hàng
 
-        return view('home.index', compact('products'));
+        return view('home.index', compact('products', 'cartItems'));
     }
 
 
