@@ -137,39 +137,23 @@
             <div class="row row-20 mtn-20">
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                            <img src="assets/img/banner/img1-top.jpg" alt="product banner">
-                        <div class="banner-content text-right">
-                            <h5 class="banner-text1">BEAUTIFUL</h5>
-                            <h2 class="banner-text2">Wedding<span>Rings</span></h2>
-                        </div>
+                            <img src="assets/img/banner/banner-nho-1.png" alt="product banner">
                     </figure>
                 </div>
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                            <img src="assets/img/banner/img2-top.jpg" alt="product banner">
+                            <img src="assets/img/banner/banner-nho-2.png" alt="product banner">
                         </a>
-                        <div class="banner-content text-center">
-                            <h5 class="banner-text1">EARRINGS</h5>
-                            <h2 class="banner-text2">Tangerine Floral <span>Earring</span></h2>
-                        </div>
                     </figure>
                 </div>
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                            <img src="assets/img/banner/img3-top.jpg" alt="product banner">
-                        <div class="banner-content text-center">
-                            <h5 class="banner-text1">NEW ARRIVALLS</h5>
-                            <h2 class="banner-text2">Pearl<span>Necklaces</span></h2>
-                        </div>
+                            <img src="assets/img/banner/banner-nho-3.png" alt="product banner">
                     </figure>
                 </div>
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                            <img src="assets/img/banner/img4-top.jpg" alt="product banner">
-                        <div class="banner-content text-right">
-                            <h5 class="banner-text1">NEW DESIGN</h5>
-                            <h2 class="banner-text2">Diamond<span>Jewelry</span></h2>
-                        </div>
+                            <img src="assets/img/banner/banner-nho-4.png" alt="product banner">
                     </figure>
                 </div>
             </div>
@@ -211,9 +195,9 @@
                                     @foreach($products as $product)
                                         <div class="product-item">
                                             <figure class="product-thumb">
-                                                <a href="">
-                                                    <img class="pri-img" src="{{ $product->getThumbnailAttribute() }}" alt="product">
-                                                    <img class="sec-img" src="{{ $product->getThumbnailAttribute() }}" alt="product">
+                                                <a href="   ">
+                                                    <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                    <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                 </a>
                                                 <div class="product-badge">
                                                     <div class="product-label new">
@@ -239,10 +223,10 @@
                                             </figure>
                                             <div class="product-caption text-center">
                                                 <h6 class="product-name">
-                                                    <a href=""></a>
+                                                    <a href="">{{ $product->name }}</a>
                                                 </h6>
                                                 <div class="price-box">
-                                                    <span class="price-regular">${{ $product->price }}</span>
+                                                    <span class="price-regular">${{ number_format($product->price, 2) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -250,6 +234,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         
                         <!-- product tab content end -->
                     </div>

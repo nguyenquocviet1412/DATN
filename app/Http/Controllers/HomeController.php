@@ -12,11 +12,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Lấy danh sách sản phẩm, có thể lấy 8 sản phẩm mới nhất
-        $products = Product::with('variants.images')->latest()->take(8)->get();
+        // Lấy 8 sản phẩm mới nhất có ảnh
+        $products = Product::with(['variants.images'])->latest()->take(8)->get();
 
         return view('home.index', compact('products'));
     }
+
 
 
     public function login()
