@@ -68,10 +68,6 @@ Chỉnh sửa Nhân Viên
                             <input class="form-control" type="text" name="position" value="{{ $employee->position }}" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Salary</label>
-                            <input class="form-control" type="number" name="salary" value="{{ $employee->salary }}" required>
-                        </div>
-                        <div class="form-group col-md-3">
                             <label class="control-label">Status</label>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Choose status --</option>

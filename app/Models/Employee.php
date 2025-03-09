@@ -32,4 +32,9 @@ class Employee extends Authenticatable
     protected $casts = ['email_verified_at' => 'datetime'];
 
     protected $dates = ['deleted_at'];
+    // App\Models\Employee.php
+public function logs()
+{
+    return $this->hasMany(Log::class, 'id_employee');
+}
 }

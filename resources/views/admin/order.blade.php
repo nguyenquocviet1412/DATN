@@ -7,29 +7,36 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
-                {{-- Hiển thị thông báo --}}
-                @if (session('success'))
-                    <script>
-                        Swal.fire({
-                            title: 'Thành công!',
-                            text: '{{ session('success') }}',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 4000
-                        });
-                    </script>
-                @endif
+                {{-- thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
 
-                @if (session('error'))
-                    <script>
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: '{{ session('error') }}',
-                            icon: 'error',
-                            showConfirmButton: true
-                        });
-                    </script>
-                @endif
+
+{{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                showConfirmButton: true,  // Hiển thị nút đóng
+                confirmButtonText: 'Đóng',  // Nội dung nút đóng
+                backdrop: true  // Làm tối nền
+            });
+        </script>
+    @endif
 
                 <h3>Danh sách đơn hàng</h3>
                 <table class="table table-bordered table-hover js-copytextarea" cellpadding="0" cellspacing="0" border="0"

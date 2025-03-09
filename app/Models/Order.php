@@ -122,7 +122,11 @@ private function calculateCartTotal()
 {
     return $this->orderItems()->sum('subtotal');
 }
-
+// Tính tổng tiền trước khi giảm giá
+public function getTotalBeforeDiscountAttribute()
+{
+    return $this->orderItems->sum('subtotal');
+}
 const PAYMENT_STATUS = [
     'waiting_payment' => 'Chờ thanh toán',
     'pending' => 'Chờ xử lý',
