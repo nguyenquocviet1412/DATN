@@ -24,6 +24,8 @@ use App\Http\Controllers\client\AuthController;
 use App\Http\Controllers\admin\EmployeeAuthController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\client\DetailProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -227,9 +229,10 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
 
 //Route home
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-// Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.details');
 
 
+// chi tiết sản phẩm
+Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
 
 
 
