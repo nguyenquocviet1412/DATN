@@ -43,92 +43,93 @@
 
                 <!-- Dropdown sắp xếp -->
 
-                <div class="father">
 
-                    <div class="container">
-                        <h1>Employee Details</h1>
-                        <table>
-                            <tr>
-                                <th>Attribute</th>
-                                <th>Details</th>
-                            </tr>
-                            <tr>
-                                <td>Username</td>
-                                <td>{{ $employee->username }}</td>
-                            </tr>
-                            <tr>
-                                <td>Role</td>
-                                <td>{{ $employee->role }}</td>
-                            </tr>
-                            <tr>
-                                <td>Full Name</td>
-                                <td>{{ $employee->fullname }}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{{ $employee->email }}</td>
-                            </tr>
-                            <tr>
-                                <td>Phone</td>
-                                <td>{{ $employee->phone }}</td>
-                            </tr>
-                            <tr>
-                                <td>Gender</td>
-                                <td>{{ $employee->gender }}</td>
-                            </tr>
-                            <tr>
-                                <td>Date of Birth</td>
-                                <td>{{ $employee->date_of_birth }}</td>
-                            </tr>
-                            <tr>
-                                <td>Address</td>
-                                <td>{{ $employee->address }}</td>
-                            </tr>
-                            <tr>
-                                <td>Position</td>
-                                <td>{{ $employee->position }}</td>
-                            </tr>
-                            <tr>
-                                <td>Create date</td>
-                                <td>{{ $employee->created_at }}</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                            </tr>
-                        </table>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Employee Details</h4>
                     </div>
+                    <table>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Details</th>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                            <td>{{ $employee->username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Role</td>
+                            <td>{{ $employee->role }}</td>
+                        </tr>
+                        <tr>
+                            <td>Full Name</td>
+                            <td>{{ $employee->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ $employee->email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ $employee->phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td>{{ $employee->gender }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date of Birth</td>
+                            <td>{{ $employee->date_of_birth }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{ $employee->address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Position</td>
+                            <td>{{ $employee->position }}</td>
+                        </tr>
+                        <tr>
+                            <td>Create date</td>
+                            <td>{{ $employee->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                        </tr>
+                    </table>
+                </div>
 
-                    <div class="container">
-                        <h2>Employee Log</h2>
-                        <table>
-                            <tr>
-                                <th>Field</th>
-                                <th>Value</th>
-                            </tr>
-                            <tr>
-                                <td>Date/Time</td>
-                                <td>{{ $employee->created_at }}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact Method</td>
-                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact Status</td>
-                                <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                            </tr>
-                            <tr>
-                                <td>Customer Feedback</td>
-                                <td>customer_feedback</td>
-                            </tr>
-                            <tr>
-                                <td>Notes</td>
-                                <td>notes</td>
-                            </tr>
-                        </table>
-
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Employee Log</h4>
                     </div>
+                    <table>
+                        <tr>
+                            <th>Field</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Date/Time</td>
+                            <td>{{ $employee->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Method</td>
+                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Status</td>
+                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Feedback</td>
+                            <td>customer_feedback</td>
+                        </tr>
+                        <tr>
+                            <td>Notes</td>
+                            <td>notes</td>
+                        </tr>
+                    </table>
                 </div>
                 <a href="{{ route('employee.index') }}" class="btn btn-primary">Back to Employee List</a>
 
@@ -146,16 +147,9 @@
 </div>
 
 <style>
-    .father {
-        display: flex;
-        justify-content: space-between;
-    }
-
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
-        max-width: 600px;
     }
 
     th,
