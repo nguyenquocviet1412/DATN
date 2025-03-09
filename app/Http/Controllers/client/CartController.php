@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Product_image;
 
 class CartController extends Controller
 {
@@ -14,13 +15,15 @@ class CartController extends Controller
      */
     public function index()
     {
+        $product_images = Product_image::take(1)->get(); // Lấy 1 ảnh của sản phẩm để hiển thị
+        $products = Product::take(1)->get(); // Lấy 1 sản phẩm để hiển thị
         $cartItems = Cart::take(3)->get(); // Lấy 3 mục đầu tiên trong giỏ hàng
         $cartTotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
         $shippingCost = 10; // Ví dụ về chi phí vận chuyển
 
-        return view('home.Cart', compact('cartItems', 'cartTotal', 'shippingCost'));
+        return view('home.Cart', compact('cartItems', 'cartTotal', 'shippingCost', 'products', 'product_images'));
     }
     /**
      * Store a newly created resource in storage.
