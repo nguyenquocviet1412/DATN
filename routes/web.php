@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\Wallet_Transaction;
 use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\FilterProductController;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
@@ -50,9 +51,10 @@ use App\Http\Controllers\client\CartController;
       Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
       Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-  
+
   //Route home
       Route::get('/', [HomeController::class, 'index'])->name('home.index');
+      Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
 
   // chi tiết sản phẩm
       Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
