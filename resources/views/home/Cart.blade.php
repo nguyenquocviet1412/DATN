@@ -11,8 +11,8 @@
                     <div class="breadcrumb-wrap">
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
+                                <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ url('/shop') }}">shop</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">cart</li>
                             </ul>
                         </nav>
@@ -43,50 +43,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @foreach ($cartItems as $item)
                                     <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-1.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
-                                        <td class="pro-price"><span>$295.00</span></td>
+                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="{{ $item->product->thumbnail }}" alt="Product" /></a></td>
+                                        <td class="pro-title"><a href="#">{{ $item->product->name }}</a></td>
+                                        <td class="pro-price"><span>{{ number_format($item->price) }} VNĐ</span></td>
                                         <td class="pro-quantity">
-                                            <div class="pro-qty"><input type="text" value="1"></div>
+                                            <div class="pro-qty"><input type="text" value="{{ $item->quantity }}"></div>
                                         </td>
-                                        <td class="pro-subtotal"><span>$295.00</span></td>
+                                        <td class="pro-subtotal"><span>{{ number_format($item->price * $item->quantity) }} VNĐ</span></td>
                                         <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
                                     </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-2.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Perfect Diamond Jewelry</a></td>
-                                        <td class="pro-price"><span>$275.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty"><input type="text" value="2"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$550.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-3.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Handmade Golden Necklace</a></td>
-                                        <td class="pro-price"><span>$295.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$295.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-4.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
-                                        <td class="pro-price"><span>$110.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="3" />
-                                            </div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$110.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -114,20 +82,20 @@
                                     <table class="table">
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>$230</td>
+                                            <td>{{ number_format($cartItems->sum(function($item) { return $item->price * $item->quantity; })) }} VNĐ</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
-                                            <td>$70</td>
+                                            <td>70,000 VNĐ</td>
                                         </tr>
                                         <tr class="total">
                                             <td>Total</td>
-                                            <td class="total-amount">$300</td>
+                                            <td class="total-amount">{{ number_format($cartItems->sum(function($item) { return $item->price * $item->quantity; }) + 70000) }} VNĐ</td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <a href="checkout.html" class="btn btn-sqr d-block">Proceed Checkout</a>
+                            <a href="{{ url('/checkout') }}" class="btn btn-sqr d-block">Proceed Checkout</a>
                         </div>
                     </div>
                 </div>

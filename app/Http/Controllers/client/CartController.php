@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -12,8 +15,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
-        
+        // Get all cart items for the authenticated user
+        $cartItems = Cart::where('id_user', Auth::id())->with('product')->get();
+        return view('home.cart', compact('cartItems'));
     }
 
     /**

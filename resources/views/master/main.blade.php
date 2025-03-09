@@ -156,7 +156,7 @@
                                                     </li>
                                                     <li class="mega-title"><span>column 03</span>
                                                         <ul>
-                                                            <li><a href="{{ route('home.cart') }}">cart</a></li>
+                                                            <li><a href="{{ route('cart.index') }}">cart</a></li>
                                                             <li><a href="checkout.html">checkout</a></li>
                                                             <li><a href="compare.html">compare</a></li>
                                                             <li><a href="wishlist.html">wishlist</a></li>

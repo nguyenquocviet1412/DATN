@@ -2818,7 +2818,7 @@
                 </div>
 
                 <div class="minicart-button">
-                    <a href="{{route('home.cart')}}"><i class="fa fa-shopping-cart"></i> View Cart</a>
+                    <a href="{{ route('cart.index') }}"><i class="fa fa-shopping-cart"></i> View Cart</a>
                     <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
                 </div>
             </div>
