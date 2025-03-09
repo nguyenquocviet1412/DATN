@@ -89,11 +89,11 @@
                                         </ul>
                                     </li>
                                     <li class="language">
-                                        <img src="{{asset('assets/img/icon/en.png" alt="flag"> Engli')}}sh
+                                        <img src="{{asset('assets/img/icon/en.png')}}" alt="flag"> English
                                         <i class="fa"></i>
                                         <ul class="dropdown-list">
-                                            <l><a href="#"><img src="{{asset('assets/img/icon/en.png" alt="flag"> english</a></l')}}i>
-                                            <l><a href="#"><img src="{{asset('assets/img/icon/fr.png" alt="flag"> french</a></l')}}i>
+                                            <li><a href="#"><img src="{{asset('assets/img/icon/en.png')}}" alt="flag"> english</a></li>
+                                            <l><a href="#"><img src="{{asset('assets/img/icon/fr.png')}}" alt="flag"> french</a></l>
                                         </ul>
                                     </li>
                                 </ul>
@@ -118,7 +118,6 @@
                             </div>
                         </div>
                         <!-- start logo area -->
-
                         <!-- main menu area start -->
                         <div class="col-lg-6 position-static">
                             <div class="main-menu-area">
@@ -182,9 +181,9 @@
                                             <ul class="dropdown-list">
                                                 @if(Auth::guard('web')->check())
                                                     {{-- Người dùng (User) đã đăng nhập --}}
-                                                    <li><a href="{{ route('home.account') }}">Tài khoản của tôi</a></li>
+                                                    <li><a href="">Tài khoản của tôi</a></li>
                                                     <li>
-                                                        <a href="{{ route('home.logout') }}"
+                                                        <a href="{{ route('logout') }}"
                                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                                             Đăng xuất
                                                         </a>
