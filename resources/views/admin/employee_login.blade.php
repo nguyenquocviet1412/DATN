@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Nhập Quản Trị</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background: linear-gradient(to right, #4b6cb7, #182848);
             height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .login-container {
             max-width: 400px;
@@ -19,36 +23,15 @@
             transition: transform 0.3s ease-in-out;
         }
         .login-container:hover {
-            transform: scale(1.02);
+            transform: scale(1.03);
+        }
+        .form-control:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 5px rgba(75, 108, 183, 0.8);
         }
     </style>
 </head>
-
-{{-- Lời chào khi đăng xuất --}}
-<!-- Thêm thư viện SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        @if (session('logout_success'))
-            Swal.fire({
-                title: "Chào tạm biệt!",
-                text: "Hẹn gặp lại lần sau!",
-                icon: "success",
-                background: "#2c2c2c", // Nền tối
-                color: "#fff", // Màu chữ trắng
-                timer: 5000, // Tự động đóng sau 3 giây
-                showConfirmButton: false,
-                toast: true,
-                position: "top-end"
-            });
-        @endif
-    });
-</script>
-
-
-<body class="d-flex justify-content-center align-items-center">
-
+<body>
     <div class="login-container">
         <h3 class="text-center text-primary">Đăng Nhập Admin</h3>
         <form action="{{ route('admin.login') }}" method="POST">
@@ -65,11 +48,6 @@
                 <input type="checkbox" id="remember" name="remember" class="form-check-input">
                 <label for="remember" class="form-check-label">Nhớ đăng nhập</label>
             </div>
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
             <button type="submit" class="btn btn-primary w-100">Đăng Nhập</button>
         </form>
         <div class="text-center mt-3">
@@ -77,6 +55,51 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if (session('logout_success'))
+                Swal.fire({
+                    title: "Chào tạm biệt!",
+                    text: "Hẹn gặp lại lần sau!",
+                    icon: "success",
+                    background: "#2c2c2c",
+                    color: "#fff",
+                    timer: 5000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: "top-end"
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    title: "Lỗi đăng nhập!",
+                    text: "{{ session('error') }}",
+                    icon: "error",
+                    background: "#ffebee",
+                    color: "#d32f2f",
+                    timer: 5000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: "top-end"
+                });
+            @endif
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if (session('error'))
+                Swal.fire({
+                    title: "Đăng nhập thất bại!",
+                    text: "{{ session('error') }}",
+                    icon: "error",
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Thử lại"
+                });
+            @endif
+        });
+    </script>
 </body>
 </html>
