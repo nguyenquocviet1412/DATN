@@ -82,7 +82,7 @@
                                 <ul class="nav align-items-center justify-content-end">
                                     <li class="curreny-wrap">
                                         $ Currency
-                                        <i class="fa fa-angle-down"></i>
+                                        <i class="fa"></i>
                                         <ul class="dropdown-list curreny-list">
                                             <li><a href="#">$ USD</a></li>
                                             <li><a href="#">€ EURO</a></li>
@@ -90,7 +90,7 @@
                                     </li>
                                     <li class="language">
                                         <img src="assets/img/icon/en.png" alt="flag"> English
-                                        <i class="fa fa-angle-down"></i>
+                                        <i class="fa"></i>
                                         <ul class="dropdown-list">
                                             <li><a href="#"><img src="assets/img/icon/en.png" alt="flag"> english</a></li>
                                             <li><a href="#"><img src="assets/img/icon/fr.png" alt="flag"> french</a></li>
@@ -126,11 +126,11 @@
                                     <!-- main menu navbar start -->
                                     <nav class="desktop-menu">
                                         <ul>
-                                            <li class="active"><a href="index.html">Home <i class="fa fa-angle-down"></i></a>
+                                            <li class=""><a href="index.html">Home <i class="fa"></i></a>
                                                
                                             </li>
                                             <li class="position-static">
-                                                <a href="#">Danh mục <i class="fa fa-angle-down"></i></a>
+                                                <a href="#">Danh mục <i class="fa"></i></a>
                                                 <ul class="megamenu dropdown">
                                                     
                                                     @foreach ($categories as $category)
@@ -139,7 +139,7 @@
                                                 </ul>
                                             </li>
                                             
-                                            <li><a href="shop.html">shop <i class="fa fa-angle-down"></i></a>
+                                            <li><a href="shop.html">shop <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     <li><a href="#">shop grid layout <i class="fa fa-angle-right"></i></a>
                                                         <ul class="dropdown">
@@ -150,7 +150,7 @@
                                                    
                                                 </ul>
                                             </li>
-                                            <li><a href="blog-left-sidebar.html">Blog <i class="fa fa-angle-down"></i></a>
+                                            <li><a href="blog-left-sidebar.html">Blog <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
                                                     
@@ -357,7 +357,7 @@
                                 <div class="dropdown mobile-top-dropdown">
                                     <a href="#" class="dropdown-toggle" id="currency" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Currency
-                                        <i class="fa fa-angle-down"></i>
+                                        <i class="fa"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="currency">
                                         <a class="dropdown-item" href="#">$ USD</a>
@@ -369,7 +369,7 @@
                                 <div class="dropdown mobile-top-dropdown">
                                     <a href="#" class="dropdown-toggle" id="myaccount" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         My Account
-                                        <i class="fa fa-angle-down"></i>
+                                        <i class="fa"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="myaccount">
                                         <a class="dropdown-item" href="my-account.html">my account</a>
