@@ -2,6 +2,33 @@
 @section('title', 'Đăng nhập')
 @section('main')
 
+<!-- Bootstrap Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    @if(session('success'))
+        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    🎉 {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ❌ {{ session('error') }}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+</div>
+
+
+
     <main>
         <!-- breadcrumb area start -->
         <div class="breadcrumb-area">
@@ -31,18 +58,34 @@
                         <div class="col-lg-6">
                             <div class="login-reg-form-wrap">
                                 <h5>Sign In</h5>
-                                <form action="#" method="post">
+
+                                <!-- Hiển thị thông báo -->
+                                @if(session('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
+                                @endif
+                                @if(session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                @endif
+
+                                <form action="{{ route('postLogin') }}" method="POST">
+                                    @csrf
                                     <div class="single-input-item">
-                                        <input type="email" placeholder="Email or Username" required />
+                                        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required />
+                                        @error('email')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                     <div class="single-input-item">
-                                        <input type="password" placeholder="Enter your Password" required />
+                                        <input type="password" name="password" placeholder="Enter your Password" required />
+                                        @error('password')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                     <div class="single-input-item">
                                         <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
                                             <div class="remember-meta">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="rememberMe">
+                                                    <input type="checkbox" name="remember" class="custom-control-input" id="rememberMe">
                                                     <label class="custom-control-label" for="rememberMe">Remember Me</label>
                                                 </div>
                                             </div>
@@ -50,7 +93,7 @@
                                         </div>
                                     </div>
                                     <div class="single-input-item">
-                                        <button class="btn btn-sqr">Login</button>
+                                        <button class="btn btn-sqr" type="submit">Login</button>
                                     </div>
                                 </form>
                             </div>
@@ -355,6 +398,18 @@
 
     <!-- JS
 ============================================ -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let toastElements = document.querySelectorAll(".toast");
+        toastElements.forEach(function (toastEl) {
+            let toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+            toast.show();
+        });
+    });
+</script>
+
+
 
     <!-- Modernizer JS -->
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
