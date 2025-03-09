@@ -1,183 +1,123 @@
 @extends('admin.layout')
-@section('title', 'Danh sách người dùng | Quản trị Admin')
-@section('title2', 'Danh sách người dùng')
-
+@section('title', 'Chi tiết nhân viên')
 @section('content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="tile">
-            <div class="tile-body">
+{{-- Thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Thành công!',
+        text: '{{ session("success") }}',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 4000,
+        backdrop: true
+    });
+</script>
+@endif
 
-                {{-- thông báo thêm thành công --}}
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                @if(session('success'))
-                <script>
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: '{{ session("success") }}',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 4000,
-                        backdrop: true // Làm tối nền
-                    });
-                </script>
-                @endif
+{{-- Thông báo lỗi --}}
+@if(session('error'))
+<script>
+    Swal.fire({
+        title: 'Lỗi!',
+        text: '{{ session("error") }}',
+        icon: 'error',
+        showConfirmButton: true,
+        confirmButtonText: 'Đóng',
+        backdrop: true
+    });
+</script>
+@endif
 
-                {{-- Thông báo lỗi --}}
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                @if(session('error'))
-                <script>
-                    Swal.fire({
-                        title: 'Lỗi!',
-                        text: '{{ session("error") }}',
-                        icon: 'error',
-                        showConfirmButton: true, // Hiển thị nút đóng
-                        confirmButtonText: 'Đóng', // Nội dung nút đóng
-                        backdrop: true // Làm tối nền
-                    });
-                </script>
-                @endif
-
-                <!-- Tìm kiếm -->
-
-                <!-- Dropdown sắp xếp -->
-
-
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Employee Details</h4>
-                    </div>
-                    <table>
-                        <tr>
-                            <th>Attribute</th>
-                            <th>Details</th>
-                        </tr>
-                        <tr>
-                            <td>Username</td>
-                            <td>{{ $employee->username }}</td>
-                        </tr>
-                        <tr>
-                            <td>Role</td>
-                            <td>{{ $employee->role }}</td>
-                        </tr>
-                        <tr>
-                            <td>Full Name</td>
-                            <td>{{ $employee->fullname }}</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>{{ $employee->email }}</td>
-                        </tr>
-                        <tr>
-                            <td>Phone</td>
-                            <td>{{ $employee->phone }}</td>
-                        </tr>
-                        <tr>
-                            <td>Gender</td>
-                            <td>{{ $employee->gender }}</td>
-                        </tr>
-                        <tr>
-                            <td>Date of Birth</td>
-                            <td>{{ $employee->date_of_birth }}</td>
-                        </tr>
-                        <tr>
-                            <td>Address</td>
-                            <td>{{ $employee->address }}</td>
-                        </tr>
-                        <tr>
-                            <td>Position</td>
-                            <td>{{ $employee->position }}</td>
-                        </tr>
-                        <tr>
-                            <td>Create date</td>
-                            <td>{{ $employee->created_at }}</td>
-                        </tr>
-                        <tr>
-                            <td>Status</td>
-                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h4 class="mb-0">Employee Log</h4>
-                    </div>
-                    <table>
-                        <tr>
-                            <th>Field</th>
-                            <th>Value</th>
-                        </tr>
-                        <tr>
-                            <td>Date/Time</td>
-                            <td>{{ $employee->created_at }}</td>
-                        </tr>
-                        <tr>
-                            <td>Contact Method</td>
-                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                        </tr>
-                        <tr>
-                            <td>Contact Status</td>
-                            <td>{{ $employee->status ? 'Active' : 'Inactive' }}</td>
-                        </tr>
-                        <tr>
-                            <td>Customer Feedback</td>
-                            <td>customer_feedback</td>
-                        </tr>
-                        <tr>
-                            <td>Notes</td>
-                            <td>notes</td>
-                        </tr>
-                    </table>
-                </div>
-                <a href="{{ route('employee.index') }}" class="btn btn-primary">Back to Employee List</a>
-
-                <!-- Phân trang -->
-                <script>
-                    document.getElementById('select-all').addEventListener('change', function() {
-                        let checkboxes = document.querySelectorAll('input[name="check1"]');
-                        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-                    });
-                </script>
-
+<div class="container mt-4">
+    <div class="card shadow-lg p-4 rounded">
+        <h2 class="text-center text-primary mb-4">Thông Tin Nhân Viên</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Tên đăng nhập:</strong> {{ $employee->username }}</p>
+                <p><strong>Họ và Tên:</strong> {{ $employee->fullname }}</p>
+                <p><strong>Email:</strong> {{ $employee->email }}</p>
+                <p><strong>Số điện thoại:</strong> {{ $employee->phone }}</p>
+                <p><strong>Giới tính:</strong> {{ $employee->gender }}</p>
             </div>
+            <div class="col-md-6">
+                <p><strong>Ngày sinh:</strong> {{ $employee->date_of_birth }}</p>
+                <p><strong>Địa chỉ:</strong> {{ $employee->address }}</p>
+                <p><strong>Chức vụ:</strong> {{ $employee->position }}</p>
+                <p><strong>Trạng thái:</strong>
+                    <span class="badge bg-{{ $employee->status ? 'success' : 'danger' }}">
+                        {{ $employee->status ? 'Hoạt động' : 'Ngừng hoạt động' }}
+                    </span>
+                </p>
+                <p><strong>Vai trò:</strong>
+                    <span class="badge bg-{{ $employee->role == 'admin' ? 'danger' : 'info' }}">
+                        {{ $employee->role == 'admin' ? 'Quản trị cấp cao' : 'Nhân viên thường' }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        <a href="{{ route('employee.index') }}" class="btn btn-secondary mt-3">Quay lại danh sách</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded">
+        <h2 class="text-center text-primary">Lịch Sử Thao Tác</h2>
+
+        <!-- Tìm kiếm -->
+        <form method="GET" action="" class="mb-3 d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm thao tác..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
+        </form>
+
+        <table class="table table-striped table-hover text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Hành động</th>
+                    <th>IP</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($logs->isNotEmpty())
+                    @foreach ($logs as $log)
+                        <tr>
+                            <td>{{ $log->created_at }}</td>
+                            <td>{{ $log->action }}</td>
+                            <td>{{ $log->ip_address }}</td>
+                            <td>{{ $log->details }}</td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="4" class="text-muted">Không có lịch sử thao tác</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+
+        <!-- Phân trang -->
+        <div class="d-flex justify-content-center mt-3">
+            {{ $logs->appends(['search' => request('search')])->links() }}
         </div>
     </div>
 </div>
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    .card {
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
-
-    th,
-    td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
     }
-
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
     .btn-primary {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
         background-color: #007bff;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 4px;
+        border: none;
     }
-
     .btn-primary:hover {
         background-color: #0056b3;
     }

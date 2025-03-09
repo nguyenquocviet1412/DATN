@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-1">
-                                    <h2 class="slide-title">Comfort & Fashion<span>Combined</span></h2>
+                                    <h2 class="slide-title text-white">Comfort & Fashion<span>Combined</span></h2>
                                     <h4 class="slide-desc">Shoes that match your pace, crafted for elegance.</h4>
                                     <a href="shop.html" class="btn btn-hero">Shop Now</a>
                                 </div>
@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-2 float-md-end float-none">
-                                    <h2 class="slide-title">Premium Shoes<span>Collection</span></h2>
+                                    <h2 class="slide-title text-white">Premium Shoes<span>Collection</span></h2>
                                     <h4 class="slide-desc">Elevate your style with comfort and durability.</h4>
                                     <a href="shop.html" class="btn btn-hero">Explore Now</a>
                                 </div>
@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-3">
-                                    <h2 class="slide-title">Step in Style<span>New Arrivals</span></h2>
+                                    <h2 class="slide-title text-white">Step in Style<span>New Arrivals</span></h2>
                                     <h4 class="slide-desc">Trendy, high-quality footwear for every occasion.</h4>
                                     <a href="shop.html" class="btn btn-hero">Discover More</a>
                                 </div>
@@ -223,8 +223,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
+
+
                         <!-- product tab content end -->
                     </div>
                 </div>

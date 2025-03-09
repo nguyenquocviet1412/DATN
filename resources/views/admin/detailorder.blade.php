@@ -61,6 +61,21 @@
                         </span>
                     </td>
                 </tr>
+
+                {{-- Tổng tiền trước khi giảm giá --}}
+                <tr>
+                    <th>💰 Tổng tiền chưa giảm:</th>
+                    <td><strong>{{ number_format($order->total_before_discount) }} VNĐ</strong></td>
+                </tr>
+
+                {{-- Hiển thị mã giảm giá nếu có --}}
+                @if ($order->coupon_code)
+                <tr>
+                    <th>🎟 Mã giảm giá:</th>
+                    <td><span class="badge bg-warning">{{ $order->coupon_code }}</span></td>
+                </tr>
+                @endif
+
                 <tr>
                     <th>💲 Số tiền giảm giá:</th>
                     <td>- {{ number_format($order->discount_amount) }} VNĐ</td>
