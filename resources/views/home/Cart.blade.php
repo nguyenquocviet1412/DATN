@@ -47,18 +47,18 @@
                                     <tr>
                                         <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="{{ $item->image }}" alt="{{ $item->name }}" /></a></td>
                                         <td class="pro-title"><a href="#">{{ $item->name }}</a></td>
-                                        <td class="pro-price"><span>{{ $item->price }} VND</span></td>
+                                        <td class="pro-price"><span>${{ $item->price }}</span></td>
                                         <td class="pro-quantity">
-                                            <form action="{{ route('cart.update', $item->id) }}" method="POST" class="d-flex align-items-center">
+                                            <form action="{{ route('cart.update', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="pro-qty">
-                                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" class="form-control">
+                                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1">
+                                                    <button type="submit" class="btn btn-sqr">Update</button>
                                                 </div>
-                                                <button type="submit" class="btn btn-sqr ml-2">Update</button>
                                             </form>
                                         </td>
-                                        <td class="pro-subtotal"><span>{{ $item->price * $item->quantity }} VND</span></td>
+                                        <td class="pro-subtotal"><span>${{ $item->price * $item->quantity }}</span></td>
                                         <td class="pro-remove">
                                             <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
                                                 @csrf
@@ -119,7 +119,7 @@
     <!-- cart main wrapper end -->
 </main>
 
-@endsection
+
 
 <style>
     .pro-qty input {
@@ -130,3 +130,4 @@
         margin-left: 10px;
     }
 </style>
+@endsection
