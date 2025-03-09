@@ -55,4 +55,6 @@ class Variant extends Model
     {
         return $this->images()->exists() ? asset($this->images->first()->image_url) : asset('default-image.jpg');
     }
+
+    
 }
