@@ -75,11 +75,11 @@ Danh sách bình luận
                         <td>{{ $comment->created_at }}</td>
                         <td>{{ $comment->updated_at }}</td>
                         <td>
-                           
+
                             <form action="{{ route('comment.destroy', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                               
+
                             </form>
                             <form action="{{ route('comment.hide', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf

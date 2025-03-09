@@ -8,30 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-
-    const TRANG_THAI_DON_HANG = [
-        'cho_xac_nhan' => 'Chờ xác nhận',
-        'da_xac_nhan' => 'Đã xác nhận',
-        'dang_chuan_bi' => 'Đang chuẩn bị',
-        'dang_van_chuyen' => 'Đang vận chuyển',
-        'da_giao_hang' => 'Đã giao hàng',
-        'huy_don_hang' => 'Hủy đơn hàng',
-    ];
-
-    // const TRANG_THAI_THANH_TOAN = [
-    //     'chua_thanh_toan' => 'Chưa thanh toán',
-    //     'da_thanh_toan' => 'Đã thanh toán',
-
-    // ];
-
-    const CHO_XAC_NHAN = 'cho_xac_nhan';
-    const DA_XAC_NHAN = 'da_xac_nhan';
-    const DANG_CHUAN_BI = 'dang_chuan_bi';
-    const DANG_VAN_CHUYEN = 'dang_van_chuyen';
-    const DA_GIAO_HANG = 'da_giao_hang';
-    const HUY_DON_HANG = 'huy_don_hang';
-    // const CHUA_THANH_TOAN = 'chua_thanh_toan';
-    // const DA_THANH_TOAN = 'da_thanh_toan';
     protected $appends = ['totalPrice'];
 
     protected $table = 'orders';
@@ -44,7 +20,10 @@ class Order extends Model
         'total_price',
         'user_points',
         'points_earned',
+        'fullname',
+        'phone',
         'shipping_address',
+        'payment_method',
         'payment_status'
     ];
     public function user()
@@ -57,4 +36,107 @@ class Order extends Model
     {
         return $this->hasMany(Order_item::class, 'id_order');
     }
+    public function voucher()
+{
+    return $this->belongsTo(Voucher::class, 'id_voucher');
+}
+public function applyVoucher($voucherCode)
+{
+    $voucher = Voucher::where('code', $voucherCode)->where('status', 'active')->first();
+
+    if (!$voucher) {
+        return ['success' => false, 'message' => 'Voucher không hợp lệ hoặc đã hết hạn.'];
+    }
+
+    // Lấy tổng tiền giỏ hàng trước khi giảm giá
+    $cartTotal = $this->calculateCartTotal();
+
+    if ($voucher->min_order_value && $cartTotal < $voucher->min_order_value) {
+        return ['success' => false, 'message' => 'Đơn hàng chưa đạt mức tối thiểu để áp dụng voucher.'];
+    }
+
+    $discountAmount = 0;
+
+    if ($voucher->discount_type === 'percentage') {
+        // Tính số tiền giảm giá theo %
+        $discountAmount = ($cartTotal * $voucher->discount_value) / 100;
+
+        // Nếu có giới hạn giảm tối đa, áp dụng giới hạn
+        if ($voucher->max_discount) {
+            $discountAmount = min($discountAmount, $voucher->max_discount);
+        }
+    } else {
+        // Giảm giá cố định
+        $discountAmount = $voucher->discount_value;
+    }
+
+    // Tính tổng tiền sau khi giảm giá
+    $totalAfterDiscount = max(0, $cartTotal - $discountAmount);
+
+    // Cập nhật thông tin vào bảng orders
+    $this->update([
+        'id_voucher' => $voucher->id,
+        'discount_amount' => $discountAmount,
+        'total_price' => $totalAfterDiscount, // Tổng tiền sau giảm giá
+    ]);
+
+    return [
+        'success' => true,
+        'message' => 'Áp dụng voucher thành công!',
+        'discount' => $discountAmount,
+        'total_before_discount' => $cartTotal, // Tổng tiền trước khi giảm giá
+        'total_after_discount' => $totalAfterDiscount // Tổng tiền sau giảm giá
+    ];
+}
+
+public function getTotalPriceAfterDiscountAttribute()
+{
+    $cartTotal = $this->orderItems()->sum('subtotal'); // Tổng tiền trước giảm giá
+
+    if (!$this->voucher) {
+        return $cartTotal; // Không có voucher, giữ nguyên tổng tiền
+    }
+
+    $voucher = $this->voucher;
+    $discountAmount = 0;
+
+    if ($voucher->discount_type === 'percentage') {
+        // Tính giảm giá theo %
+        $discountAmount = ($cartTotal * $voucher->discount_value) / 100;
+
+        // Kiểm tra giới hạn giảm tối đa
+        if ($voucher->max_discount) {
+            $discountAmount = min($discountAmount, $voucher->max_discount);
+        }
+    } else {
+        // Giảm giá theo số tiền cố định
+        $discountAmount = $voucher->discount_value;
+    }
+
+    // Trả về tổng tiền sau giảm giá
+    return max(0, $cartTotal - $discountAmount);
+}
+
+// Tính tổng tiền giỏ hàng
+private function calculateCartTotal()
+{
+    return $this->orderItems()->sum('subtotal');
+}
+// Tính tổng tiền trước khi giảm giá
+public function getTotalBeforeDiscountAttribute()
+{
+    return $this->orderItems->sum('subtotal');
+}
+const PAYMENT_STATUS = [
+    'waiting_payment' => 'Chờ thanh toán',
+    'pending' => 'Chờ xử lý',
+    'shipping' => 'Đang vận chuyển',
+    'completed' => 'Hoàn tất',
+    'failed' => 'Thất bại'
+];
+
+const PAYMENT_METHOD = [
+    'COD' => 'Thanh toán khi nhận hàng',
+    'Online' => 'Thanh toán trực tuyến'
+];
 }

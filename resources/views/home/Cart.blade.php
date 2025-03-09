@@ -81,7 +81,7 @@
                                 </form>
                             </div>
                             <div class="cart-update">
-                                <a href="#" class="btn btn-sqr">Update Cart</a>
+                                <a href="{{ route('cart.index') }}" class="btn btn-sqr">Update Cart</a>
                             </div>
                         </div>
                     </div>
@@ -96,15 +96,15 @@
                                     <table class="table">
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>${{ $cartTotal }}</td>
+                                            <td>{{ $cartTotal }} VND</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
-                                            <td>${{ $shippingCost }}</td>
+                                            <td>{{ $shippingCost }} VND</td>
                                         </tr>
                                         <tr class="total">
                                             <td>Total</td>
-                                            <td class="total-amount">${{ $cartTotal + $shippingCost }}</td>
+                                            <td class="total-amount">{{ $cartTotal + $shippingCost }} VND</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -119,4 +119,15 @@
     <!-- cart main wrapper end -->
 </main>
 
+
+
+<style>
+    .pro-qty input {
+        width: 60px;
+        text-align: center;
+    }
+    .btn-sqr {
+        margin-left: 10px;
+    }
+</style>
 @endsection

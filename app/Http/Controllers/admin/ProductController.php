@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller; // Thêm dòng này
 
 use App\Models\Product;
@@ -32,6 +33,8 @@ class ProductController extends Controller
         // Thực hiện sắp xếp theo yêu cầu
         $products = Product::with(['category', 'variants.images'])->orderBy($sortBy, $sortOrder)->paginate(10);
 
+        // Ghi log
+        LogHelper::logAction('Vào trang hiển thị danh sách sản phẩm');
         return view('admin.product.product', compact('products', 'sortBy', 'sortOrder', 'search'));
     }
 
@@ -42,11 +45,14 @@ class ProductController extends Controller
         $categories = Category::all();
         $colors = Color::all();
         $sizes = Size::all();
+
+        // Ghi log
+        LogHelper::logAction('Vào trang thêm sản phẩm');
         return view('admin.product.addproduct', compact('categories', 'colors', 'sizes'));
     }
 
     // Thêm sản phẩm
-    public function store(Request $request)
+public function store(Request $request)
 {
     $request->validate([
         'name' => 'required|string|max:255',
@@ -64,6 +70,9 @@ class ProductController extends Controller
         'price' => $request->price,
         'status' => $request->status,
     ]);
+// Ghi log
+LogHelper::logAction('Thêm sản phẩm mới có id: ' . $product->id);
+    $variantCombinations = [];
 
     // Kiểm tra xem có biến thể nào được gửi lên không
     if ($request->has('variants')) {
@@ -71,6 +80,13 @@ class ProductController extends Controller
             if (!isset($variantData['id_color'], $variantData['id_size'], $variantData['price'], $variantData['quantity'])) {
                 continue;
             }
+
+            // Tạo khóa duy nhất cho biến thể (màu sắc + size)
+            $variantKey = $variantData['id_color'] . '-' . $variantData['id_size'];
+            if (in_array($variantKey, $variantCombinations)) {
+                return redirect()->back()->withInput()->with('error', 'Có biến thể bị trùng màu sắc và kích thước. Vui lòng kiểm tra lại.');
+            }
+            $variantCombinations[] = $variantKey;
 
             // Thêm biến thể mới
             $variant = Variant::create([
@@ -80,6 +96,8 @@ class ProductController extends Controller
                 'price' => $variantData['price'],
                 'quantity' => $variantData['quantity'],
             ]);
+// Ghi log
+LogHelper::logAction('Thêm biến thể mới có id: ' . $variant->id. ' cho sản phẩm có id: ' . $product->id);
 
             // Kiểm tra nếu có ảnh được tải lên
             if ($variant && isset($variantData['images'])) {
@@ -99,8 +117,10 @@ class ProductController extends Controller
         }
     }
 
+
     return redirect()->route('product.index')->with('success', 'Sản phẩm và biến thể đã được thêm.');
 }
+
 
 
 // Hiển thị form sửa
@@ -108,6 +128,11 @@ public function edit($id)
 {
     $product = Product::with('variants')->findOrFail($id);
     $categories = Category::all();
+    $colors = Color::all();
+    $sizes = Size::all();
+
+    // Ghi log
+    LogHelper::logAction('Vào trang sửa sản phẩm: ' . $product->id);
     return view('admin.product.editproduct', compact('product', 'categories'));
 }
 
@@ -126,7 +151,8 @@ public function update(Request $request, $id)
             ['image_url' => 'storage/product' . $imagePath]
         );
     }
-
+    // Ghi log
+    LogHelper::logAction('Cập nhật sản phẩm có id: ' . $product->id);
     return redirect()->route('product.index')->with('success', 'Sản phẩm đã được cập nhật.');
 }
 

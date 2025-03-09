@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employee extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class Employee extends Authenticatable
 {
     use HasFactory, SoftDeletes;
 
@@ -24,6 +27,14 @@ class Employee extends Model
         'salary',
         'status'
     ];
+    protected $hidden = ['password', 'remember_token'];
+
+    protected $casts = ['email_verified_at' => 'datetime'];
 
     protected $dates = ['deleted_at'];
+    // App\Models\Employee.php
+public function logs()
+{
+    return $this->hasMany(Log::class, 'id_employee');
+}
 }

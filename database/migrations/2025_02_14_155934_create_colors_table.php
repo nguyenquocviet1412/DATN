@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // Khóa chính tự động tăng
             $table->string('name')->unique(); // Tên màu, không trùng lặp
             $table->timestamps(); // created_at & updated_at
+            $table->softDeletes(); // Xóa mềm
         });
     }
 

@@ -129,12 +129,12 @@
                                             <li class=""><a href="index.html">Home <i class="fa"></i></a>
 
                                             </li>
-                                            <li>
-                                                <a href="">Danh mục <i class="fa"></i></a>
-                                                <ul class=" dropdown">
+                                            <li class="position-static">
+                                                <a href="#">Danh mục <i class="fa"></i></a>
+                                                <ul class="megamenu dropdown">
 
                                                     @foreach ($categories as $category)
-                                                        <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
+                                                        <li><a href="">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>
@@ -178,13 +178,25 @@
                                 <div class="header-configure-area">
                                     <ul class="nav justify-content-end">
                                         <li class="user-hover">
-                                            <a href="#">
-                                                <i class="pe-7s-user"></i>
-                                            </a>
+                                            <a href="#"><i class="pe-7s-user"></i></a>
                                             <ul class="dropdown-list">
-                                                <li><a href="{{ route('home.login') }}">login</a></li>
-                                                <li><a href="{{ route('home.register') }}">register</a></li>
-                                                <li><a href="my-account.html">my account</a></li>
+                                                @if(Auth::guard('web')->check())
+                                                    {{-- Người dùng (User) đã đăng nhập --}}
+                                                    <li><a href="#">Tài khoản của tôi</a></li>
+                                                    <li>
+                                                        <a href="{{ route('logout') }}"
+                                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                            Đăng xuất
+                                                        </a>
+                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                        </form>
+                                                    </li>
+                                                @else
+                                                    {{-- Chưa đăng nhập --}}
+                                                    <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                                                    <li><a href="{{ route('register') }}">Đăng ký</a></li>
+                                                @endif
                                             </ul>
                                         </li>
                                         <li>

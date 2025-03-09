@@ -1,131 +1,149 @@
 @extends('admin.layout')
-@section('title', 'Danh sách đơn hàng | Quản trị Admin')
-@section('title2', 'Danh sách đơn hàng')
+@section('title', 'Chỉnh sửa đơn hàng | Quản trị Admin')
+@section('title2', 'Chỉnh sửa đơn hàng')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <div class="tile-body">
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                @if (session('success'))
+                    <script>
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: '{{ session('success') }}',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 4000
+                        });
+                    </script>
+                @endif
 
-                    {{-- thông báo thêm thành công --}}
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                    @if (session('success'))
-                        <script>
-                            Swal.fire({
-                                title: 'Thành công!',
-                                text: '{{ session('success') }}',
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 4000,
-                                backdrop: true // Làm tối nền
-                            });
-                        </script>
-                    @endif
+                <form action="{{ route('order.update', $order->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
+                    {{-- Thông tin tài khoản người đặt hàng --}}
+                    <h3>Thông tin tài khoản</h3>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>ID tài khoản:</th>
+                            <td>{{ $order->user->id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td>{{ $order->user->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ $order->user->email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Số điện thoại:</th>
+                            <td>{{ $order->user->phone }}</td>
+                        </tr>
+                    </table>
 
-                    {{-- Thông báo lỗi --}}
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                    @if (session('error'))
-                        <script>
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: '{{ session('error') }}',
-                                icon: 'error',
-                                showConfirmButton: true, // Hiển thị nút đóng
-                                confirmButtonText: 'Đóng', // Nội dung nút đóng
-                                backdrop: true // Làm tối nền
-                            });
-                        </script>
-                    @endif
+                    {{-- Thông tin người nhận --}}
+                    <h3>Thông tin người nhận</h3>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td>{{ $order->recipient_name ?? $order->user->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Số điện thoại:</th>
+                            <td>{{ $order->recipient_phone ?? $order->user->phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Địa chỉ giao hàng:</th>
+                            <td>{{ $order->shipping_address ?? 'Chưa có địa chỉ' }}</td>
+                        </tr>
+                    </table>
 
-
-                    <div class="row element-button">
-                        <div class="col-md-6">
-                            <form action="{{ route('order.index') }}" method="GET">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control"
-                                        placeholder="Tìm kiếm đơn hàng..." value="{{ request('search') }}">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Tìm kiếm
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <form action="{{ route('order.update', ['id' => $order->id]) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Thông tin khách hàng</h3>
-                                <table class="table">
-                                    <thead>
-
-                                        <tr>
-                                            <th>Họ tên: </th>
-                                            <td>{{ $order->user->fullname }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Phone: </th>
-                                            <td>{{ $order->user->phone }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Địa chỉ: </th>
-                                            <td><input type="text" value="{{ $order->shipping_address }}" name="shipping_address"></td>
-                                        </tr>
-
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                        <h3>Thông tin sản phẩm</h3>
-                        <table class="table">
-                            <thead>
+                    {{-- Thông tin sản phẩm --}}
+                    <h3>Thông tin sản phẩm</h3>
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Mã SP</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Hình ảnh</th>
+                                <th>Số lượng</th>
+                                <th>Giá</th>
+                                <th>Tổng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($order->orderItems as $index => $item)
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Mã sản phẩm</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá</th>
-                                    <th>Tổng</th>
-                                    <th>Hoạt Động</th>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->variant->id_product }}</td>
+                                    <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
+                                    <td>
+                                        @if ($item->variant->images->isNotEmpty())
+                                            <img src="{{ asset($item->variant->images->first()->image_url) }}" width="50">
+                                        @else
+                                            <img src="{{ asset('default-image.jpg') }}" width="50">
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ number_format($item->price) }} VNĐ</td>
+                                    <td>{{ number_format($item->subtotal) }} VNĐ</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($order->orderItems as $index => $item)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $item->variant->id_product }}</td>
-                                        <td>
-                                            @if (isset($item->variant->product))
-                                                {{ $item->variant->product->name }}
-                                            @endif
-                                        </td>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                                        <td>
-                                            @foreach ($item->variant->images as $img)
-                                                <img src="{{ $img->image_url }}" alt="">
-                                            @endforeach
-                                        </td>
-                                        <td>{{ number_format($item->quantity) }}</td>
-                                        <td>{{ number_format($item->price) }}</td>
-                                        <td>{{ number_format($item->subtotal) }}</td>
-                                        <td>
-                                            <form action="{{ route('order.delete', $order->id) }}" method="POSt"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('PUT')
-                                                <button class="btn btn-danger btn-sm" type="submit"
-                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </form>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                @endsection
+                    {{-- Cập nhật trạng thái đơn hàng --}}
+                    <h3>Trạng thái đơn hàng</h3>
+                    <div class="form-group">
+                        <label for="payment_status">Trạng thái đơn hàng:</label>
+                        <select class="form-control" name="payment_status">
+                            @foreach ([
+                                'waiting_payment' => 'Chờ thanh toán',
+                                'pending' => 'Chờ xử lý',
+                                'shipping' => 'Đang vận chuyển',
+                                'completed' => 'Hoàn tất',
+                                'failed' => 'Thất bại'
+                            ] as $key => $value)
+                                <option value="{{ $key }}" {{ $order->payment_status == $key ? 'selected' : '' }}>
+                                    {{ $value }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Cập nhật phương thức thanh toán --}}
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="form-group">
+                        <label for="payment_method">Phương thức thanh toán:</label>
+                        <select class="form-control" name="payment_method">
+                            @foreach ([
+                                'COD' => 'Thanh toán khi nhận hàng',
+                                'Online' => 'Thanh toán trực tuyến'
+                            ] as $key => $value)
+                                <option value="{{ $key }}" {{ $order->payment_method == $key ? 'selected' : '' }}>
+                                    {{ $value }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('order.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay về
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Cập nhật đơn hàng
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

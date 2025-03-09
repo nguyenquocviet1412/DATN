@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -87,6 +88,8 @@ class AdminReportController extends Controller
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(price * quantity) as revenue'))
             ->pluck('revenue', 'date');
 
+            // Ghi log
+            LogHelper::logAction('Vào trang doanh thu');
         // Trả dữ liệu ra view
         return view('admin.reports', compact(
             'totalEmployees',
