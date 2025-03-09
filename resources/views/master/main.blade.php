@@ -128,12 +128,12 @@
                                             <li class=""><a href="index.html">Home <i class="fa"></i></a>
 
                                             </li>
-                                            <li class="position-static">
-                                                <a href="#">Danh mục <i class="fa"></i></a>
-                                                <ul class="megamenu dropdown">
+                                            <li>
+                                                <a href="">Danh mục <i class="fa"></i></a>
+                                                <ul class=" dropdown">
 
                                                     @foreach ($categories as $category)
-                                                        <li><a href="">{{ $category->name }}</a></li>
+                                                        <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>

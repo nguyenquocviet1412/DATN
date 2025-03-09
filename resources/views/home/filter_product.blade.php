@@ -2,28 +2,6 @@
 
 @section('main')
 <div class="container mt-4">
-    <h2 class="mb-4">Lọc Sản Phẩm</h2>
-
-    <form method="GET" action="{{ route('filter-product') }}" class="mb-4">
-        <div class="row">
-            <div class="col-md-4">
-                <select name="category" class="form-control">
-                    <option value="">Chọn danh mục</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm..." value="{{ request('keyword') }}">
-            </div>
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary">Lọc</button>
-            </div>
-        </div>
-    </form>
 
     <div class="row">
         @foreach($products as $product)

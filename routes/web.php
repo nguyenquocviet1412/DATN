@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\client\DetailProductController;
 use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\FilterProductController;
 
 /*
 |--------------------------------------------------------------------------
