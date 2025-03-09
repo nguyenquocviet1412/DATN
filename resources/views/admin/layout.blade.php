@@ -189,6 +189,7 @@
 
 </head>
 
+
 <body onload="time()" class="app sidebar-mini rtl">
     <!-- Navbar-->
     <header class="app-header">

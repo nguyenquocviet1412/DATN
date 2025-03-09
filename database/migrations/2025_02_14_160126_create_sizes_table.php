@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
-            $table->string('size')->unique(); // Đảm bảo mỗi size là duy nhất
+            $table->string('size')->unique()->change(); // Đảm bảo mỗi size là duy nhất
             $table->timestamps();
             $table->softDeletes(); // Xóa mềm
         });

@@ -157,7 +157,7 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
 
     // Route quản lý Size
     Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('size', SizeController::class);
+    Route::resource('size', SizeController::class)->except(['show']);
     Route::get('/size', [SizeController::class, 'index'])->name('size.index');
     Route::get('/size/create', [SizeController::class, 'create'])->name('size.create');
     Route::post('/size/store', [SizeController::class, 'store'])->name('size.store');
