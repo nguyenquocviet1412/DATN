@@ -1,4 +1,4 @@
-// filepath: /c:/laragon/www/DATN/resources/views/admin/comment/comment.blade.php
+
 @extends('admin.layout')
 @section('title')
 Danh sách bình luận | Quản trị Admin
@@ -14,7 +14,7 @@ Danh sách bình luận
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comments</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <style>
         body {
             background-color: #f0f2f5;
@@ -49,26 +49,6 @@ Danh sách bình luận
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Comment Management</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('comment.create') }}">Add Comment</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- Main Content -->
     <div class="container">
         <h1 class="mb-4 text-center">Comments</h1>
@@ -95,11 +75,11 @@ Danh sách bình luận
                         <td>{{ $comment->created_at }}</td>
                         <td>{{ $comment->updated_at }}</td>
                         <td>
-                           
+
                             <form action="{{ route('comment.destroy', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                               
+
                             </form>
                             <form action="{{ route('comment.hide', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
@@ -115,13 +95,6 @@ Danh sách bình luận
             </table>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="text-center">
-        <div class="container">
-            <p>&copy; 2025 Comment Management System. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -9,9 +9,7 @@ Thêm voucher
 
 <div class="row">
     <div class="col-md-12">
-
       <div class="tile">
-
         <h3 class="tile-title">Tạo mới Voucher</h3>
         <div class="tile-body">
             <form class="row" action="{{route('voucher.store')}}" method="POST" enctype="multipart/form-data">
@@ -23,7 +21,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Loại Giảm Giá</label>
                     <select name="discount_type" class="form-control @error('discount_type') is-invalid @enderror" required>
@@ -34,7 +31,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Giá Trị Giảm Giá</label>
                     <input class="form-control @error('discount_value') is-invalid @enderror" name="discount_value" type="number" required>
@@ -42,7 +38,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Giá Trị Đơn Hàng Tối Thiểu</label>
                     <input class="form-control @error('min_order_value') is-invalid @enderror" name="min_order_value" type="number" required>
@@ -52,13 +47,19 @@ Thêm voucher
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label class="control-label">Giảm Giá Tối Đa</label>
+                    <label class="control-label">Giá Trị Giảm Tối Đa</label>
                     <input class="form-control @error('max_discount') is-invalid @enderror" name="max_discount" type="number">
                     @error('max_discount')
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
+                <div class="form-group col-md-4">
+                    <label class="control-label">Số lượng</label>
+                    <input class="form-control @error('quantity') is-invalid @enderror" name="quantity" type="number" required>
+                    @error('quantity')
+                        <span class="invalid-feedback d-block">{{$message}}</span>
+                    @enderror
+                </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Ngày Bắt Đầu</label>
                     <input class="form-control @error('start_date') is-invalid @enderror" name="start_date" type="date" required>
@@ -66,7 +67,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Ngày Kết Thúc</label>
                     <input class="form-control @error('end_date') is-invalid @enderror" name="end_date" type="date" required>
@@ -74,7 +74,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Số Lần Sử Dụng Tối Đa</label>
                     <input class="form-control @error('usage_limit') is-invalid @enderror" name="usage_limit" type="number" required>
@@ -82,7 +81,6 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Trạng Thái</label>
                     <select name="status" class="form-control @error('status') is-invalid @enderror">
@@ -93,19 +91,12 @@ Thêm voucher
                         <span class="invalid-feedback d-block">{{$message}}</span>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-12">
                     <button class="btn btn-save" type="submit">Lưu lại</button>
                     <a class="btn btn-cancel" href="{{route('voucher.index')}}">Hủy bỏ</a>
                 </div>
             </form>
-
         </div>
-
       </div>
-
 </div>
-
-
-
 @endsection
