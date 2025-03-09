@@ -37,7 +37,8 @@ use App\Http\Controllers\client\CartController;
 |
 */
 
-// ----------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------
+// Route CLIENT
 // Routes đăng ký đăng nhập cho khách hàng
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
@@ -49,13 +50,8 @@ Route::post('/register', [AuthController::class, 'postRegister'])->name('postReg
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Routes đăng nhập cho nhân viên
-Route::get('/admin/login', [EmployeeAuthController::class, 'getLogin'])->name('admin.login');
-Route::post('/admin/login', [EmployeeAuthController::class, 'postLogin'])->name('admin.postLogin');
-Route::get('/admin/logout', [EmployeeAuthController::class, 'logout'])->name('admin.logout');
-//Route Admin
 
-
+//Giỏ hàng
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
     Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
@@ -64,9 +60,19 @@ Route::prefix('cart')->group(function () {
     Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/login', [HomeController::class, 'login'])->name('home.login');
-Route::get('/register', [HomeController::class, 'register'])->name('home.register');
+
+
+
+
+
+
+// -----------------------------------------------------------------------------------------------------------------------------------------
+//Route ADMIN
+// Routes đăng nhập cho nhân viên
+Route::get('/admin/login', [EmployeeAuthController::class, 'getLogin'])->name('admin.login');
+Route::post('/admin/login', [EmployeeAuthController::class, 'postLogin'])->name('admin.postLogin');
+Route::get('/admin/logout', [EmployeeAuthController::class, 'logout'])->name('admin.logout');
+
 
 Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
     //route dashboard
@@ -155,7 +161,7 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
     Route::get('/size/restore/{id}', [SizeController::class, 'restore'])->name('size.restore');
     Route::delete('/size/destroy/{id}', [SizeController::class, 'destroy'])->name('size.destroy');
     });
-    
+
 
 
     //route Report

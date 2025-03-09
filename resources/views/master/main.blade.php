@@ -127,33 +127,33 @@
                                     <nav class="desktop-menu">
                                         <ul>
                                             <li class=""><a href="index.html">Home <i class="fa"></i></a>
-                                               
+
                                             </li>
                                             <li class="position-static">
                                                 <a href="#">Danh mục <i class="fa"></i></a>
                                                 <ul class="megamenu dropdown">
-                                                    
+
                                                     @foreach ($categories as $category)
                                                         <li><a href="">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>
-                                            
+
                                             <li><a href="shop.html">shop <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     <li><a href="#">shop grid layout <i class="fa fa-angle-right"></i></a>
                                                         <ul class="dropdown">
                                                             <li><a href="shop.html">shop grid left sidebar</a></li>
-                                                            
+
                                                         </ul>
                                                     </li>
-                                                   
+
                                                 </ul>
                                             </li>
                                             <li><a href="blog-left-sidebar.html">Blog <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
-                                                    
+
                                                 </ul>
                                             </li>
                                             <li><a href="contact-us.html">Contact us</a></li>
@@ -178,13 +178,25 @@
                                 <div class="header-configure-area">
                                     <ul class="nav justify-content-end">
                                         <li class="user-hover">
-                                            <a href="#">
-                                                <i class="pe-7s-user"></i>
-                                            </a>
+                                            <a href="#"><i class="pe-7s-user"></i></a>
                                             <ul class="dropdown-list">
-                                                <li><a href="{{ route('home.login') }}">login</a></li>
-                                                <li><a href="{{ route('home.register') }}">register</a></li>
-                                                <li><a href="my-account.html">my account</a></li>
+                                                @if(Auth::guard('web')->check())
+                                                    {{-- Người dùng (User) đã đăng nhập --}}
+                                                    <li><a href="#">Tài khoản của tôi</a></li>
+                                                    <li>
+                                                        <a href="{{ route('logout') }}"
+                                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                            Đăng xuất
+                                                        </a>
+                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                        </form>
+                                                    </li>
+                                                @else
+                                                    {{-- Chưa đăng nhập --}}
+                                                    <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                                                    <li><a href="{{ route('register') }}">Đăng ký</a></li>
+                                                @endif
                                             </ul>
                                         </li>
                                         <li>
