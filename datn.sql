@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 04, 2025 at 05:38 PM
+-- Generation Time: Mar 09, 2025 at 04:14 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -98,19 +98,20 @@ CREATE TABLE `colors` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `colors`
 --
 
-INSERT INTO `colors` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Red', '2024-04-26 10:48:38', NULL),
-(2, 'Blue', '2024-06-18 10:48:38', NULL),
-(3, 'Black', '2024-09-22 10:48:38', NULL),
-(4, 'White', '2025-01-07 10:48:38', NULL),
-(5, 'Green', '2024-12-18 10:48:38', NULL);
+INSERT INTO `colors` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Red', '2024-04-26 10:48:38', NULL, NULL),
+(2, 'Blue', '2024-06-18 10:48:38', NULL, NULL),
+(3, 'Black', '2024-09-22 10:48:38', NULL, NULL),
+(4, 'White', '2025-01-07 10:48:38', NULL, NULL),
+(5, 'Green', '2024-12-18 10:48:38', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -301,7 +302,189 @@ INSERT INTO `logs` (`id`, `id_employee`, `action`, `ip_address`, `details`, `cre
 (16, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-04 10:24:59', '2025-03-04 10:24:59'),
 (17, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-04 10:25:01', '2025-03-04 10:25:01'),
 (18, 10, 'Vào trang thêm biến thể cho sản phẩm có ID: 41', '127.0.0.1', NULL, '2025-03-04 10:25:39', '2025-03-04 10:25:39'),
-(19, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-04 10:25:47', '2025-03-04 10:25:47');
+(19, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-04 10:25:47', '2025-03-04 10:25:47'),
+(20, 10, 'đăng nhập vào hệ thống', '127.0.0.1', NULL, '2025-03-06 09:44:46', '2025-03-06 09:44:46'),
+(21, 10, 'hiển thị trang dashboard', '127.0.0.1', NULL, '2025-03-06 09:44:46', '2025-03-06 09:44:46'),
+(22, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:44:51', '2025-03-06 09:44:51'),
+(23, 10, 'Vào trang tạo mới tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:44:56', '2025-03-06 09:44:56'),
+(24, 10, 'Tạo mới tài khoản người dùng có id: 22', '127.0.0.1', NULL, '2025-03-06 09:46:02', '2025-03-06 09:46:02'),
+(25, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:46:02', '2025-03-06 09:46:02'),
+(26, 10, 'Xem chi tiết tài khoản người dùng có id: 1', '127.0.0.1', NULL, '2025-03-06 09:47:18', '2025-03-06 09:47:18'),
+(27, 10, 'Xem chi tiết tài khoản người dùng có id: 19', '127.0.0.1', NULL, '2025-03-06 09:47:45', '2025-03-06 09:47:45'),
+(28, 10, 'Xem chi tiết tài khoản người dùng có id: 20', '127.0.0.1', NULL, '2025-03-06 09:47:48', '2025-03-06 09:47:48'),
+(29, 10, 'Vào trang tạo mới tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:48:17', '2025-03-06 09:48:17'),
+(30, 10, 'Tạo mới tài khoản người dùng có id: 23', '127.0.0.1', NULL, '2025-03-06 09:48:31', '2025-03-06 09:48:31'),
+(31, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:48:32', '2025-03-06 09:48:32'),
+(32, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:49:12', '2025-03-06 09:49:12'),
+(33, 10, 'Xem chi tiết tài khoản người dùng có id: 20', '127.0.0.1', NULL, '2025-03-06 09:49:15', '2025-03-06 09:49:15'),
+(34, 10, 'Xem chi tiết tài khoản người dùng có id: 20', '127.0.0.1', NULL, '2025-03-06 09:49:25', '2025-03-06 09:49:25'),
+(35, 10, 'Xem chi tiết tài khoản người dùng có id: 19', '127.0.0.1', NULL, '2025-03-06 09:49:48', '2025-03-06 09:49:48'),
+(36, 10, 'Xem chi tiết tài khoản người dùng có id: 16', '127.0.0.1', NULL, '2025-03-06 09:49:50', '2025-03-06 09:49:50'),
+(37, 10, 'Vào trang tạo mới tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:54:26', '2025-03-06 09:54:26'),
+(38, 10, 'Vào trang tạo mới tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:54:41', '2025-03-06 09:54:41'),
+(39, 10, 'Tạo mới tài khoản người dùng có id: 24', '127.0.0.1', NULL, '2025-03-06 09:55:09', '2025-03-06 09:55:09'),
+(40, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 09:55:10', '2025-03-06 09:55:10'),
+(41, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 09:55:25', '2025-03-06 09:55:25'),
+(42, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 09:55:38', '2025-03-06 09:55:38'),
+(43, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 09:59:15', '2025-03-06 09:59:15'),
+(44, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 10:00:28', '2025-03-06 10:00:28'),
+(45, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 10:02:25', '2025-03-06 10:02:25'),
+(46, 10, 'Xem chi tiết tài khoản người dùng có id: 12', '127.0.0.1', NULL, '2025-03-06 10:02:40', '2025-03-06 10:02:40'),
+(47, 10, 'Xem chi tiết tài khoản người dùng có id: 1', '127.0.0.1', NULL, '2025-03-06 10:03:19', '2025-03-06 10:03:19'),
+(48, 10, 'Xem chi tiết tài khoản người dùng có id: 1', '127.0.0.1', NULL, '2025-03-06 10:03:58', '2025-03-06 10:03:58'),
+(49, 10, 'Xem chi tiết tài khoản người dùng có id: 2', '127.0.0.1', NULL, '2025-03-06 10:04:01', '2025-03-06 10:04:01'),
+(50, 10, 'Xem chi tiết tài khoản người dùng có id: 3', '127.0.0.1', NULL, '2025-03-06 10:04:03', '2025-03-06 10:04:03'),
+(51, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:04', '2025-03-06 10:09:04'),
+(52, 10, 'Xem chi tiết tài khoản người dùng có id: 1', '127.0.0.1', NULL, '2025-03-06 10:09:06', '2025-03-06 10:09:06'),
+(53, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:25', '2025-03-06 10:09:25'),
+(54, 10, 'Xem chi tiết tài khoản người dùng có id: 2', '127.0.0.1', NULL, '2025-03-06 10:09:26', '2025-03-06 10:09:26'),
+(55, 10, 'Xem chi tiết tài khoản người dùng có id: 15', '127.0.0.1', NULL, '2025-03-06 10:09:30', '2025-03-06 10:09:30'),
+(56, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:32', '2025-03-06 10:09:32'),
+(57, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:34', '2025-03-06 10:09:34'),
+(58, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:38', '2025-03-06 10:09:38'),
+(59, 10, 'Xem chi tiết tài khoản người dùng có id: 10', '127.0.0.1', NULL, '2025-03-06 10:09:42', '2025-03-06 10:09:42'),
+(60, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:45', '2025-03-06 10:09:45'),
+(61, 10, 'Xem chi tiết tài khoản người dùng có id: 11', '127.0.0.1', NULL, '2025-03-06 10:09:47', '2025-03-06 10:09:47'),
+(62, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:09:49', '2025-03-06 10:09:49'),
+(63, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:11:18', '2025-03-06 10:11:18'),
+(64, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:11:24', '2025-03-06 10:11:24'),
+(65, 10, 'Xem chi tiết tài khoản người dùng có id: 16', '127.0.0.1', NULL, '2025-03-06 10:11:33', '2025-03-06 10:11:33'),
+(66, 10, 'Xem chi tiết tài khoản người dùng có id: 24', '127.0.0.1', NULL, '2025-03-06 10:11:36', '2025-03-06 10:11:36'),
+(67, NULL, 'đăng xuất khỏi hệ thống', '127.0.0.1', NULL, '2025-03-06 10:14:25', '2025-03-06 10:14:25'),
+(68, 10, 'đăng nhập vào hệ thống', '127.0.0.1', NULL, '2025-03-06 10:16:13', '2025-03-06 10:16:13'),
+(69, 10, 'hiển thị trang dashboard', '127.0.0.1', NULL, '2025-03-06 10:16:13', '2025-03-06 10:16:13'),
+(70, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:16:18', '2025-03-06 10:16:18'),
+(71, 10, 'Xem chi tiết tài khoản người dùng có id: 24', '127.0.0.1', NULL, '2025-03-06 10:16:20', '2025-03-06 10:16:20'),
+(72, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:16:29', '2025-03-06 10:16:29'),
+(73, 10, 'Xem chi tiết tài khoản người dùng có id: 15', '127.0.0.1', NULL, '2025-03-06 10:16:32', '2025-03-06 10:16:32'),
+(74, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:16:35', '2025-03-06 10:16:35'),
+(75, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:16:39', '2025-03-06 10:16:39'),
+(76, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:16:45', '2025-03-06 10:16:45'),
+(77, 10, 'Xem chi tiết tài khoản người dùng có id: 23', '127.0.0.1', NULL, '2025-03-06 10:17:11', '2025-03-06 10:17:11'),
+(78, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-06 10:17:14', '2025-03-06 10:17:14'),
+(79, 10, 'đăng nhập vào hệ thống', '127.0.0.1', NULL, '2025-03-08 07:05:25', '2025-03-08 07:05:25'),
+(80, 10, 'hiển thị trang dashboard', '127.0.0.1', NULL, '2025-03-08 07:05:25', '2025-03-08 07:05:25'),
+(81, 10, 'hiển thị trang dashboard', '127.0.0.1', NULL, '2025-03-08 07:05:41', '2025-03-08 07:05:41'),
+(82, 10, 'Vào trang danh sách danh mục', '127.0.0.1', NULL, '2025-03-08 07:05:42', '2025-03-08 07:05:42'),
+(83, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 08:32:05', '2025-03-08 08:32:05'),
+(84, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 08:32:11', '2025-03-08 08:32:11'),
+(85, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 08:32:14', '2025-03-08 08:32:14'),
+(86, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 08:38:56', '2025-03-08 08:38:56'),
+(87, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 08:39:07', '2025-03-08 08:39:07'),
+(88, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 08:39:26', '2025-03-08 08:39:26'),
+(89, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 08:40:30', '2025-03-08 08:40:30'),
+(90, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 08:40:33', '2025-03-08 08:40:33'),
+(91, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 08:49:09', '2025-03-08 08:49:09'),
+(92, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 08:58:04', '2025-03-08 08:58:04'),
+(93, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 09:06:19', '2025-03-08 09:06:19'),
+(94, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 09:06:32', '2025-03-08 09:06:32'),
+(95, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 09:06:42', '2025-03-08 09:06:42'),
+(96, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 09:06:43', '2025-03-08 09:06:43'),
+(97, 10, 'Vào trang sửa sản phẩm: 67', '127.0.0.1', NULL, '2025-03-08 09:06:50', '2025-03-08 09:06:50'),
+(98, 10, 'Xóa biến thể có ID: 137 của sản phẩm có ID: 67', '127.0.0.1', NULL, '2025-03-08 09:06:53', '2025-03-08 09:06:53'),
+(99, 10, 'Vào trang sửa sản phẩm: 67', '127.0.0.1', NULL, '2025-03-08 09:06:53', '2025-03-08 09:06:53'),
+(100, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 09:06:55', '2025-03-08 09:06:55'),
+(101, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:06:57', '2025-03-08 09:06:57'),
+(102, 10, 'Xóa ảnh biến thể có ID: 1', '127.0.0.1', NULL, '2025-03-08 09:07:01', '2025-03-08 09:07:01'),
+(103, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:07:01', '2025-03-08 09:07:01'),
+(104, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:07:29', '2025-03-08 09:07:29'),
+(105, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:08:09', '2025-03-08 09:08:09'),
+(106, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:11:17', '2025-03-08 09:11:17'),
+(107, 10, 'Xóa ảnh biến thể có ID: 1', '127.0.0.1', NULL, '2025-03-08 09:16:59', '2025-03-08 09:16:59'),
+(108, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 09:17:00', '2025-03-08 09:17:00'),
+(109, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:02:20', '2025-03-08 10:02:20'),
+(110, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:02:50', '2025-03-08 10:02:50'),
+(111, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:04:02', '2025-03-08 10:04:02'),
+(112, 10, 'Vào trang sửa sản phẩm: 42', '127.0.0.1', NULL, '2025-03-08 10:04:05', '2025-03-08 10:04:05'),
+(113, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:04:09', '2025-03-08 10:04:09'),
+(114, 10, 'Vào trang sửa sản phẩm: 50', '127.0.0.1', NULL, '2025-03-08 10:04:11', '2025-03-08 10:04:11'),
+(115, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:04:14', '2025-03-08 10:04:14'),
+(116, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:04:23', '2025-03-08 10:04:23'),
+(117, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:04:25', '2025-03-08 10:04:25'),
+(118, 10, 'Vào trang chỉnh sửa biến thể có ID: 1', '127.0.0.1', NULL, '2025-03-08 10:06:47', '2025-03-08 10:06:47'),
+(119, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:06:54', '2025-03-08 10:06:54'),
+(120, 10, 'Vào trang chỉnh sửa biến thể có ID: 1', '127.0.0.1', NULL, '2025-03-08 10:07:01', '2025-03-08 10:07:01'),
+(121, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:07:07', '2025-03-08 10:07:07'),
+(122, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:09:01', '2025-03-08 10:09:01'),
+(123, 10, 'Xóa ảnh biến thể có ID: 2', '127.0.0.1', NULL, '2025-03-08 10:10:20', '2025-03-08 10:10:20'),
+(124, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:10:20', '2025-03-08 10:10:20'),
+(125, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:13:34', '2025-03-08 10:13:34'),
+(126, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:21:16', '2025-03-08 10:21:16'),
+(127, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:23:15', '2025-03-08 10:23:15'),
+(128, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:23:38', '2025-03-08 10:23:38'),
+(129, 10, 'Vào trang sửa sản phẩm: 41', '127.0.0.1', NULL, '2025-03-08 10:23:55', '2025-03-08 10:23:55'),
+(130, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:28:19', '2025-03-08 10:28:19'),
+(131, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:28:20', '2025-03-08 10:28:20'),
+(132, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:28:37', '2025-03-08 10:28:37'),
+(133, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:28:46', '2025-03-08 10:28:46'),
+(134, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 10:30:43', '2025-03-08 10:30:43'),
+(135, 10, 'Vào trang danh sách danh mục', '127.0.0.1', NULL, '2025-03-08 10:32:37', '2025-03-08 10:32:37'),
+(136, 10, 'Vào trang hiển thị danh sách tài khoản người dùng', '127.0.0.1', NULL, '2025-03-08 10:32:44', '2025-03-08 10:32:44'),
+(137, 10, 'Xem chi tiết tài khoản người dùng có id: 1', '127.0.0.1', NULL, '2025-03-08 10:32:46', '2025-03-08 10:32:46'),
+(138, 10, 'Xem chi tiết tài khoản người dùng có id: 24', '127.0.0.1', NULL, '2025-03-08 10:32:53', '2025-03-08 10:32:53'),
+(139, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:33:01', '2025-03-08 10:33:01'),
+(140, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:45:32', '2025-03-08 10:45:32'),
+(141, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:46:52', '2025-03-08 10:46:52'),
+(142, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:50:40', '2025-03-08 10:50:40'),
+(143, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:56:43', '2025-03-08 10:56:43'),
+(144, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:58:21', '2025-03-08 10:58:21'),
+(145, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 10:59:20', '2025-03-08 10:59:20'),
+(146, 10, 'đăng nhập vào hệ thống', '127.0.0.1', NULL, '2025-03-08 19:17:28', '2025-03-08 19:17:28'),
+(147, 10, 'hiển thị trang dashboard', '127.0.0.1', NULL, '2025-03-08 19:17:28', '2025-03-08 19:17:28'),
+(148, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:17:33', '2025-03-08 19:17:33'),
+(149, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:17:42', '2025-03-08 19:17:42'),
+(150, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:18:00', '2025-03-08 19:18:00'),
+(151, 10, 'Vào trang hiển thị danh sách nhân viên', '127.0.0.1', NULL, '2025-03-08 19:18:03', '2025-03-08 19:18:03'),
+(152, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:50:34', '2025-03-08 19:50:34'),
+(153, 10, 'Vào trang hiển thị danh sách đánh giá', '127.0.0.1', NULL, '2025-03-08 19:50:40', '2025-03-08 19:50:40'),
+(154, 10, 'Xem chi tiết đánh giá sản phẩm có id: 41', '127.0.0.1', NULL, '2025-03-08 19:50:42', '2025-03-08 19:50:42'),
+(155, 10, 'Vào trang hiển thị danh sách đánh giá', '127.0.0.1', NULL, '2025-03-08 19:50:43', '2025-03-08 19:50:43'),
+(156, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:50:47', '2025-03-08 19:50:47'),
+(157, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:50:49', '2025-03-08 19:50:49'),
+(158, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:50:52', '2025-03-08 19:50:52'),
+(159, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:51:05', '2025-03-08 19:51:05'),
+(160, 10, 'Vào trang hiển thị danh sách nhân viên', '127.0.0.1', NULL, '2025-03-08 19:51:19', '2025-03-08 19:51:19'),
+(161, 10, 'Xem thông tin nhân viên có id: 3', '127.0.0.1', NULL, '2025-03-08 19:51:22', '2025-03-08 19:51:22'),
+(162, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:51:28', '2025-03-08 19:51:28'),
+(163, 10, 'Vào trang thêm voucher', '127.0.0.1', NULL, '2025-03-08 19:51:30', '2025-03-08 19:51:30'),
+(164, 10, 'Tạo voucher mới có id: 19', '127.0.0.1', NULL, '2025-03-08 19:52:11', '2025-03-08 19:52:11'),
+(165, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:52:11', '2025-03-08 19:52:11'),
+(166, 10, 'Vào trang chỉnh sửa voucher có ID: 19', '127.0.0.1', NULL, '2025-03-08 19:52:24', '2025-03-08 19:52:24'),
+(167, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 19:52:42', '2025-03-08 19:52:42'),
+(168, 10, 'Vào trang hiển thị danh sách bình luận', '127.0.0.1', NULL, '2025-03-08 19:52:53', '2025-03-08 19:52:53'),
+(169, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:52:54', '2025-03-08 19:52:54'),
+(170, 10, 'Vào trang hiển thị danh sách bình luận', '127.0.0.1', NULL, '2025-03-08 19:52:57', '2025-03-08 19:52:57'),
+(171, 10, 'Vào trang hiển thị danh sách nhân viên', '127.0.0.1', NULL, '2025-03-08 19:53:23', '2025-03-08 19:53:23'),
+(172, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:53:24', '2025-03-08 19:53:24'),
+(173, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:53:25', '2025-03-08 19:53:25'),
+(174, 10, 'Thêm sản phẩm mới có id: 69', '127.0.0.1', NULL, '2025-03-08 19:53:53', '2025-03-08 19:53:53'),
+(175, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:53:53', '2025-03-08 19:53:53'),
+(176, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:53:56', '2025-03-08 19:53:56'),
+(177, 10, 'Vào trang sửa sản phẩm: 69', '127.0.0.1', NULL, '2025-03-08 19:54:00', '2025-03-08 19:54:00'),
+(178, 10, 'Vào trang thêm biến thể cho sản phẩm có ID: 69', '127.0.0.1', NULL, '2025-03-08 19:54:05', '2025-03-08 19:54:05'),
+(179, 10, 'Vào trang sửa sản phẩm: 69', '127.0.0.1', NULL, '2025-03-08 19:54:07', '2025-03-08 19:54:07'),
+(180, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 19:54:35', '2025-03-08 19:54:35'),
+(181, 10, 'Vào trang hiển thị danh sách voucher', '127.0.0.1', NULL, '2025-03-08 20:05:53', '2025-03-08 20:05:53'),
+(182, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:05:57', '2025-03-08 20:05:57'),
+(183, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:14:02', '2025-03-08 20:14:02'),
+(184, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:14:03', '2025-03-08 20:14:03'),
+(185, 10, 'Thêm sản phẩm mới có id: 70', '127.0.0.1', NULL, '2025-03-08 20:14:22', '2025-03-08 20:14:22'),
+(186, 10, 'Thêm biến thể mới có id: 142 cho sản phẩm có id: 70', '127.0.0.1', NULL, '2025-03-08 20:14:23', '2025-03-08 20:14:23'),
+(187, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:14:23', '2025-03-08 20:14:23'),
+(188, 10, 'Thêm sản phẩm mới có id: 71', '127.0.0.1', NULL, '2025-03-08 20:16:09', '2025-03-08 20:16:09'),
+(189, 10, 'Thêm biến thể mới có id: 143 cho sản phẩm có id: 71', '127.0.0.1', NULL, '2025-03-08 20:16:09', '2025-03-08 20:16:09'),
+(190, 10, 'Vào trang thêm sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:16:10', '2025-03-08 20:16:10'),
+(191, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 20:16:17', '2025-03-08 20:16:17'),
+(192, 10, 'Vào trang hiển thị danh sách đơn hàng', '127.0.0.1', NULL, '2025-03-08 20:16:25', '2025-03-08 20:16:25'),
+(193, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:16:39', '2025-03-08 20:16:39'),
+(194, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:22:31', '2025-03-08 20:22:31'),
+(195, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:30:55', '2025-03-08 20:30:55'),
+(196, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:31:17', '2025-03-08 20:31:17'),
+(197, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:38:36', '2025-03-08 20:38:36'),
+(198, 10, 'Xem chi tiết đơn hàng: 20', '127.0.0.1', NULL, '2025-03-08 20:38:49', '2025-03-08 20:38:49'),
+(199, 10, 'Vào trang hiển thị danh sách sản phẩm', '127.0.0.1', NULL, '2025-03-08 21:03:32', '2025-03-08 21:03:32'),
+(200, 10, 'Vào trang hiển thị danh sách đơn hàng', '127.0.0.1', NULL, '2025-03-08 21:10:17', '2025-03-08 21:10:17'),
+(201, 10, 'Xem chi tiết đơn hàng: 19', '127.0.0.1', NULL, '2025-03-08 21:10:18', '2025-03-08 21:10:18');
 
 -- --------------------------------------------------------
 
@@ -356,7 +539,10 @@ CREATE TABLE `orders` (
   `id_voucher` bigint UNSIGNED DEFAULT NULL,
   `discount_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
   `total_price` decimal(15,2) NOT NULL,
+  `fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `shipping_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'COD',
   `payment_status` enum('pending','shipping','completed','failed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -366,27 +552,27 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `id_user`, `id_voucher`, `discount_amount`, `total_price`, `shipping_address`, `payment_status`, `created_at`, `updated_at`) VALUES
-(1, 5, 2, '10000.00', '6000000.00', '983 Kenny Dale Suite 897\nHuelchester, MO 82274', 'completed', '2025-01-26 03:40:14', NULL),
-(2, 15, 6, '0.00', '0.00', '4050 Johnson Bridge Suite 420\nPort Dedrick, CO 29651', 'pending', '2025-01-22 23:17:24', NULL),
-(3, 14, 1, '0.00', '0.00', '633 Vandervort Pike Apt. 848\nRennerstad, WI 86658', 'completed', '2025-01-28 05:47:59', NULL),
-(4, 11, 9, '0.00', '0.00', '96098 Jonatan Ranch\nNorth Destinimouth, NY 55275-9263', 'pending', '2025-01-25 09:12:52', NULL),
-(5, 15, 9, '0.00', '0.00', '67935 Kerluke Keys\nSouth Jeremiestad, NC 02598-0019', 'failed', '2025-02-08 03:06:24', NULL),
-(6, 7, 1, '0.00', '0.00', '684 Towne Fort\nNew Elliottown, DE 89279', 'completed', '2025-01-10 02:29:51', NULL),
-(7, 20, 5, '0.00', '0.00', '6188 Ernser Village\nNew Valentinamouth, WY 34995-3220', 'failed', '2025-01-05 06:06:24', NULL),
-(8, 20, 2, '0.00', '0.00', '937 Rowland Mills\nHermanville, AR 00474', 'completed', '2025-01-28 01:53:56', NULL),
-(9, 7, 4, '0.00', '0.00', '6737 Medhurst Center Apt. 280\nHomenickbury, WI 59037', 'failed', '2025-02-03 19:44:03', NULL),
-(10, 19, 7, '0.00', '0.00', '4015 Dicki Ville Apt. 234\nChristiansenmouth, VT 09312-4072', 'failed', '2025-01-30 13:03:22', NULL),
-(11, 17, 2, '0.00', '0.00', '36095 Beer Gateway Suite 879\nMistytown, MO 91616-7112', 'pending', '2025-02-14 01:32:44', NULL),
-(12, 12, 10, '0.00', '0.00', '7443 Russel Stravenue Suite 158\nNorth Sylvia, PA 36789', 'completed', '2025-01-02 12:04:32', NULL),
-(13, 6, 1, '0.00', '6000000.00', '86697 Serena Tunnel Apt. 274\nTobyport, VT 42820', 'failed', '2025-02-09 06:51:20', NULL),
-(14, 4, 5, '0.00', '0.00', '64586 Howe Fields\nMcCulloughmouth, AK 78495-7611', 'failed', '2025-01-11 00:44:16', NULL),
-(15, 11, 10, '0.00', '0.00', '231 Turcotte Crossing\nGibsonland, OH 65115-5501', 'completed', '2025-01-16 01:48:40', NULL),
-(16, 13, 5, '0.00', '0.00', '35810 Hank Circles Apt. 113\nIvybury, KY 84608-1923', 'pending', '2025-01-27 05:43:29', NULL),
-(17, 8, 3, '0.00', '0.00', '8376 Gaetano River\nEast Arianeburgh, NC 64560', 'pending', '2025-01-06 05:51:54', NULL),
-(18, 3, 10, '0.00', '0.00', '54984 Janick Islands\nPort Daijahaven, WA 16133-7337', 'completed', '2025-01-13 08:45:24', NULL),
-(19, 4, 1, '0.00', '0.00', '306 Jamel Meadow Suite 939\nMaybellbury, MT 44517-6389', 'completed', '2025-02-03 06:55:28', NULL),
-(20, 7, 3, '0.00', '0.00', '71970 Vicky Rest Suite 400\nWeissnatberg, VA 98782', 'failed', '2025-01-10 11:41:15', NULL);
+INSERT INTO `orders` (`id`, `id_user`, `id_voucher`, `discount_amount`, `total_price`, `fullname`, `phone`, `shipping_address`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
+(1, 5, 2, '10000.00', '6000000.00', NULL, NULL, '983 Kenny Dale Suite 897\nHuelchester, MO 82274', '', 'completed', '2025-01-26 03:40:14', NULL),
+(2, 15, 6, '0.00', '0.00', NULL, NULL, '4050 Johnson Bridge Suite 420\nPort Dedrick, CO 29651', '', 'pending', '2025-01-22 23:17:24', NULL),
+(3, 14, 1, '0.00', '0.00', NULL, NULL, '633 Vandervort Pike Apt. 848\nRennerstad, WI 86658', '', 'completed', '2025-01-28 05:47:59', NULL),
+(4, 11, 9, '0.00', '0.00', NULL, NULL, '96098 Jonatan Ranch\nNorth Destinimouth, NY 55275-9263', '', 'pending', '2025-01-25 09:12:52', NULL),
+(5, 15, 9, '0.00', '0.00', NULL, NULL, '67935 Kerluke Keys\nSouth Jeremiestad, NC 02598-0019', '', 'failed', '2025-02-08 03:06:24', NULL),
+(6, 7, 1, '0.00', '0.00', NULL, NULL, '684 Towne Fort\nNew Elliottown, DE 89279', '', 'completed', '2025-01-10 02:29:51', NULL),
+(7, 20, 5, '0.00', '0.00', NULL, NULL, '6188 Ernser Village\nNew Valentinamouth, WY 34995-3220', '', 'failed', '2025-01-05 06:06:24', NULL),
+(8, 20, 2, '0.00', '0.00', NULL, NULL, '937 Rowland Mills\nHermanville, AR 00474', '', 'completed', '2025-01-28 01:53:56', NULL),
+(9, 7, 4, '0.00', '0.00', NULL, NULL, '6737 Medhurst Center Apt. 280\nHomenickbury, WI 59037', '', 'failed', '2025-02-03 19:44:03', NULL),
+(10, 19, 7, '0.00', '0.00', NULL, NULL, '4015 Dicki Ville Apt. 234\nChristiansenmouth, VT 09312-4072', '', 'failed', '2025-01-30 13:03:22', NULL),
+(11, 17, 2, '0.00', '0.00', NULL, NULL, '36095 Beer Gateway Suite 879\nMistytown, MO 91616-7112', '', 'pending', '2025-02-14 01:32:44', NULL),
+(12, 12, 10, '0.00', '0.00', NULL, NULL, '7443 Russel Stravenue Suite 158\nNorth Sylvia, PA 36789', '', 'completed', '2025-01-02 12:04:32', NULL),
+(13, 6, 1, '0.00', '6000000.00', NULL, NULL, '86697 Serena Tunnel Apt. 274\nTobyport, VT 42820', '', 'failed', '2025-02-09 06:51:20', NULL),
+(14, 4, 5, '0.00', '0.00', NULL, NULL, '64586 Howe Fields\nMcCulloughmouth, AK 78495-7611', '', 'failed', '2025-01-11 00:44:16', NULL),
+(15, 11, 10, '0.00', '0.00', NULL, NULL, '231 Turcotte Crossing\nGibsonland, OH 65115-5501', '', 'completed', '2025-01-16 01:48:40', NULL),
+(16, 13, 5, '0.00', '0.00', NULL, NULL, '35810 Hank Circles Apt. 113\nIvybury, KY 84608-1923', '', 'pending', '2025-01-27 05:43:29', NULL),
+(17, 8, 3, '0.00', '0.00', NULL, NULL, '8376 Gaetano River\nEast Arianeburgh, NC 64560', '', 'pending', '2025-01-06 05:51:54', NULL),
+(18, 3, 10, '0.00', '0.00', NULL, NULL, '54984 Janick Islands\nPort Daijahaven, WA 16133-7337', '', 'completed', '2025-01-13 08:45:24', NULL),
+(19, 4, 1, '0.00', '0.00', NULL, NULL, '306 Jamel Meadow Suite 939\nMaybellbury, MT 44517-6389', '', 'completed', '2025-02-03 06:55:28', NULL),
+(20, 7, 3, '0.00', '0.00', NULL, NULL, '71970 Vicky Rest Suite 400\nWeissnatberg, VA 98782', '', 'failed', '2025-01-10 11:41:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -555,7 +741,10 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `view`, `status`, 
 (65, 'Nike3', 'qrsaegfegfesg', 2000000, 0, 'active', '2025-03-01 09:58:37', '2025-03-01 09:58:37', 4),
 (66, 'vietnqph45471', 'dgsvs', 1000, 0, 'active', '2025-03-01 19:54:21', '2025-03-01 19:54:21', 4),
 (67, 'eafae', 'wefgwefw', 12345, 0, 'active', '2025-03-02 08:25:02', '2025-03-02 08:25:02', 2),
-(68, 'sẻtg4w', 'ư4tgwtg', 1234, 0, 'active', '2025-03-02 08:49:54', '2025-03-02 08:49:54', 4);
+(68, 'sẻtg4w', 'ư4tgwtg', 1234, 0, 'active', '2025-03-02 08:49:54', '2025-03-02 08:49:54', 4),
+(69, 'Giày nam 12', 'ègvsergsef', 1000000, 0, 'active', '2025-03-08 19:53:53', '2025-03-08 19:53:53', 2),
+(70, 'vietseges', 'ưdf', 1312134, 0, 'active', '2025-03-08 20:14:22', '2025-03-08 20:14:22', 2),
+(71, 'viet255', '3qwrtf3', 234, 0, 'active', '2025-03-08 20:16:09', '2025-03-08 20:16:09', 2);
 
 -- --------------------------------------------------------
 
@@ -708,21 +897,18 @@ INSERT INTO `product_images` (`id`, `id_variant`, `image_url`, `is_primary`, `cr
 (146, 136, 'storage/product/1740887593_tải xuống (1).jpg', 0, '2025-03-01 20:53:13', '2025-03-01 20:53:13'),
 (147, 136, 'storage/product/1740887593_tải xuống.jpg', 0, '2025-03-01 20:53:13', '2025-03-01 20:53:13'),
 (149, 1, 'storage/product/1740889270_tải xuống (2).jpg', 0, '2025-03-01 21:21:10', '2025-03-01 21:21:10'),
-(150, 1, 'storage/product/1740889270_tải xuống (1).jpg', 0, '2025-03-01 21:21:10', '2025-03-01 21:21:10'),
-(151, 1, 'storage/product/1740889270_tải xuống.jpg', 0, '2025-03-01 21:21:10', '2025-03-01 21:21:10'),
 (152, 61, 'storage/product/1740889603_tải xuống (2).jpg', 0, '2025-03-01 21:26:43', '2025-03-01 21:26:43'),
 (153, 61, 'storage/product/1740889603_tải xuống (1).jpg', 0, '2025-03-01 21:26:43', '2025-03-01 21:26:43'),
 (154, 61, 'storage/product/1740889603_tải xuống.jpg', 0, '2025-03-01 21:26:43', '2025-03-01 21:26:43'),
 (155, 96, 'storage/product/1740889741_tải xuống.jpg', 0, '2025-03-01 21:29:01', '2025-03-01 21:29:01'),
-(156, 137, 'storage/product/1740929102_tải xuống (1).jpg', 1, '2025-03-02 08:25:02', '2025-03-02 08:25:02'),
 (158, 2, 'storage/product/1740929471_tải xuống (1).jpg', 0, '2025-03-02 08:31:11', '2025-03-02 08:31:11'),
-(159, 2, 'storage/product/1740929471_tải xuống.jpg', 0, '2025-03-02 08:31:11', '2025-03-02 08:31:11'),
 (160, 139, 'storage/product/1740930594_tải xuống (3).jpg', 1, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
 (161, 139, 'storage/product/1740930594_tải xuống (2).jpg', 0, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
 (162, 139, 'storage/product/1740930594_tải xuống (1).jpg', 0, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
 (163, 139, 'storage/product/1740930594_tải xuống.jpg', 0, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
 (164, 140, 'storage/product/1740930594_tải xuống (3).jpg', 1, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
-(165, 140, 'storage/product/1740930594_tải xuống (2).jpg', 0, '2025-03-02 08:49:54', '2025-03-02 08:49:54');
+(165, 140, 'storage/product/1740930594_tải xuống (2).jpg', 0, '2025-03-02 08:49:54', '2025-03-02 08:49:54'),
+(166, 141, 'storage/product/1741488833_tải xuống (2).jpg', 1, '2025-03-08 19:53:53', '2025-03-08 19:53:53');
 
 -- --------------------------------------------------------
 
@@ -781,25 +967,26 @@ CREATE TABLE `sizes` (
   `id` bigint UNSIGNED NOT NULL,
   `size` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `sizes`
 --
 
-INSERT INTO `sizes` (`id`, `size`, `created_at`, `updated_at`) VALUES
-(1, '35', '2025-02-08 18:14:21', NULL),
-(2, '36', '2025-01-14 16:45:54', NULL),
-(3, '37', '2025-02-03 13:17:44', NULL),
-(4, '38', '2025-01-03 00:39:27', NULL),
-(5, '39', '2025-02-04 14:08:58', NULL),
-(6, '40', '2025-01-08 00:41:02', NULL),
-(7, '41', '2025-01-25 01:30:50', NULL),
-(8, '42', '2025-01-24 10:50:19', NULL),
-(9, '43', '2025-02-11 15:22:43', NULL),
-(10, '44', '2025-01-30 14:29:38', NULL),
-(11, '45', '2025-01-31 16:02:20', NULL);
+INSERT INTO `sizes` (`id`, `size`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '35', '2025-02-08 18:14:21', '2025-03-08 07:54:15', NULL),
+(2, '36', '2025-01-14 16:45:54', NULL, NULL),
+(3, '37', '2025-02-03 13:17:44', NULL, NULL),
+(4, '38', '2025-01-03 00:39:27', NULL, NULL),
+(5, '39', '2025-02-04 14:08:58', NULL, NULL),
+(6, '40', '2025-01-08 00:41:02', NULL, NULL),
+(7, '41', '2025-01-25 01:30:50', NULL, NULL),
+(8, '42', '2025-01-24 10:50:19', NULL, NULL),
+(9, '43', '2025-02-11 15:22:43', NULL, NULL),
+(10, '44', '2025-01-30 14:29:38', NULL, NULL),
+(11, '45', '2025-01-31 16:02:20', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -815,7 +1002,7 @@ CREATE TABLE `users` (
   `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `gender` enum('Male','Female','Other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
   `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -848,7 +1035,10 @@ INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `phone`, `address`, 
 (18, 'Bạc Như Tuyến', 'lac46@example.com', '$2y$12$HuVg3DwQDB4uOXp.MRfsVOUnKkXO/uWrLyaxNDufM3vYcxRiXV7zO', '+84-780-794-9891', '939 Phố Đổng, Phường Thắm Giao, Quận 88\nCần Thơ', 'Male', 'user', 'active', NULL, '2025-02-04 10:49:22', NULL, NULL),
 (19, 'Cát Đinh Phụng', 'phong85@example.net', '$2y$12$IcvkrPRk2fnXo4VXyHiLDuY1achu9xBB9h7ZPw7RAMKnmLwqluXqi', '090-791-7651', '46 Phố Hồng Trang Dũng, Xã Cự, Quận Vĩnh Lễ\nKon Tum', 'Male', 'user', 'active', NULL, '2025-02-01 10:49:22', NULL, NULL),
 (20, 'Chị. Danh Cầm', 'moc.khoi@example.org', '$2y$12$cEWypLb4tNDLB1v/d6Psy.r3D.RGURFJV5V8dqOmaNDyp9B.ZCoOC', '(0128)673-6533', '5622, Ấp Võ, Xã Đào Bằng Thoại, Quận Thi Điệp\nLong An', 'Female', 'user', 'active', NULL, '2024-07-23 10:49:22', NULL, NULL),
-(21, 'kenn', 'giangsunshinee@gmail.com', '$2y$12$Cb5THxWSZ1RN0AZDqGgXledbSHIfm8/MzL9vX/eS2Xkfjw3PRwxIq', '0869311893', 'Ha Noi', NULL, 'user', 'active', NULL, '2025-02-27 19:17:42', '2025-02-27 19:20:00', NULL);
+(21, 'kenn', 'giangsunshinee@gmail.com', '$2y$12$Cb5THxWSZ1RN0AZDqGgXledbSHIfm8/MzL9vX/eS2Xkfjw3PRwxIq', '0869311893', 'Ha Noi', 'Male', 'user', 'active', NULL, '2025-02-27 19:17:42', '2025-02-27 19:20:00', NULL),
+(22, 'Nguyễn Văn A', 'vietnqph45471@fpt.edu.vn', '$2y$12$aCBrbdGKTQ0DEs0Y6fAQzut.KsAelwsWySZXDnw20oAM9/GYdXvTC', '0987654321', 'Hà Nội', 'Male', 'user', 'active', NULL, '2025-03-06 09:46:02', '2025-03-06 09:46:02', NULL),
+(23, 'Nguyễn Văn B', 'chu@gmail.com', '$2y$12$gee0n/c8RdLOzq9Qe/FU9ehzMLkpXXLkA.s5lkrJSUg4Fnh9ouPNW', '0334947408', 'Mỹ', 'Male', 'user', 'active', NULL, '2025-03-06 09:48:31', '2025-03-06 09:48:31', NULL),
+(24, 'Trần Văn Chú', 'viet@gmail.com', '$2y$12$elNwHW/d.7DTBqepYWKH..hkB79UFwqhobt5LPUK14W7Sam4caQ26', '0987654322', '315 Phố Cẩn, Phường Bích, Huyện Liên KhoátCà Mau', 'Male', 'user', 'active', NULL, '2025-03-06 09:55:09', '2025-03-06 09:55:09', NULL);
 
 -- --------------------------------------------------------
 
@@ -1057,9 +1247,11 @@ INSERT INTO `variants` (`id`, `id_product`, `id_color`, `id_size`, `price`, `qua
 (133, 65, 1, 1, 2500000, 10, 'available', '2025-03-01 09:58:37', '2025-03-01 21:13:20', NULL),
 (134, 66, 1, 1, 100000, 10, 'available', '2025-03-01 19:54:21', '2025-03-01 19:54:21', NULL),
 (136, 61, 1, 4, 20000, 1, 'available', '2025-03-01 20:53:13', '2025-03-01 20:53:13', NULL),
-(137, 67, 1, 1, 12345, 12, 'available', '2025-03-02 08:25:02', '2025-03-02 08:25:02', NULL),
 (139, 68, 1, 1, 123456, 12, 'available', '2025-03-02 08:49:54', '2025-03-02 08:49:54', NULL),
-(140, 68, 1, 1, 1234, 12, 'available', '2025-03-02 08:49:54', '2025-03-02 08:49:54', NULL);
+(140, 68, 1, 1, 1234, 12, 'available', '2025-03-02 08:49:54', '2025-03-02 08:49:54', NULL),
+(141, 69, 1, 1, 100000, 1, 'available', '2025-03-08 19:53:53', '2025-03-08 19:53:53', NULL),
+(142, 70, 1, 1, 213543, 12, 'available', '2025-03-08 20:14:22', '2025-03-08 20:14:22', NULL),
+(143, 71, 1, 1, 2314, 3, 'available', '2025-03-08 20:16:09', '2025-03-08 20:16:09', NULL);
 
 -- --------------------------------------------------------
 
@@ -1103,7 +1295,8 @@ INSERT INTO `vouchers` (`id`, `code`, `discount_type`, `discount_value`, `min_or
 (13, 'VIET', 'percentage', 20, 10000, NULL, '2025-02-19 00:00:00', '2025-02-27 00:00:00', 2, 0, 0, 'active', '2025-02-19 09:35:56', '2025-02-19 09:35:56'),
 (16, 'VIET2', 'percentage', 10, NULL, NULL, '2025-03-01 00:00:00', '2025-03-10 00:00:00', 1, 10, 0, 'active', '2025-03-01 08:02:03', '2025-03-01 08:02:03'),
 (17, 'TZV3G0A723', 'fixed', 210000, NULL, NULL, '2025-03-01 00:00:00', '2025-03-03 00:00:00', 1, 10, 0, 'active', '2025-03-01 08:39:50', '2025-03-01 08:39:50'),
-(18, 'TZV3G0A7677', 'fixed', 100000, 100000, NULL, '2025-03-01 00:00:00', '2025-03-02 00:00:00', 1, 10, 0, 'active', '2025-03-01 08:44:32', '2025-03-01 08:56:58');
+(18, 'TZV3G0A7677', 'fixed', 100000, 100000, NULL, '2025-03-01 00:00:00', '2025-03-02 00:00:00', 1, 10, 0, 'active', '2025-03-01 08:44:32', '2025-03-01 08:56:58'),
+(19, 'VIETYSUAN', 'percentage', 10, 100000, 100000, '2025-03-09 00:00:00', '2025-03-16 00:00:00', 1, 10, 0, 'active', '2025-03-08 19:52:11', '2025-03-08 19:52:11');
 
 -- --------------------------------------------------------
 
@@ -1145,7 +1338,8 @@ INSERT INTO `wallets` (`id`, `id_user`, `balance`, `currency`, `status`, `create
 (17, 19, '2358000.00', 'VND', 'active', '2025-01-12 06:25:46', NULL),
 (18, 10, '1035000.00', 'VND', 'active', '2025-02-10 01:19:56', NULL),
 (19, 3, '2543000.00', 'VND', 'active', '2025-01-13 13:19:40', NULL),
-(20, 15, '3853000.00', 'VND', 'active', '2025-01-16 15:44:13', NULL);
+(20, 15, '3853000.00', 'VND', 'active', '2025-01-16 15:44:13', NULL),
+(21, 24, '0.00', 'VND', 'active', '2025-03-06 09:55:09', '2025-03-06 09:55:09');
 
 -- --------------------------------------------------------
 
@@ -1426,7 +1620,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -1462,13 +1656,13 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
 -- AUTO_INCREMENT for table `rates`
@@ -1486,7 +1680,7 @@ ALTER TABLE `sizes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `user_vouchers`
@@ -1498,19 +1692,19 @@ ALTER TABLE `user_vouchers`
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT for table `vouchers`
 --
 ALTER TABLE `vouchers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `wallets`
 --
 ALTER TABLE `wallets`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `wallet_transactions`

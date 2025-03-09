@@ -30,11 +30,12 @@ class ColorController extends Controller
             'name' => 'required|string|unique:colors,name', // Kiểm tra không được trùng tên
         ]);
 
-        Color::create([
-            'name' => $request->name,
-        ]);
-
-        return redirect()->route('admin.color.index')->with('success', 'Màu đã được thêm thành công.');
+        try {
+            Color::create($request->all());
+            return redirect()->route('admin.color.index')->with('success', 'Màu đã được thêm thành công.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi thêm màu.');
+        }
     }
 
     public function edit($id)
@@ -49,10 +50,14 @@ class ColorController extends Controller
         'name' => 'required|unique:colors,name,' . $id,
     ]);
 
-    $color = Color::findOrFail($id);
-    $color->update($request->only('name')); // Sửa lại thành 'name' thay vì 'color'
+    try {
+        $color = Color::findOrFail($id);
+        $color->update($request->only('size'));
 
-    return redirect()->route('admin.color.index')->with('success', 'Màu đã được cập nhật.');
+        return redirect()->route('admin.color.index')->with('success', 'Màu đã được cập nhật.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi cập nhật màu.');
+    }
 }
 public function softDelete($id)
 {
@@ -64,8 +69,15 @@ public function softDelete($id)
 public function restore($id)
 {
     $color = Color::withTrashed()->findOrFail($id);
-    $color->restore(); // Khôi phục
-    return redirect()->route('admin.color.index')->with('success', 'Màu đã được khôi phục.');
+
+// Kiểm tra xem có màu nào cùng tên mà chưa bị xóa không
+if (Color::where('name', $color->name)->whereNull('deleted_at')->exists()) {
+    return redirect()->route('admin.color.index')->with('error', 'Không thể khôi phục vì đã tồn tại màu này.');
+}
+
+$color->restore();
+return redirect()->route('admin.color.index')->with('success', 'Màu đã được khôi phục.');
+
 }
 
 public function trash()
@@ -75,8 +87,13 @@ return view('admin.color.trash', compact('colors')); // Hiển thị danh sách 
 }
 public function destroy($id)
 {
-    $color = Color::withTrashed()->findOrFail($id);
-    $color->forceDelete(); // Xóa vĩnh viễn
-    return redirect()->route('admin.color.index')->with('success', 'Màu đã bị xóa vĩnh viễn.');
+    try {
+        $color= Color::withTrashed()->findOrFail($id);
+        $color->forceDelete();
+        return redirect()->route('admin.color.index')->with('success', 'Màu đã bị xóa vĩnh viễn.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi xóa màu.');
+    }
+    
 }
 }

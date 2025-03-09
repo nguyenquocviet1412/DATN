@@ -25,8 +25,12 @@ class SizeController extends Controller
             'size' => 'required|unique:sizes,size',
         ]);
 
-        Size::create($request->all());
-        return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được thêm thành công.');
+        try {
+            Size::create($request->all());
+            return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được thêm thành công.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.size.index')->with('error', 'Có lỗi xảy ra khi thêm kích thước.');
+        }
     }
 
     public function edit($id)
@@ -41,10 +45,14 @@ class SizeController extends Controller
         'size' => 'required|string|unique:sizes,size,' . $id, // Kiểm tra trùng lặp nhưng bỏ qua ID hiện tại
     ]);
 
-    $size = Size::findOrFail($id);
-    $size->update($request->only('size')); // Cập nhật chỉ cột 'size'
+    try {
+        $size = Size::findOrFail($id);
+        $size->update($request->only('size'));
 
-    return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được cập nhật.');
+        return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được cập nhật.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.size.index')->with('error', 'Có lỗi xảy ra khi cập nhật kích thước.');
+    }
 }
 
 public function softDelete($id)
@@ -68,8 +76,12 @@ public function trash()
 }
 public function destroy($id)
 {
-    $size = Size::withTrashed()->findOrFail($id);
-    $size->forceDelete(); // Xóa vĩnh viễn
-    return redirect()->route('admin.size.index')->with('success', 'Kích thước đã bị xóa vĩnh viễn.');
+    try {
+        $size = Size::withTrashed()->findOrFail($id);
+        $size->forceDelete();
+        return redirect()->route('admin.size.index')->with('success', 'Kích thước đã bị xóa vĩnh viễn.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.size.index')->with('error', 'Có lỗi xảy ra khi xóa kích thước.');
+    }
 }
 }
