@@ -56,10 +56,6 @@ Thêm Nhân Viên
                             <input class="form-control" type="text" name="position" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Salary</label>
-                            <input class="form-control" type="number" name="salary" required>
-                        </div>
-                        <div class="form-group col-md-3">
                             <label class="control-label">Role</label>
                             <select class="form-control" name="role" required>
                                 <option value="">-- Choose status --</option>

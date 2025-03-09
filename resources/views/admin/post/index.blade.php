@@ -24,7 +24,6 @@
                         </script>
                     @endif
 
-
                     {{-- Thông báo lỗi --}}
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     @if (session('error'))
@@ -39,7 +38,6 @@
                             });
                         </script>
                     @endif
-
 
                     <div class="row element-button">
                         <div class="col-sm-6">
@@ -60,13 +58,6 @@
                             </form>
                         </div>
                     </div>
-
-
-                    <!-- Tím kiếm  -->
-
-
-
-                    <!-- Dropdown sắp xếp -->
 
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -95,9 +86,9 @@
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->content }}</td>
                                     <td class="text-center">
-                                        @if ($post->status == 'published')
+                                        @if ($post->status === 'published')
                                             <span class="badge bg-success">Đã xuất bản</span>
-                                        @elseif ($post->status == 'draft')
+                                        @else
                                             <span class="badge bg-danger">Nháp</span>
                                         @endif
                                     </td>
@@ -110,7 +101,6 @@
                                         <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-
 
                                         <form action="{{ route('post.delete', $post->id) }}" method="POST"
                                             style="display:inline;">
@@ -127,7 +117,6 @@
                         </tbody>
                     </table>
 
-                    <!-- Phân trang -->
                     <script>
                         document.getElementById('select-all').addEventListener('change', function() {
                             let checkboxes = document.querySelectorAll('input[name="check1"]');

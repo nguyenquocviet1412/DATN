@@ -9,14 +9,14 @@
         <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home1-slide2.jpg">
+                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide2.jpg">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-1">
-                                    <h2 class="slide-title">Family Jewelry <span>Collection</span></h2>
-                                    <h4 class="slide-desc">Designer Jewelry Necklaces-Bracelets-Earings</h4>
-                                    <a href="shop.html" class="btn btn-hero">Read More</a>
+                                    <h2 class="slide-title text-white">Comfort & Fashion<span>Combined</span></h2>
+                                    <h4 class="slide-desc">Shoes that match your pace, crafted for elegance.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Shop Now</a>
                                 </div>
                             </div>
                         </div>
@@ -27,14 +27,14 @@
 
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home1-slide3.jpg">
+                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide3.webp">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-2 float-md-end float-none">
-                                    <h2 class="slide-title">Diamonds Jewelry<span>Collection</span></h2>
-                                    <h4 class="slide-desc">Shukra Yogam & Silver Power Silver Saving Schemes.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Read More</a>
+                                    <h2 class="slide-title text-white">Premium Shoes<span>Collection</span></h2>
+                                    <h4 class="slide-desc">Elevate your style with comfort and durability.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Explore Now</a>
                                 </div>
                             </div>
                         </div>
@@ -45,14 +45,14 @@
 
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home1-slide1.jpg">
+                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide1.jpg">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-3">
-                                    <h2 class="slide-title">Grace Designer<span>Jewelry</span></h2>
-                                    <h4 class="slide-desc">Rings, Occasion Pieces, Pandora & More.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Read More</a>
+                                    <h2 class="slide-title text-white">Step in Style<span>New Arrivals</span></h2>
+                                    <h4 class="slide-desc">Trendy, high-quality footwear for every occasion.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Discover More</a>
                                 </div>
                             </div>
                         </div>
@@ -65,17 +65,6 @@
     <!-- hero slider area end -->
 
     <!-- twitter feed area start -->
-    <div class="twitter-feed">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="twitter-feed-content text-center">
-                        <p>Check out "Corano - Multipurpose eCommerce Bootstrap 5 template" on #Envato by @<a href="#">Corano</a> #Themeforest <a href="http://1.envato.market/9LbxW">http://1.envato.market/9LbxW</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- twitter feed area end -->
 
     <!-- service policy area start -->
@@ -234,8 +223,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
+
+
                         <!-- product tab content end -->
                     </div>
                 </div>
@@ -254,7 +243,7 @@
                         <div class="banner-slide-item">
                             <figure class="banner-statistics">
                                 <a href="#">
-                                    <img src="assets/img/banner/img1-middle.jpg" alt="product banner">
+                                    <img src="assets/img/banner/banner-nho-9.png" alt="product banner">
                                 </a>
                                 <div class="banner-content banner-content_style2">
                                     <h5 class="banner-text3"><a href="#">BRACELATES</a></h5>
@@ -266,7 +255,7 @@
                         <div class="banner-slide-item">
                             <figure class="banner-statistics">
                                 <a href="#">
-                                    <img src="assets/img/banner/img2-middle.jpg" alt="product banner">
+                                    <img src="assets/img/banner/banner-nho-8.png" alt="product banner">
                                 </a>
                                 <div class="banner-content banner-content_style2">
                                     <h5 class="banner-text3"><a href="#">EARRINGS</a></h5>
@@ -278,7 +267,7 @@
                         <div class="banner-slide-item">
                             <figure class="banner-statistics">
                                 <a href="#">
-                                    <img src="assets/img/banner/img3-middle.jpg" alt="product banner">
+                                    <img src="assets/img/banner/banner-nho-7.png" alt="product banner">
                                 </a>
                                 <div class="banner-content banner-content_style2">
                                     <h5 class="banner-text3"><a href="#">NECJLACES</a></h5>
@@ -290,7 +279,7 @@
                         <div class="banner-slide-item">
                             <figure class="banner-statistics">
                                 <a href="#">
-                                    <img src="assets/img/banner/img4-middle.jpg" alt="product banner">
+                                    <img src="assets/img/banner/banner-nho-6.png" alt="product banner">
                                 </a>
                                 <div class="banner-content banner-content_style2">
                                     <h5 class="banner-text3"><a href="#">RINGS</a></h5>
@@ -302,7 +291,7 @@
                         <div class="banner-slide-item">
                             <figure class="banner-statistics">
                                 <a href="#">
-                                    <img src="assets/img/banner/img5-middle.jpg" alt="product banner">
+                                    <img src="assets/img/banner/banner-nho-5.png" alt="product banner">
                                 </a>
                                 <div class="banner-content banner-content_style2">
                                     <h5 class="banner-text3"><a href="#">PEARLS</a></h5>
@@ -410,16 +399,16 @@
                     <div class="testimonial-thumb-wrapper">
                         <div class="testimonial-thumb-carousel">
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/testimonial-1.png" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi.webp" alt="testimonial-thumb">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/testimonial-2.png" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi2.jpg" alt="testimonial-thumb">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/testimonial-3.png" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi3.jpg" alt="testimonial-thumb">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/testimonial-2.png" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi4.png" alt="testimonial-thumb">
                             </div>
                         </div>
                     </div>
@@ -456,7 +445,7 @@
                                     <span><i class="fa fa-star-o"></i></span>
                                     <span><i class="fa fa-star-o"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">Anamika lusy</h5>
+                                <h5 class="testimonial-author">Henry Cavill</h5>
                             </div>
                             <div class="testimonial-content">
                                 <p>Vivamus a lobortis ipsum, vel condimentum magna. Etiam id turpis tortor. Nunc scelerisque, nisi a blandit varius, nunc purus venenatis ligula, sed venenatis orci augue nec sapien. Cum sociis natoque</p>
@@ -467,7 +456,7 @@
                                     <span><i class="fa fa-star-o"></i></span>
                                     <span><i class="fa fa-star-o"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">Maria Mora</h5>
+                                <h5 class="testimonial-author">Tony Stark</h5>
                             </div>
                         </div>
                     </div>
@@ -485,7 +474,7 @@
                     <div class="group-product-banner">
                         <figure class="banner-statistics">
                             <a href="#">
-                                <img src="assets/img/banner/img-bottom-banner.jpg" alt="product banner">
+                                <img src="assets/img/banner/banner-vua.jpg" alt="product banner">
                             </a>
                             <div class="banner-content banner-content_style3 text-center">
                                 <h6 class="banner-text1">BEAUTIFUL</h6>
@@ -953,7 +942,7 @@
                 </div>
 
                 <div class="minicart-button">
-                    <a href="{{route('home.cart')}}"><i class="fa fa-shopping-cart"></i> View Cart</a>
+                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-cart"></i> View Cart</a>
                     <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
                 </div>
             </div>
