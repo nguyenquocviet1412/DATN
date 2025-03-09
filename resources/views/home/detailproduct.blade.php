@@ -2,47 +2,6 @@
 @section('title', 'Trang chủ')
 @section('main')
 
-<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS (kèm Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>\
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- slick Slider JS -->
-<script src="assets/js/plugins/slick.min.js"></script>
-<!-- Countdown JS -->
-<script src="assets/js/plugins/countdown.min.js"></script>
-<!-- Nice Select JS -->
-<script src="assets/js/plugins/nice-select.min.js"></script>
-<!-- jQuery UI JS -->
-<script src="assets/js/plugins/jqueryui.min.js"></script>
-<!-- Image zoom JS -->
-<script src="assets/js/plugins/image-zoom.min.js"></script>
-<!-- Images loaded JS -->
-<script src="assets/js/plugins/imagesloaded.pkgd.min.js"></script>
-<!-- Mailchimp JS -->
-<script src="assets/js/plugins/ajaxchimp.js"></script>
-<!-- Contact form JS -->
-<script src="assets/js/plugins/ajax-mail.js"></script>
-<!-- Google Map API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfmCVTjRI007pC1Yk2o2d_EhgkjTsFVN8"></script>
-<!-- Google Map Active JS -->
-<script src="assets/js/plugins/google-map.js"></script>
-<!-- Main JS -->
-<script src="assets/js/main.js"></script>
-
-
 <main>
     <div class="container mt-5">
         <div class="row">
@@ -66,7 +25,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Thông tin sản phẩm -->
             <div class="col-md-6">
                 <h1>{{ $product->name }}</h1>
@@ -77,7 +36,7 @@
                 <p><strong>Status:</strong> <span class="badge bg-{{ $product->status ? 'success' : 'danger' }}">
                     {{ $product->status ? 'Available' : 'Out of Stock' }}
                 </span></p>
-                
+
                 <!-- Chọn biến thể -->
                 <div class="mb-3">
                     <label for="variantSelect" class="form-label">Choose Variant:</label>
@@ -89,7 +48,7 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <!-- Nút thêm vào giỏ hàng -->
                 <button class="btn btn-dark w-100">Add to Bag</button>
                 <button class="btn btn-outline-secondary w-100 mt-2">Favourite ♥</button>
@@ -97,6 +56,7 @@
         </div>
     </div>
 </main>
+
 
 
 @endsection
