@@ -43,58 +43,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($cartItems as $item)
                                     <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-1.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
-                                        <td class="pro-price"><span>$295.00</span></td>
+                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="{{ $item->image }}" alt="{{ $item->name }}" /></a></td>
+                                        <td class="pro-title"><a href="#">{{ $item->name }}</a></td>
+                                        <td class="pro-price"><span>${{ $item->price }}</span></td>
                                         <td class="pro-quantity">
-                                            <div class="pro-qty"><input type="text" value="1"></div>
+                                            <form action="{{ route('cart.update', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="pro-qty">
+                                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1">
+                                                    <button type="submit" class="btn btn-sqr">Update</button>
+                                                </div>
+                                            </form>
                                         </td>
-                                        <td class="pro-subtotal"><span>$295.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-2.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Perfect Diamond Jewelry</a></td>
-                                        <td class="pro-price"><span>$275.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty"><input type="text" value="2"></div>
+                                        <td class="pro-subtotal"><span>${{ $item->price * $item->quantity }}</span></td>
+                                        <td class="pro-remove">
+                                            <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                            </form>
                                         </td>
-                                        <td class="pro-subtotal"><span>$550.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
                                     </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-3.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Handmade Golden Necklace</a></td>
-                                        <td class="pro-price"><span>$295.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$295.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/product-4.jpg" alt="Product" /></a></td>
-                                        <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
-                                        <td class="pro-price"><span>$110.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="3" />
-                                            </div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$110.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                         <!-- Cart Update Option -->
                         <div class="cart-update-option d-block d-md-flex justify-content-between">
                             <div class="apply-coupon-wrapper">
-                                <form action="#" method="post" class=" d-block d-md-flex">
-                                    <input type="text" placeholder="Enter Your Coupon Code" required />
+                                <form action="{{ route('cart.applyCoupon') }}" method="POST" class="d-block d-md-flex">
+                                    @csrf
+                                    <input type="text" name="coupon_code" placeholder="Enter Your Coupon Code" required />
                                     <button class="btn btn-sqr">Apply Coupon</button>
                                 </form>
                             </div>
@@ -114,20 +96,20 @@
                                     <table class="table">
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>$230</td>
+                                            <td>${{ $cartTotal }}</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
-                                            <td>$70</td>
+                                            <td>${{ $shippingCost }}</td>
                                         </tr>
                                         <tr class="total">
                                             <td>Total</td>
-                                            <td class="total-amount">$300</td>
+                                            <td class="total-amount">${{ $cartTotal + $shippingCost }}</td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <a href="checkout.html" class="btn btn-sqr d-block">Proceed Checkout</a>
+                            <a href="#" class="btn btn-sqr d-block">Proceed Checkout</a>
                         </div>
                     </div>
                 </div>

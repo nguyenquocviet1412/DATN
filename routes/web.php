@@ -24,6 +24,8 @@ use App\Http\Controllers\client\AuthController;
 use App\Http\Controllers\admin\EmployeeAuthController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\client\CartController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,8 +55,16 @@ Route::post('/admin/login', [EmployeeAuthController::class, 'postLogin'])->name(
 Route::get('/admin/logout', [EmployeeAuthController::class, 'logout'])->name('admin.logout');
 //Route Admin
 
+
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
+    Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
+    Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
+    Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
+    Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/cart', [HomeController::class, 'cart'])->name('home.cart');
 Route::get('/login', [HomeController::class, 'login'])->name('home.login');
 Route::get('/register', [HomeController::class, 'register'])->name('home.register');
 
