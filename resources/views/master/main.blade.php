@@ -113,10 +113,10 @@
                         <div class="col-lg-2">
                             <div class="logo">
                                 <a href="{{ route('home.index') }}">
-                                    <img src="{{asset('assets/img/logo/logo.png" alt="Brand Logo')}}">
+                                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Brand Logo">
                                 </a>
                             </div>
-                        </div>
+                        </div>                        
                         <!-- start logo area -->
                         <!-- main menu area start -->
                         <div class="col-lg-6 position-static">
