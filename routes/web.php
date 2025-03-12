@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\client\DetailProductController;
 use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\FilterProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,9 +51,10 @@ use App\Http\Controllers\client\CartController;
       Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
       Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-  
+
   //Route home
       Route::get('/', [HomeController::class, 'index'])->name('home.index');
+      Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
 
   // chi tiết sản phẩm
       Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
