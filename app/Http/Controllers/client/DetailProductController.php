@@ -21,9 +21,9 @@ class DetailProductController extends Controller
         $colors = Color::all();
         $sizes = Size::all();
         
-        // Tính trung bình đánh giá
-        // $averageRating = $product->rates->avg('rating');
+        $product->load('rates');
+        $averageRating = $product->rates->avg('rating');
 
-        return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes'));
+        return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes', 'averageRating'));
     }
 }
