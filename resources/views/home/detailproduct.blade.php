@@ -1,3 +1,4 @@
+<!-- filepath: c:\laragon\www\DATN\resources\views\home\detailproduct.blade.php -->
 @extends('master.main')
 @section('title', 'Trang chủ')
 @section('main')
@@ -37,26 +38,63 @@
                     {{ $product->status ? 'Available' : 'Out of Stock' }}
                 </span></p>
 
-                <!-- Chọn biến thể -->
-                <div class="mb-3">
-                    <label for="variantSelect" class="form-label">Choose Variant:</label>
-                    <select id="variantSelect" class="form-select">
-                        @foreach ($product->variants as $variant)
-                            <option value="{{ $variant->id }}">
-                                {{ $variant->color->name }} - Size {{ $variant->size->size }} (${{ number_format($variant->price, 2) }})
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                <!-- Hiển thị điểm trung bình đánh giá -->
+                <p><strong>Average Rating:</strong> 
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= $averageRating)
+                            <i class="fa fa-star text-warning"></i>
+                        @elseif ($i - $averageRating < 1)
+                            <i class="fa fa-star-half-alt text-warning"></i>
+                        @else
+                            <i class="fa fa-star text-secondary"></i>
+                        @endif
+                    @endfor
+                </p>
 
-                <!-- Nút thêm vào giỏ hàng -->
-                <button class="btn btn-dark w-100">Add to Bag</button>
-                <button class="btn btn-outline-secondary w-100 mt-2">Favourite ♥</button>
+                <div class="mb-3 position-relative">
+                    <button id="variantButton" class="btn btn-warning btn-lg fw-bold shadow-lg py-3 w-100 dropdown-toggle" 
+                        type="button" data-bs-toggle="dropdown">
+                        🔽 Choose Variant
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                        @foreach ($product->variants as $variant)
+                            <li>
+                                <a class="dropdown-item fw-bold" href="#" onclick="selectVariant('{{ $variant->id }}', '{{ $variant->color->name }} - Size {{ $variant->size->size }}')">
+                                    {{ $variant->color->name }} - Size {{ $variant->size->size }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                <!-- Nút thêm vào giỏ hàng và yêu thích -->
+                <div class="d-grid gap-3">
+                    <button class="btn btn-primary btn-lg fw-bold shadow-lg py-3" onclick="addToBag()">🛒 Add to Bag</button>
+                    <button class="btn btn-outline-danger btn-lg fw-bold shadow-sm py-3">❤️ Favourite</button>
+                </div>
+                
+                           
             </div>
         </div>
     </div>
 </main>
 
+<script>
+    let selectedVariant = null;
 
+    function selectVariant(id, text) {
+        document.getElementById('variantButton').innerText = text;
+        selectedVariant = id; // Lưu ID biến thể đã chọn
+    }
+
+    function addToBag() {
+        if (!selectedVariant) {
+            alert("Please select a variant before adding to the bag.");
+            return;
+        }
+        console.log("Added to bag:", selectedVariant);
+        alert(`Added Variant ID: ${selectedVariant} to Bag`);
+    }
+</script>
 
 @endsection
