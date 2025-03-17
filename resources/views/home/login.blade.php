@@ -28,6 +28,21 @@
 </div>
 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@if(session('message'))
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Swal.fire({
+            title: "Thành công!",
+            text: "{{ session('message') }}",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 3000
+        });
+    });
+</script>
+@endif
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <main>
         <!-- breadcrumb area start -->
