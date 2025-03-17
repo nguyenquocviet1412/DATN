@@ -37,7 +37,19 @@
             text: "{{ session('message') }}",
             icon: "success",
             showConfirmButton: false,
-            timer: 3000
+            timer: 4000
+        });
+    });
+</script>
+@endif
+@if(session('warning'))
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Swal.fire({
+            title: "Thông báo!",
+            text: "{{ session('warning') }}",
+            icon: "warning",
+            showConfirmButton: true
         });
     });
 </script>

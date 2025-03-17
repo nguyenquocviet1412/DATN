@@ -68,5 +68,8 @@ class Kernel extends HttpKernel
 
         // Thêm middleware cho nhân viên
         'employee.auth' => \App\Http\Middleware\EmployeeAuth::class,
+
+        // Thêm middleware cho user
+        'user.auth' => \App\Http\Middleware\UserAuth::class,
     ];
 }
