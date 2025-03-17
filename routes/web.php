@@ -41,34 +41,37 @@ use App\Http\Controllers\FilterProductController;
 
 // ------------------------------------------------------------------------------------------------------------------
 // Route CLIENT
-  // Routes đăng nhập & đăng ký cho khách hàng
-        Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
-        Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+    // Routes đăng nhập & đăng ký cho khách hàng
+            Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
+            Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
 
-        Route::get('/register', [AuthController::class, 'getRegister'])->name('register');
-        Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+            Route::get('/register', [AuthController::class, 'getRegister'])->name('register');
+            Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
-        // Route đăng xuất (dùng POST để bảo mật)
-        Route::post('/logout', [AuthController::class, 'logoutUser'])->name('logout');
+            // Route đăng xuất (dùng POST để bảo mật)
+            Route::post('/logout', [AuthController::class, 'logoutUser'])->name('logout');
 
-  //Route home
-      Route::get('/', [HomeController::class, 'index'])->name('home.index');
-      Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
+    //Route home
+        Route::get('/', [HomeController::class, 'index'])->name('home.index');
+        Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
 
-  // chi tiết sản phẩm
-      Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
-
-
-  //Giỏ hàng
-      Route::prefix('cart')->group(function () {
-          Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
-          Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
-          Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
-          Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
-          Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
-      });
+    // chi tiết sản phẩm
+        Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
 
 
+    //Người dùng đăng nhập để thao tác
+    Route::prefix('')->middleware(['user.auth'])->group(function () {
+
+    //Giỏ hàng
+        Route::prefix('cart')->group(function () {
+            Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
+            Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
+            Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
+            Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
+            Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
+        });
+
+    });
 
 
 
