@@ -2,11 +2,36 @@
 
 @section('main')
 
-<!-- Hiển thị tiêu đề danh mục -->
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap">
+                    <nav aria-label="breadcrumb">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home.index')}}"><i class="fa fa-home"></i> Trang chủ</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
+
+<!-- Hiển thị tiêu đề danh mục hoặc từ khóa tìm kiếm -->
 <div class="container mt-4">
     <h2 class="category-title text-center">
         <i class="pe-7s-shopbag"></i>
-        {{ $categories->first()->name ?? 'Danh mục sản phẩm' }}
+        @if(isset($searchKeyword))
+            Kết quả tìm kiếm: "{{ $searchKeyword }}"
+        @else
+            {{ $categories->first()->name ?? 'Danh mục sản phẩm' }}
+        @endif
     </h2>
     <hr class="category-divider">
 </div>
@@ -48,8 +73,9 @@
         @endforeach
     </div>
 
-    <div class="d-flex justify-content-center">
-        {{ $products->links() }}
+    <!-- Phân trang -->
+    <div class="pagination-container d-flex justify-content-center mt-4">
+        {{ $products->links('pagination::bootstrap-5') }}
     </div>
 </div>
 
@@ -118,6 +144,31 @@
     .btn-view-detail:hover {
         background: linear-gradient(45deg, #0056b3, #003f7f);
         transform: translateY(-2px);
+    }
+
+    /* Phân trang */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination .page-item .page-link {
+        color: #007bff;
+        border-radius: 8px;
+        margin: 0 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination .page-item .page-link:hover {
+        background-color: #0056b3;
+        color: white;
     }
 </style>
 
