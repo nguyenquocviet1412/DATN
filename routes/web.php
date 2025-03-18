@@ -26,7 +26,9 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\client\DetailProductController;
 use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\client\ClientOrderController;
 use App\Http\Controllers\FilterProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,20 +64,44 @@ use App\Http\Controllers\FilterProductController;
     //Người dùng đăng nhập để thao tác
     Route::prefix('')->middleware(['user.auth'])->group(function () {
 
-    //Giỏ hàng
-        Route::prefix('cart')->group(function () {
-            Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
-            Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
-            Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
-            Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
-            Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
-        });
+  //Giỏ hàng
+      Route::prefix('cart')->group(function () {
+          Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
+          Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
+          Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
+          Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
+          Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
+
 
     });
 
+          
+      });
+    
+  
+  // Thanh toán  
+Route::middleware(['auth'])->group(function () {
+    Route::match(['get', 'post'], '/checkout', [ClientOrderController::class, 'checkout'])->name('checkout');
+    Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
+    Route::get('/order-success', [ClientOrderController::class, 'success'])->name('order.success');
+    Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');  
+    Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
+    Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
 
+    // Xử lý thanh toán
+    Route::prefix('payment')->group(function () {
+        Route::get('/{order_id}', [PaymentController::class, 'processPayment'])->name('payment.process');
+        Route::get('/momo/{order_id}', [MomoController::class, 'pay'])->name('momo.pay');
+        Route::get('/vnpay/{order_id}', [VnPayController::class, 'pay'])->name('vnpay.pay');
+        Route::get('/paypal/{order_id}', [PaypalController::class, 'pay'])->name('paypal.pay');
+        Route::get('/creditcard/{order_id}', [CreditCardController::class, 'pay'])->name('creditcard.pay');
+    });
+});
+    
 
-
+   
+      
+    
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 //Route ADMIN
