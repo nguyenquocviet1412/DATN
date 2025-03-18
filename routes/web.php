@@ -27,6 +27,11 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\client\DetailProductController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\ClientOrderController;
+use App\Http\Controllers\Client\Payment\MomoController;
+use App\Http\Controllers\Client\Payment\VnPayController;
+use App\Http\Controllers\Client\Payment\PaypalController;
+use App\Http\Controllers\Client\Payment\CreditCardController;
+use App\Http\Controllers\Client\Payment\PaymentController;
 use App\Http\Controllers\FilterProductController;
 
 
@@ -83,7 +88,7 @@ use App\Http\Controllers\FilterProductController;
 Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/checkout', [ClientOrderController::class, 'checkout'])->name('checkout');
     Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
-    Route::get('/order-success', [ClientOrderController::class, 'success'])->name('order.success');
+    Route::get('/checkout-success', [ClientOrderController::class, 'success'])->name('order.success');
     Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');  
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
     Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
