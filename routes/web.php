@@ -47,19 +47,11 @@ use App\Http\Controllers\FilterProductController;
 |
 */
 
-
-// Routes đăng ký đăng nhập cho khách hàng
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-
-Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
-
 // ------------------------------------------------------------------------------------------------------------------
 // Route CLIENT
     // Routes đăng nhập & đăng ký cho khách hàng
             Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
             Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
-
 
             Route::get('/register', [AuthController::class, 'getRegister'])->name('register');
             Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
