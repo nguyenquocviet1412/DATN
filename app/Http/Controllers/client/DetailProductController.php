@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\client;
 
@@ -15,15 +15,20 @@ use Illuminate\Validation\Rule;
 class DetailProductController extends Controller
 {
     public function show($id)
-    {
-        $product = Product::with('variants')->findOrFail($id);
-        $categories = Category::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        
-        // Tính trung bình đánh giá
-        // $averageRating = $product->rates->avg('rating');
+{
+    $product = Product::with(['variants.color', 'variants.size'])->findOrFail($id);
 
-        return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes'));
-    }
+    // Tăng số lượt xem mỗi khi người dùng vào xem chi tiết
+    $product->increment('view');
+
+    $categories = Category::all();
+    $colors = Color::all();
+    $sizes = Size::all();
+
+    $product->load('rates');
+    $averageRating = $product->rates->avg('rating');
+
+    return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes', 'averageRating'));
+}
+
 }

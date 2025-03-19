@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+
+use App\Models\Category;
+
 use App\Models\Product;
+use DB;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,14 +15,66 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
         // Lấy 8 sản phẩm mới nhất có ảnh
         $products = Product::with(['variants.images'])->latest()->take(8)->get();
         $cartItems = Cart::take(3)->get(); // Lấy tất cả các mục trong giỏ hàng
 
         return view('home.index', compact('products', 'cartItems'));
+
+        $query = Product::query();
+
+        // Tìm kiếm theo tên sản phẩm
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Lọc theo danh mục
+        if ($request->has('category') && $request->category != '') {
+            $query->where('id_category', $request->category);
+        }
+
+        // Sắp xếp theo giá, lượt xem hoặc yêu thích
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'views':
+                    $query->orderBy('view', 'desc'); // Đổi từ 'views' thành 'view' (theo cột trong database)
+                    break;
+            }
+        }
+
+        // Lấy 8 sản phẩm mới nhất
+        $latestProducts = Product::orderBy('created_at', 'desc')->take(8)->get();
+
+        // Lấy 8 sản phẩm có lượt xem nhiều nhất
+        $mostViewedProducts = Product::orderBy('view', 'desc')->take(8)->get();
+
+        $products = $query->paginate(9);
+        $categories = Category::all();
+
+        // Lấy 4 sản phẩm bán chạy nhất
+        $bestSellingProducts = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->join('variants', 'products.id', '=', 'variants.id_product')
+            ->join('order_items', 'variants.id', '=', 'order_items.id_variant')
+            ->groupBy('products.id')
+            ->orderByDesc('total_sold')
+            ->take(4)
+            ->get();
+
+        $products = $query->paginate(9);
+        $categories = Category::all();
+
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts'));
     }
+
 
 
 
@@ -52,9 +108,10 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
     }
 
     /**

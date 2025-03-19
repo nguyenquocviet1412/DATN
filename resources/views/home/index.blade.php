@@ -14,11 +14,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-1">
-                                    <h2 class="slide-title text-white">Comfort & Fashion<span>Combined</span></h2>
-                                    <h4 class="slide-desc">Shoes that match your pace, crafted for elegance.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Shop Now</a>
+                                    <h2 class="slide-title text-white">Thoải mái & Thời trang<span>Kết hợp hoàn hảo</span></h2>
+                                    <h4 class="slide-desc">Giày phù hợp với nhịp sống của bạn, thiết kế thanh lịch.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Mua ngay</a>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -32,12 +32,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-2 float-md-end float-none">
-                                    <h2 class="slide-title text-white">Premium Shoes<span>Collection</span></h2>
-                                    <h4 class="slide-desc">Elevate your style with comfort and durability.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Explore Now</a>
+                                    <h2 class="slide-title text-white">Giày cao cấp<span>Bộ sưu tập</span></h2>
+                                    <h4 class="slide-desc">Nâng tầm phong cách với sự thoải mái và bền bỉ.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
                                 </div>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -50,10 +50,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="hero-slider-content slide-3">
-                                    <h2 class="slide-title text-white">Step in Style<span>New Arrivals</span></h2>
-                                    <h4 class="slide-desc">Trendy, high-quality footwear for every occasion.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Discover More</a>
-                                </div>
+                                    <h2 class="slide-title text-white">Bước đi phong cách<span>Sản phẩm mới</span></h2>
+                                    <h4 class="slide-desc">Giày thời trang, chất lượng cao cho mọi người.</h4>
+                                    <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -77,8 +77,8 @@
                             <i class="pe-7s-plane"></i>
                         </div>
                         <div class="policy-content">
-                            <h6>Free Shipping</h6>
-                            <p>Free shipping all order</p>
+                            <h6>Miễn phí vận chuyển</h6>
+                            <p>Miễn phí vận chuyển mọi đơn hàng</p>
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,8 @@
                             <i class="pe-7s-help2"></i>
                         </div>
                         <div class="policy-content">
-                            <h6>Support 24/7</h6>
-                            <p>Support 24 hours a day</p>
+                            <h6>Hỗ trợ 24/7</h6>
+                            <p>Hỗ trợ khách hàng 24/7</p>
                         </div>
                     </div>
                 </div>
@@ -99,8 +99,8 @@
                             <i class="pe-7s-back"></i>
                         </div>
                         <div class="policy-content">
-                            <h6>Money Return</h6>
-                            <p>30 days for free return</p>
+                            <h6>Hoàn tiền</h6>
+                            <p>Hoàn trả miễn phí trong 30 ngày</p>
                         </div>
                     </div>
                 </div>
@@ -110,14 +110,14 @@
                             <i class="pe-7s-credit"></i>
                         </div>
                         <div class="policy-content">
-                            <h6>100% Payment Secure</h6>
-                            <p>We ensure secure payment</p>
+                            <h6>Thanh toán an toàn 100%</h6>
+                            <p>Chúng tôi đảm bảo thanh toán an toàn</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
     <!-- service policy area end -->
 
     <!-- banner statistics area start -->
@@ -157,57 +157,43 @@
                 <div class="col-12">
                     <!-- section title start -->
                     <div class="section-title text-center">
-                        <h2 class="title">our products</h2>
-                        <p class="sub-title">Add our products to weekly lineup</p>
+                        <h2 class="title">Sản phẩm mới nhất</h2>
+                        <p class="sub-title">Thêm sản phẩm mới từ cửa hàng của chúng tôi</p>
                     </div>
-                    <!-- section title start -->
+                    <!-- section title end -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="product-container">
-                        <!-- product tab menu start -->
-                        <div class="product-tab-menu">
-                            <ul class="nav justify-content-center">
-                                <li><a href="#tab1" class="active" data-bs-toggle="tab">Entertainment</a></li>
-                                <li><a href="#tab2" data-bs-toggle="tab">Storage</a></li>
-                                <li><a href="#tab3" data-bs-toggle="tab">Lying</a></li>
-                                <li><a href="#tab4" data-bs-toggle="tab">Tables</a></li>
-                            </ul>
-                        </div>
-                        <!-- product tab menu end -->
-
                         <!-- product tab content start -->
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab1">
                                 <div class="product-carousel-4 slick-row-10 slick-arrow-style">
-                                    @foreach($products as $product)
+                                    @foreach($latestProducts as $product)
                                         <div class="product-item">
                                             <figure class="product-thumb">
-                                                <a href="   ">
+                                                <a href="">
                                                     <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                     <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                 </a>
                                                 <div class="product-badge">
                                                     <div class="product-label new">
-                                                        <span>new</span>
+                                                        <span>Mới</span>
                                                     </div>
                                                 </div>
                                                 <div class="button-group">
-                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist">
+                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào danh sách yêu thích">
                                                         <i class="pe-7s-like"></i>
                                                     </a>
-                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare">
-                                                        <i class="pe-7s-refresh-2"></i>
-                                                    </a>
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view">
-                                                        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View">
+                                                        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Xem nhanh">
                                                             <i class="pe-7s-search"></i>
                                                         </span>
                                                     </a>
                                                 </div>
                                                 <div class="cart-hover">
-                                                    <button class="btn btn-cart">add to cart</button>
+                                                    <button class="btn btn-cart">Thêm vào giỏ</button>
                                                 </div>
                                             </figure>
                                             <div class="product-caption text-center">
@@ -215,22 +201,21 @@
                                                     <a href="">{{ $product->name }}</a>
                                                 </h6>
                                                 <div class="price-box">
-                                                    <span class="price-regular">${{ number_format($product->price, 2) }}</span>
-                                                </div>
+                                                    <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}VND</span>
+                                                </div>                                                
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
-
-
                         <!-- product tab content end -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
     <!-- product area end -->
 
     <!-- product banner statistics area start -->
@@ -307,78 +292,73 @@
     <!-- product banner statistics area end -->
 
     <!-- featured product area start -->
-    <section class="feature-product section-padding">
+    <section class="product-area section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <!-- section title start -->
                     <div class="section-title text-center">
-                        <h2 class="title">featured products</h2>
-                        <p class="sub-title">Add featured products to weekly lineup</p>
+                        <h2 class="title">Sản phẩm nổi bật</h2>
+                        <p class="sub-title">Những sản phẩm nổi bật từ cửa hàng của chúng tôi</p>
                     </div>
-                    <!-- section title start -->
+                    <!-- section title end -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="product-carousel-4_2 slick-row-10 slick-arrow-style">
-                        <!-- product item start -->
-                        <div class="product-item">
-                            <figure class="product-thumb">
-                                <a href="product-details.html">
-                                    <img class="pri-img" src="assets/img/product/product-6.jpg" alt="product">
-                                    <img class="sec-img" src="assets/img/product/product-13.jpg" alt="product">
-                                </a>
-                                <div class="product-badge">
-                                    <div class="product-label new">
-                                        <span>new</span>
-                                    </div>
-                                    <div class="product-label discount">
-                                        <span>10%</span>
-                                    </div>
-                                </div>
-                                <div class="button-group">
-                                    <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                    <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                </div>
-                                <div class="cart-hover">
-                                    <button class="btn btn-cart">add to cart</button>
-                                </div>
-                            </figure>
-                            <div class="product-caption text-center">
-                                <div class="product-identity">
-                                    <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                </div>
-                                <ul class="color-categories">
-                                    <li>
-                                        <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                    </li>
-                                    <li>
-                                        <a class="c-darktan" href="#" title="Darktan"></a>
-                                    </li>
-                                    <li>
-                                        <a class="c-grey" href="#" title="Grey"></a>
-                                    </li>
-                                    <li>
-                                        <a class="c-brown" href="#" title="Brown"></a>
-                                    </li>
-                                </ul>
-                                <h6 class="product-name">
-                                    <a href="product-details.html">Perfect Diamond Jewelry</a>
-                                </h6>
-                                <div class="price-box">
-                                    <span class="price-regular">$60.00</span>
-                                    <span class="price-old"><del>$70.00</del></span>
+                    <div class="product-container">
+                        <!-- product tab content start -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab1">
+                                <div class="product-carousel-4 slick-row-10 slick-arrow-style">
+                                    @foreach($mostViewedProducts as $product)
+                                        <div class="product-item">
+                                            <figure class="product-thumb">
+                                                <a href="#">
+                                                    <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                    <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                </a>
+                                                <div class="product-badge">
+                                                    <div class="product-label new">
+                                                        <span>Nổi bật</span>
+                                                    </div>
+                                                </div>
+                                                <div class="button-group">
+                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào danh sách yêu thích">
+                                                        <i class="pe-7s-like"></i>
+                                                    </a>
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view">
+                                                        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Xem nhanh">
+                                                            <i class="pe-7s-search"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div class="cart-hover">
+                                                    <button class="btn btn-cart">Thêm vào giỏ</button>
+                                                </div>
+                                            </figure>
+                                            <div class="product-caption text-center">
+                                                <h6 class="product-name">
+                                                    <a href="#">{{ $product->name }}</a>
+                                                </h6>
+                                                <div class="price-box">
+                                                    <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }} VND</span>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                        <!-- product item end -->
+                        <!-- product tab content end -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    
+    
     <!-- featured product area end -->
 
     <!-- testimonial area start -->
@@ -386,12 +366,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <!-- section title start -->
+                    <!-- Tiêu đề -->
                     <div class="section-title text-center">
-                        <h2 class="title">testimonials</h2>
-                        <p class="sub-title">What they say</p>
+                        <h2 class="title">Cảm nhận của khách hàng</h2>
+                        <p class="sub-title">Họ nói gì về chúng tôi?</p>
                     </div>
-                    <!-- section title start -->
+                    <!-- Kết thúc tiêu đề -->
                 </div>
             </div>
             <div class="row">
@@ -399,71 +379,71 @@
                     <div class="testimonial-thumb-wrapper">
                         <div class="testimonial-thumb-carousel">
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi.webp" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi.webp" alt="Khách hàng 1">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi2.jpg" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi2.jpg" alt="Khách hàng 2">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi3.jpg" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi3.jpg" alt="Khách hàng 3">
                             </div>
                             <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi4.png" alt="testimonial-thumb">
+                                <img src="assets/img/testimonial/nguoi4.png" alt="Khách hàng 4">
                             </div>
                         </div>
                     </div>
                     <div class="testimonial-content-wrapper">
                         <div class="testimonial-content-carousel">
                             <div class="testimonial-content">
-                                <p>Vivamus a lobortis ipsum, vel condimentum magna. Etiam id turpis tortor. Nunc scelerisque, nisi a blandit varius, nunc purus venenatis ligula, sed venenatis orci augue nec sapien. Cum sociis natoque</p>
+                                <p>Đôi giày ở đây thực sự tuyệt vời! Chất lượng da mềm mại, đi rất êm chân và không gây đau khi mang cả ngày. Tôi chắc chắn sẽ quay lại mua thêm!</p>
                                 <div class="ratings">
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">lindsy niloms</h5>
+                                <h5 class="testimonial-author">Linh Nguyễn</h5>
                             </div>
                             <div class="testimonial-content">
-                                <p>Vivamus a lobortis ipsum, vel condimentum magna. Etiam id turpis tortor. Nunc scelerisque, nisi a blandit varius, nunc purus venenatis ligula, sed venenatis orci augue nec sapien. Cum sociis natoque</p>
+                                <p>Shop có rất nhiều mẫu giày phong cách và hợp xu hướng. Tôi đã mua một đôi sneaker và cực kỳ hài lòng với chất lượng. Dịch vụ khách hàng cũng rất nhiệt tình!</p>
                                 <div class="ratings">
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star-half-o"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">Daisy Millan</h5>
+                                <h5 class="testimonial-author">Minh Thư</h5>
                             </div>
                             <div class="testimonial-content">
-                                <p>Vivamus a lobortis ipsum, vel condimentum magna. Etiam id turpis tortor. Nunc scelerisque, nisi a blandit varius, nunc purus venenatis ligula, sed venenatis orci augue nec sapien. Cum sociis natoque</p>
+                                <p>Tôi đã tìm được đôi giày thể thao hoàn hảo cho việc tập gym ở đây. Thiết kế đẹp, độ bám tốt và rất nhẹ. Một sản phẩm đáng tiền!</p>
                                 <div class="ratings">
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">Henry Cavill</h5>
+                                <h5 class="testimonial-author">Minh Quân</h5>
                             </div>
                             <div class="testimonial-content">
-                                <p>Vivamus a lobortis ipsum, vel condimentum magna. Etiam id turpis tortor. Nunc scelerisque, nisi a blandit varius, nunc purus venenatis ligula, sed venenatis orci augue nec sapien. Cum sociis natoque</p>
+                                <p>Giày rất êm và thoải mái! Tôi đã mang thử trong nhiều giờ và vẫn cảm thấy dễ chịu. Đây chắc chắn là nơi tôi sẽ giới thiệu cho bạn bè.</p>
                                 <div class="ratings">
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
                                 </div>
-                                <h5 class="testimonial-author">Tony Stark</h5>
+                                <h5 class="testimonial-author">Hoài Nam</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section>    
     <!-- testimonial area end -->
 
     <!-- group product start -->
@@ -474,85 +454,83 @@
                     <div class="group-product-banner">
                         <figure class="banner-statistics">
                             <a href="#">
-                                <img src="assets/img/banner/banner-vua.jpg" alt="product banner">
+                                <img src="assets/img/banner/banner-vua.jpg" alt="Banner sản phẩm">
                             </a>
-                            <div class="banner-content banner-content_style3 text-center">
-                                <h6 class="banner-text1">BEAUTIFUL</h6>
-                                <h2 class="banner-text2">Wedding Rings</h2>
-                            </div>
                         </figure>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="categories-group-wrapper">
-                        <!-- section title start -->
+                        <!-- Tiêu đề danh mục -->
                         <div class="section-title-append">
-                            <h4>best seller product</h4>
+                            <h4>Sản phẩm bán chạy</h4>
                             <div class="slick-append"></div>
                         </div>
-                        <!-- section title start -->
-
-                        <!-- group list carousel start -->
-                        <div class="group-list-item-wrapper">
-                            <div class="group-list-carousel">
-                                <!-- group list item start -->
-                                <div class="group-slide-item">
-                                    <div class="group-item">
-                                        <div class="group-item-thumb">
-                                            <a href="product-details.html">
-                                                <img src="assets/img/product/product-1.jpg" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="group-item-desc">
-                                            <h5 class="group-product-name"><a href="product-details.html">
-                                                    Diamond Exclusive ring</a></h5>
-                                            <div class="price-box">
-                                                <span class="price-regular">$50.00</span>
-                                                <span class="price-old"><del>$29.99</del></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- group list item end -->
-                            </div>
+                        <!-- Kết thúc tiêu đề danh mục -->
+    
+                       <!-- Bắt đầu danh sách sản phẩm bán chạy -->
+<div class="group-list-item-wrapper">
+    <div class="group-list-carousel">
+        @foreach($bestSellingProducts as $product)
+            <div class="group-slide-item">
+                <div class="group-item">
+                    <div class="group-item-thumb">
+                        <a href="">
+                            <img src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}">
+                        </a>
+                    </div>
+                    <div class="group-item-desc">
+                        <h5 class="group-product-name">
+                            <a href="">{{ $product->name }}</a>
+                        </h5>
+                        <div class="price-box">
+                            <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}₫</span>
                         </div>
-                        <!-- group list carousel start -->
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+<!-- Kết thúc danh sách sản phẩm -->
+
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="categories-group-wrapper">
-                        <!-- section title start -->
+                        <!-- Tiêu đề danh mục -->
                         <div class="section-title-append">
-                            <h4>on-sale product</h4>
+                            <h4>Sản phẩm giảm giá</h4>
                             <div class="slick-append"></div>
                         </div>
-                        <!-- section title start -->
-
-                        <!-- group list carousel start -->
+                        <!-- Kết thúc tiêu đề danh mục -->
+    
+                        <!-- Bắt đầu danh sách sản phẩm giảm giá -->
                         <div class="group-list-item-wrapper">
                             <div class="group-list-carousel">
-                                <!-- group list item start -->
+                                <!-- Sản phẩm bắt đầu -->
                                 <div class="group-slide-item">
                                     <div class="group-item">
                                         <div class="group-item-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-17.jpg" alt="">
+                                                <img src="assets/img/product/product-17.jpg" alt="Dây chuyền vàng">
                                             </a>
                                         </div>
                                         <div class="group-item-desc">
-                                            <h5 class="group-product-name"><a href="product-details.html">
-                                                    Handmade Golden Necklace</a></h5>
+                                            <h5 class="group-product-name">
+                                                <a href="product-details.html">Dây chuyền vàng thủ công</a>
+                                            </h5>
                                             <div class="price-box">
-                                                <span class="price-regular">$50.00</span>
-                                                <span class="price-old"><del>$29.99</del></span>
+                                                <span class="price-regular">{{ number_format(1200000, 0, ',', '.') }}₫</span>
+                                                <span class="price-old"><del>{{ number_format(800000, 0, ',', '.') }}₫</del></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- group list item end -->
+                                <!-- Sản phẩm kết thúc -->
                             </div>
                         </div>
-                        <!-- group list carousel start -->
+                        <!-- Kết thúc danh sách sản phẩm -->
                     </div>
                 </div>
             </div>
@@ -565,40 +543,39 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <!-- section title start -->
+                    <!-- Tiêu đề -->
                     <div class="section-title text-center">
-                        <h2 class="title">latest blogs</h2>
-                        <p class="sub-title">There are latest blog posts</p>
+                        <h2 class="title">Bài viết mới nhất</h2>
+                        <p class="sub-title">Những tin tức và xu hướng giày mới nhất</p>
                     </div>
-                    <!-- section title start -->
+                    <!-- Kết thúc tiêu đề -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="blog-carousel-active slick-row-10 slick-arrow-style">
-                        <!-- blog post item start -->
+                        <!-- Bài viết blog bắt đầu -->
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="assets/img/blog/blog-img1.jpg" alt="blog image">
+                                    <img src="assets/img/blog/blog-img1.jpg" alt="Hình ảnh blog">
                                 </a>
                             </figure>
                             <div class="blog-content">
                                 <div class="blog-meta">
-                                    <p>25/03/2019 | <a href="#">Corano</a></p>
+                                    <p>25/03/2024 | <a href="#">SneakerWorld</a></p>
                                 </div>
                                 <h5 class="blog-title">
-                                    <a href="blog-details.html">Celebrity Daughter Opens Up About Having Her Eye Color Changed</a>
+                                    <a href="blog-details.html">Xu hướng giày sneaker hot nhất năm 2024</a>
                                 </h5>
                             </div>
                         </div>
-                        <!-- blog post item end -->
-
+                        <!-- Bài viết blog kết thúc -->
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section>    
     <!-- latest blog area end -->
 
     <!-- brand logo area start -->
@@ -661,327 +638,5 @@
     </div>
     <!-- brand logo area end -->
 </main>
-
-<!-- Scroll to top start -->
-<div class="scroll-top not-visible">
-    <i class="fa fa-angle-up"></i>
-</div>
-<!-- Scroll to Top End -->
-
-<!-- footer area start -->
-<footer class="footer-widget-area">
-    <div class="footer-top section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget-item">
-                        <div class="widget-title">
-                            <div class="widget-logo">
-                                <a href="index.html">
-                                    <img src="assets/img/logo/logo.png" alt="brand logo">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="widget-body">
-                            <p>We are a team of designers and developers that create high quality wordpress, shopify, Opencart </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget-item">
-                        <h6 class="widget-title">Contact Us</h6>
-                        <div class="widget-body">
-                            <address class="contact-block">
-                                <ul>
-                                    <li><i class="pe-7s-home"></i> 4710-4890 Breckinridge USA</li>
-                                    <li><i class="pe-7s-mail"></i> <a href="mailto:demo@plazathemes.com">demo@yourdomain.com </a></li>
-                                    <li><i class="pe-7s-call"></i> <a href="tel:(012)800456789987">(012) 800 456 789-987</a></li>
-                                </ul>
-                            </address>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget-item">
-                        <h6 class="widget-title">Information</h6>
-                        <div class="widget-body">
-                            <ul class="info-list">
-                                <li><a href="#">about us</a></li>
-                                <li><a href="#">Delivery Information</a></li>
-                                <li><a href="#">privet policy</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
-                                <li><a href="#">contact us</a></li>
-                                <li><a href="#">site map</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="widget-item">
-                        <h6 class="widget-title">Follow Us</h6>
-                        <div class="widget-body social-link">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center mt-20">
-                <div class="col-md-6">
-                    <div class="newsletter-wrapper">
-                        <h6 class="widget-title-text">Signup for newsletter</h6>
-                        <form class="newsletter-inner" id="mc-form">
-                            <input type="email" class="news-field" id="mc-email" autocomplete="off" placeholder="Enter your email address">
-                            <button class="news-btn" id="mc-submit">Subscribe</button>
-                        </form>
-                        <!-- mail-chimp-alerts Start -->
-                        <div class="mailchimp-alerts">
-                            <div class="mailchimp-submitting"></div><!-- mail-chimp-submitting end -->
-                            <div class="mailchimp-success"></div><!-- mail-chimp-success end -->
-                            <div class="mailchimp-error"></div><!-- mail-chimp-error end -->
-                        </div>
-                        <!-- mail-chimp-alerts end -->
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="footer-payment">
-                        <img src="assets/img/payment.png" alt="payment method">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="copyright-text text-center">
-                        <p>&copy; 2022 <b>Corano</b> Made with <i class="fa fa-heart text-danger"></i> by <a href="https://hasthemes.com/"><b>HasThemes</b></a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- footer area end -->
-
-<!-- Quick view modal start -->
-<div class="modal" id="quick_view">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- product details inner end -->
-                <div class="product-details-inner">
-                    <div class="row">
-                        <div class="col-lg-5">
-                            <div class="product-large-slider">
-                                <div class="pro-large-img img-zoom">
-                                    <img src="assets/img/product/product-details-img1.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-large-img img-zoom">
-                                    <img src="assets/img/product/product-details-img2.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-large-img img-zoom">
-                                    <img src="assets/img/product/product-details-img3.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-large-img img-zoom">
-                                    <img src="assets/img/product/product-details-img4.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-large-img img-zoom">
-                                    <img src="assets/img/product/product-details-img5.jpg" alt="product-details" />
-                                </div>
-                            </div>
-                            <div class="pro-nav slick-row-10 slick-arrow-style">
-                                <div class="pro-nav-thumb">
-                                    <img src="assets/img/product/product-details-img1.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-nav-thumb">
-                                    <img src="assets/img/product/product-details-img2.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-nav-thumb">
-                                    <img src="assets/img/product/product-details-img3.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-nav-thumb">
-                                    <img src="assets/img/product/product-details-img4.jpg" alt="product-details" />
-                                </div>
-                                <div class="pro-nav-thumb">
-                                    <img src="assets/img/product/product-details-img5.jpg" alt="product-details" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-7">
-                            <div class="product-details-des">
-                                <div class="manufacturer-name">
-                                    <a href="product-details.html">HasTech</a>
-                                </div>
-                                <h3 class="product-name">Handmade Golden Necklace</h3>
-                                <div class="ratings d-flex">
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <span><i class="fa fa-star-o"></i></span>
-                                    <div class="pro-review">
-                                        <span>1 Reviews</span>
-                                    </div>
-                                </div>
-                                <div class="price-box">
-                                    <span class="price-regular">$70.00</span>
-                                    <span class="price-old"><del>$90.00</del></span>
-                                </div>
-                                <h5 class="offer-text"><strong>Hurry up</strong>! offer ends in:</h5>
-                                <div class="product-countdown" data-countdown="2022/12/20"></div>
-                                <div class="availability">
-                                    <i class="fa fa-check-circle"></i>
-                                    <span>200 in stock</span>
-                                </div>
-                                <p class="pro-desc">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.</p>
-                                <div class="quantity-cart-box d-flex align-items-center">
-                                    <h6 class="option-title">qty:</h6>
-                                    <div class="quantity">
-                                        <div class="pro-qty"><input type="text" value="1"></div>
-                                    </div>
-                                    <div class="action_link">
-                                        <a class="btn btn-cart2" href="#">Add to cart</a>
-                                    </div>
-                                </div>
-                                <div class="useful-links">
-                                    <a href="#" data-bs-toggle="tooltip" title="Compare"><i
-                                            class="pe-7s-refresh-2"></i>compare</a>
-                                    <a href="#" data-bs-toggle="tooltip" title="Wishlist"><i
-                                            class="pe-7s-like"></i>wishlist</a>
-                                </div>
-                                <div class="like-icon">
-                                    <a class="facebook" href="#"><i class="fa fa-facebook"></i>like</a>
-                                    <a class="twitter" href="#"><i class="fa fa-twitter"></i>tweet</a>
-                                    <a class="pinterest" href="#"><i class="fa fa-pinterest"></i>save</a>
-                                    <a class="google" href="#"><i class="fa fa-google-plus"></i>share</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- product details inner end -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Quick view modal end -->
-
-<!-- offcanvas mini cart start -->
-<div class="offcanvas-minicart-wrapper">
-    <div class="minicart-inner">
-        <div class="offcanvas-overlay"></div>
-        <div class="minicart-inner-content">
-            <div class="minicart-close">
-                <i class="pe-7s-close"></i>
-            </div>
-            <div class="minicart-content-box">
-                <div class="minicart-item-wrapper">
-                    <ul>
-                        <li class="minicart-item">
-                            <div class="minicart-thumb">
-                                <a href="product-details.html">
-                                    <img src="assets/img/cart/cart-1.jpg" alt="product">
-                                </a>
-                            </div>
-                            <div class="minicart-content">
-                                <h3 class="product-name">
-                                    <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                </h3>
-                                <p>
-                                    <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                    <span class="cart-price">$100.00</span>
-                                </p>
-                            </div>
-                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                        </li>
-                        <li class="minicart-item">
-                            <div class="minicart-thumb">
-                                <a href="product-details.html">
-                                    <img src="assets/img/cart/cart-2.jpg" alt="product">
-                                </a>
-                            </div>
-                            <div class="minicart-content">
-                                <h3 class="product-name">
-                                    <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                </h3>
-                                <p>
-                                    <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                    <span class="cart-price">$80.00</span>
-                                </p>
-                            </div>
-                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="minicart-pricing-box">
-                    <ul>
-                        <li>
-                            <span>sub-total</span>
-                            <span><strong>$300.00</strong></span>
-                        </li>
-                        <li>
-                            <span>Eco Tax (-2.00)</span>
-                            <span><strong>$10.00</strong></span>
-                        </li>
-                        <li>
-                            <span>VAT (20%)</span>
-                            <span><strong>$60.00</strong></span>
-                        </li>
-                        <li class="total">
-                            <span>total</span>
-                            <span><strong>$370.00</strong></span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="minicart-button">
-                    <a href="{{route('cart.index')}}"><i class="fa fa-shopping-cart"></i> View Cart</a>
-                    <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- offcanvas mini cart end -->
-
-<!-- JS
-============================================ -->
-
-<!-- Modernizer JS -->
-<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-<!-- jQuery JS -->
-<script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-<!-- slick Slider JS -->
-<script src="assets/js/plugins/slick.min.js"></script>
-<!-- Countdown JS -->
-<script src="assets/js/plugins/countdown.min.js"></script>
-<!-- Nice Select JS -->
-<script src="assets/js/plugins/nice-select.min.js"></script>
-<!-- jquery UI JS -->
-<script src="assets/js/plugins/jqueryui.min.js"></script>
-<!-- Image zoom JS -->
-<script src="assets/js/plugins/image-zoom.min.js"></script>
-<!-- Images loaded JS -->
-<script src="assets/js/plugins/imagesloaded.pkgd.min.js"></script>
-<!-- mail-chimp active js -->
-<script src="assets/js/plugins/ajaxchimp.js"></script>
-<!-- contact form dynamic js -->
-<script src="assets/js/plugins/ajax-mail.js"></script>
-<!-- google map api -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfmCVTjRI007pC1Yk2o2d_EhgkjTsFVN8"></script>
-<!-- google map active js -->
-<script src="assets/js/plugins/google-map.js"></script>
-<!-- Main JS -->
-<script src="assets/js/main.js"></script>
-
 
 @endsection

@@ -45,22 +45,23 @@ class AuthController extends Controller
     }
 
     public function postRegister(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|confirmed',
-        ]);
+{
+    $data = $request->validate([
+        'fullname' => 'required|min:3',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:5|confirmed',
+        'phone' => 'required|digits:10|unique:users,phone',
+        'address' => 'required|string|max:255',
+        'gender' => 'required|in:male,female,other',
+    ]);
 
-        $data['password'] = bcrypt($data['password']);
-        User::create($data);
+    $data['password'] = bcrypt($data['password']);
+    $data['role'] = 'user'; // Mặc định user
+    $data['status'] = 1; // Tài khoản đang hoạt động
 
-        return redirect()->route('login')->with('message', 'Đăng ký thành công.');
-    }
+    User::create($data);
 
-    public function logout()
-    {
-        Auth::guard('web')->logout();
-        return redirect()->route('login');
-    }
+    return redirect()->route('login')->with('message', 'Đăng ký thành công.');
+}
+
 }

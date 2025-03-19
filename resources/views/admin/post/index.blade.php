@@ -1,3 +1,4 @@
+
 @extends('admin.layout')
 @section('title', 'Danh sách Bài Viết| Quản trị Admin')
 @section('title2', 'Danh sách Bài Viết')

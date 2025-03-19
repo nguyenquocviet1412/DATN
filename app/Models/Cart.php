@@ -15,14 +15,15 @@ class Cart extends Model
         'quantity',
         'price',
     ];
-    // Quan hệ với bảng users
+
+    // Quan hệ với bảng Users
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    // Quan hệ với bảng variants
-    public function productVariant()
+    // Quan hệ với bảng Variants (Biến thể sản phẩm)
+    public function variant()
     {
         return $this->belongsTo(Variant::class, 'id_variant');
     }
