@@ -72,7 +72,7 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
         Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add'); // Thêm sản phẩm vào giỏ hàng
         Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
-        Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
+        Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove'); // Xóa sản phẩm khỏi giỏ hàng
         Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
     });
  });
