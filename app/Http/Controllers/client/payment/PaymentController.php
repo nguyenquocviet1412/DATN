@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Client\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -11,6 +11,11 @@ class PaymentController extends Controller
     public function processPayment($order_id)
     {
         $order = Order::findOrFail($order_id);
+
+        // Kiểm tra xem đơn hàng có phương thức thanh toán không
+        if (!$order->payment_method) {
+            return redirect()->route('checkout')->with('error', 'Vui lòng chọn phương thức thanh toán.');
+        }
 
         switch ($order->payment_method) {
             case 'momo':
@@ -26,4 +31,3 @@ class PaymentController extends Controller
         }
     }
 }
-// trang xử lý thanh toán 

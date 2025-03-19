@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\Cart as CartModel; // Đổi tên alias tránh trùng với thư viện Cart
+use App\Models\Order_item;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+
 
 class ClientOrderController extends Controller
 {
@@ -28,59 +30,75 @@ class ClientOrderController extends Controller
     }
 
     // Xử lý đặt hàng
-    public function placeOrder(Request $request)
-    {
-        $user = Auth::user();
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->back()->with('error', 'Giỏ hàng trống!');
-        }
+    
+public function placeOrder(Request $request)
+{
+    $validated = $request->validate([
+        'fullname' => 'required',
+        'phone' => 'required',
+        'shipping_address' => 'required',
+        'payment_method' => 'required',
+        'voucher_code' => 'nullable|string',
+    ]);
 
-        // Kiểm tra voucher
-        $voucher = Voucher::where('code', $request->voucher_code)
-            ->where('status', 'active')
-            ->first();
-        $discountAmount = $voucher ? min($voucher->discount_value, session('cart_total_before_discount', 0)) : 0;
-        $totalAfterDiscount = session('cart_total_before_discount', 0) - $discountAmount;
+    // Kiểm tra voucher
+    $voucher = Voucher::where('code', $request->voucher_code)
+        ->where('status', 'active')
+        ->first();
+    
+    // Lấy giỏ hàng từ database
+    $cartItems = CartModel::all();
+    $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
 
-        // Tạo đơn hàng
-        $order = Order::create([
-            'id_user' => $user->id,
-            'id_voucher' => $voucher ? $voucher->id : null,
-            'discount_amount' => $discountAmount,
-            'total_price' => $totalAfterDiscount,
-            'fullname' => $request->fullname,
-            'phone' => $request->phone,
-            'shipping_address' => $request->shipping_address,
-            'payment_method' => $request->payment_method,
-            'payment_status' => 'pending',
+    // Tính toán giảm giá
+    $discountAmount = $voucher ? min($voucher->discount_value, $cartTotal) : 0;
+    $totalAfterDiscount = $cartTotal - $discountAmount;
+
+    // Tạo đơn hàng
+    $order = Order::create([
+        'customer_name' => $request->fullname,
+        'customer_phone' => $request->phone,
+        'shipping_address' => $request->shipping_address,
+        'total_price' => $totalAfterDiscount,
+        'payment_method' => $request->payment_method,
+        'status' => 'pending',
+        'voucher_id' => $voucher ? $voucher->id : null,
+        'discount_amount' => $discountAmount,
+    ]);
+
+    // Thêm sản phẩm vào đơn hàng
+    foreach ($cartItems as $item) {
+        Order_item::create([
+            'order_id' => $order->id,
+            'product_id' => $item->product_id,
+            'quantity' => $item->quantity,
+            'price' => $item->price,
+            'subtotal' => $item->price * $item->quantity,
         ]);
-
-        // Thêm sản phẩm vào đơn hàng
-        foreach ($cart as $item) {
-            OrderItem::create([
-                'id_order' => $order->id,
-                'id_variant' => $item['id_variant'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'subtotal' => $item['price'] * $item['quantity'],
-            ]);
-        }
-
-        session()->forget('cart');
-
-        // Chuyển hướng đến trang thanh toán nếu không phải COD
-        if ($request->payment_method !== 'cod') {
-            return redirect()->route('payment.process', ['order_id' => $order->id]);
-        }
-
-        return redirect()->route('order.success')->with('success', 'Đặt hàng thành công!');
     }
 
+    // Xóa giỏ hàng sau khi đặt hàng
+    CartModel::truncate();
+
+    // Xử lý thanh toán
+    switch ($order->payment_method) {
+        case 'momo':
+            return redirect()->route('momo.pay', ['order_id' => $order->id]);
+        case 'vnpay':
+            return redirect()->route('vnpay.pay', ['order_id' => $order->id]);
+        case 'paypal':
+            return redirect()->route('paypal.pay', ['order_id' => $order->id]);
+        case 'credit_card':
+            return redirect()->route('creditcard.pay', ['order_id' => $order->id]);
+        default:
+            return redirect()->route('order.success')->with('success', 'Đơn hàng đã được đặt thành công!');
+    }
+}
+    
     // Hiển thị trang đặt hàng thành công
     public function success()
     {
-        return view('checkout-success');
+        return view('home.checkout-success');
     }
 
     // Lịch sử đơn hàng
