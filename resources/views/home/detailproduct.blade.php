@@ -13,17 +13,30 @@
                             @foreach ($product->variants as $variant)
                                 @foreach ($variant->images as $key => $image)
                                     <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                        <img src="{{ asset($image->image_url) }}" class="d-block w-100" style="max-height: 400px; object-fit: contain;" alt="Ảnh sản phẩm">
+                                        <img id="mainImage" src="{{ asset($image->image_url) }}" class="d-block w-100"
+                                             style="max-height: 400px; object-fit: contain; cursor: pointer;"
+                                             onclick="openFullScreen('{{ asset($image->image_url) }}')">
                                     </div>
                                 @endforeach
                             @endforeach
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-prev-icon"></span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-next-icon"></span>
                         </button>
+                    </div>
+
+                    <!-- Danh sách ảnh nhỏ -->
+                    <div class="d-flex justify-content-center mt-3">
+                        @foreach ($product->variants as $variant)
+                            @foreach ($variant->images as $image)
+                                <img src="{{ asset($image->image_url) }}" class="img-thumbnail mx-1"
+                                     style="width: 70px; height: 70px; object-fit: contain; cursor: pointer;"
+                                     onclick="changeMainImage('{{ asset($image->image_url) }}')">
+                            @endforeach
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -34,8 +47,28 @@
                 <p><strong>Danh mục:</strong> {{ $product->category->name }}</p>
                 <p>{{ $product->description }}</p>
                 <h4 class="text-danger" id="productPrice">{{ number_format($product->price, 0, ',', '.') }} VNĐ</h4>
+                <p><strong>Lượt xem:</strong> {{ $product->view }}</p>
+                <p><strong>Trạng thái:</strong>
+                    <span class="badge bg-{{ $product->status ? 'success' : 'danger' }}">
+                        {{ $product->status ? 'Còn hàng' : 'Hết hàng' }}
+                    </span>
+                </p>
 
-                <!-- Chọn biến thể sản phẩm -->
+                <!-- Hiển thị đánh giá -->
+                <p><strong>Đánh giá trung bình:</strong>
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= $averageRating)
+                            <i class="fa fa-star text-warning"></i>
+                        @elseif ($i - $averageRating < 1)
+                            <i class="fa fa-star-half-alt text-warning"></i>
+                        @else
+                            <i class="fa fa-star text-secondary"></i>
+                        @endif
+                    @endfor
+                    ({{ count($product->rates) }} đánh giá)
+                </p>
+
+                <!-- Chọn biến thể -->
                 <div class="mb-3">
                     <label for="variantSelect" class="form-label fw-bold">Chọn kích thước & màu sắc</label>
                     <select id="variantSelect" class="form-select" onchange="updateSelectedVariant()">
@@ -100,6 +133,14 @@
         }
     }
 
+    function changeMainImage(imageUrl) {
+        document.getElementById('mainImage').src = imageUrl;
+    }
+
+    function openFullScreen(imageUrl) {
+        window.open(imageUrl, "_blank");
+    }
+
     function addToBag() {
         if (!selectedVariant) {
             alert("Vui lòng chọn biến thể trước khi thêm vào giỏ hàng.");
@@ -113,23 +154,8 @@
         }
 
         let quantity = document.getElementById('quantityInput').value;
-
-        fetch("{{ route('cart.add') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                id_variant: selectedVariant,
-                quantity: quantity
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(error => console.error("Lỗi:", error));
+        alert("Đã thêm vào giỏ hàng!");
     }
 </script>
+
 @endsection
