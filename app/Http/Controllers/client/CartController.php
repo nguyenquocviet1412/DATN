@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Product_image;
+use App\Models\Variant;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,27 +24,38 @@ class CartController extends Controller
 }
 
     // Thêm sản phẩm vào giỏ hàng
-    public function add(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1'
-        ]);
+public function add(Request $request)
+{
+    $request->validate([
+        'id_variant' => 'required|exists:variants,id',
+        'quantity' => 'required|integer|min:1'
+    ]);
 
-        $product = Product::findOrFail($request->product_id);
-        $user = Auth::user();
+    $variant = Variant::with('product')->findOrFail($request->id_variant);
+    $user = Auth::user();
 
-        if ($product->stock < $request->quantity) {
-            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
-        }
-
-        $cartItem = Cart::updateOrCreate(
-            ['user_id' => $user->id, 'product_id' => $product->id],
-            ['quantity' => $request->quantity, 'price' => $product->price]
-        );
-
-        return response()->json(['message' => 'Sản phẩm đã được thêm vào giỏ hàng', 'cartItem' => $cartItem]);
+    // Kiểm tra số lượng tồn kho
+    if ($variant->quantity < $request->quantity) {
+        return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
     }
+
+    // Thêm vào giỏ hàng hoặc cập nhật số lượng nếu đã tồn tại
+    $cartItem = Cart::updateOrCreate(
+        [
+            'id_user' => $user->id,
+            'id_variant' => $variant->id
+        ],
+        [
+            'quantity' => $request->quantity,
+            'price' => $variant->price
+        ]
+    );
+
+    return response()->json([
+        'message' => 'Sản phẩm đã được thêm vào giỏ hàng',
+        'cartItem' => $cartItem
+    ]);
+}
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public function update(Request $request, $id)

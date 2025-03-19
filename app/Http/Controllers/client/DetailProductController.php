@@ -16,7 +16,7 @@ class DetailProductController extends Controller
 {
     public function show($id)
 {
-    $product = Product::with('variants')->findOrFail($id);
+    $product = Product::with(['variants.color', 'variants.size'])->findOrFail($id);
 
     // Tăng số lượt xem mỗi khi người dùng vào xem chi tiết
     $product->increment('view');
