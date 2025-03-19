@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use DB;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -22,7 +23,7 @@ class HomeController extends Controller
 
         // Lọc theo danh mục
         if ($request->has('category') && $request->category != '') {
-            $query->where('category_id', $request->category);
+            $query->where('id_category', $request->category);
         }
 
         // Sắp xếp theo giá, lượt xem hoặc yêu thích
@@ -35,19 +36,35 @@ class HomeController extends Controller
                     $query->orderBy('price', 'desc');
                     break;
                 case 'views':
-                    $query->orderBy('views', 'desc');
-                    break;
-                case 'favorites':
-                    $query->orderBy('favorites', 'desc');
+                    $query->orderBy('view', 'desc'); // Đổi từ 'views' thành 'view' (theo cột trong database)
                     break;
             }
         }
 
+        // Lấy 8 sản phẩm mới nhất
+        $latestProducts = Product::orderBy('created_at', 'desc')->take(8)->get();
+
+        // Lấy 8 sản phẩm có lượt xem nhiều nhất
+        $mostViewedProducts = Product::orderBy('view', 'desc')->take(8)->get();
+
         $products = $query->paginate(9);
         $categories = Category::all();
 
-        return view('home.index', compact('products', 'categories'));
+        // Lấy 4 sản phẩm bán chạy nhất
+        $bestSellingProducts = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->join('variants', 'products.id', '=', 'variants.id_product')
+            ->join('order_items', 'variants.id', '=', 'order_items.id_variant')
+            ->groupBy('products.id')
+            ->orderByDesc('total_sold')
+            ->take(4)
+            ->get();
+
+        $products = $query->paginate(9);
+        $categories = Category::all();
+
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts'));
     }
+
 
 
 
