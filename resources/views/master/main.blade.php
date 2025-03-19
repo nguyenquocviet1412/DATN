@@ -128,11 +128,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li><a href="blog-left-sidebar.html">Blog <i class="fa"></i></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="blog-left-sidebar.html">Blog - Thanh bên trái</a></li>
-                                                </ul>
-                                            </li>
+                                            <li><a href="{{route('blogs.index')}}">Blog </a> </li>
                                             <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>
