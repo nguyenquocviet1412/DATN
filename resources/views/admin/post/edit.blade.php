@@ -45,20 +45,22 @@
 <div class="container mt-4">
     <div class="card shadow p-4 rounded">
         <h2 class="text-center text-primary mb-4">Chỉnh sửa bài viết</h2>
+
+        {{-- Hiển thị lỗi --}}
         @if($errors->any())
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                title: 'Lỗi!',
-                html: `{!! implode('<br>', $errors->all()) !!}`,
-                icon: 'error',
-                showConfirmButton: true,
-                confirmButtonText: 'Đóng',
-                backdrop: true
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    icon: 'error',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Đóng',
+                    backdrop: true
+                });
             });
-        });
-    </script>
-@endif
+        </script>
+        @endif
 
         <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -98,14 +100,13 @@
             <div class="mb-3">
                 <label class="form-label">Trạng thái</label>
                 <div>
-                    <input type="radio" name="status" value="1" {{ old('status', $post->status) == 1 ? 'checked' : '' }}> Xuất bản
-                    <input type="radio" name="status" value="0" {{ old('status', $post->status) == 0 ? 'checked' : '' }}> Nháp
+                    <input type="radio" name="status" value="published" {{ old('status', $post->status) == 'published' ? 'checked' : '' }}> Xuất bản
+                    <input type="radio" name="status" value="draft" {{ old('status', $post->status) == 'draft' ? 'checked' : '' }}> Nháp
                 </div>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-
 
             {{-- Nút hành động --}}
             <div class="d-flex justify-content-between">

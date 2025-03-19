@@ -75,7 +75,7 @@ class PostController extends Controller
         return view('admin.post.show', compact('post'));
     }
 
-    /**
+     /**
      * Hiển thị form chỉnh sửa bài viết
      */
     public function edit(string $id)
@@ -93,7 +93,7 @@ class PostController extends Controller
             'title'   => 'required|string|max:255',
             'content' => 'required|string',
             'image'   => 'nullable|image|max:2048',
-            'status'  => 'required|in:0,1',
+            'status'  => 'required|in:draft,published',
         ], [
             'title.required'   => 'Vui lòng nhập tiêu đề bài viết.',
             'title.max'        => 'Tiêu đề không được vượt quá 255 ký tự.',
@@ -111,12 +111,13 @@ class PostController extends Controller
             // Xử lý ảnh nếu có thay đổi
             if ($request->hasFile('image')) {
                 if ($post->image) {
-                    Storage::delete($post->image);
+                    Storage::delete('public/' . $post->image);
                 }
-                $data['image'] = $request->file('image')->store('posts');
+                $data['image'] = $request->file('image')->store('posts', 'public');
             }
 
             $post->update($data);
+
             return redirect()->route('post.index')->with('success', 'Cập nhật bài viết thành công!');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi cập nhật: ' . $e->getMessage()])->withInput();

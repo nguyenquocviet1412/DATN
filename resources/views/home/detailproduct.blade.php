@@ -93,7 +93,7 @@
 
                 <!-- Nút thêm vào giỏ hàng -->
                 <div class="d-grid gap-3">
-                    <button id="addToCartBtn" class="btn btn-primary btn-lg fw-bold shadow-lg py-3" onclick="addToBag()" disabled>🛒 Thêm vào giỏ hàng</button>
+                    <button id="addToCartBtn" class="btn btn-primary btn-lg fw-bold shadow-lg py-3" onclick="addToCart()" disabled>🛒 Thêm vào giỏ hàng</button>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
         window.open(imageUrl, "_blank");
     }
 
-    function addToBag() {
+    function addToCart() {
         if (!selectedVariant) {
             alert("Vui lòng chọn biến thể trước khi thêm vào giỏ hàng.");
             return;
@@ -154,7 +154,31 @@
         }
 
         let quantity = document.getElementById('quantityInput').value;
-        alert("Đã thêm vào giỏ hàng!");
+
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                id_variant: selectedVariant,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message);
+                // Cập nhật giao diện nếu cần
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi khi thêm vào giỏ hàng:", error);
+            alert("Có lỗi xảy ra, vui lòng thử lại!");
+        });
     }
 </script>
 
