@@ -22,8 +22,6 @@ class PaymentController extends Controller
                 return redirect()->route('momo.pay', ['order_id' => $order_id]);
             case 'vnpay':
                 return redirect()->route('vnpay.pay', ['order_id' => $order_id]);
-            case 'paypal':
-                return redirect()->route('paypal.pay', ['order_id' => $order_id]);
             case 'credit_card':
                 return redirect()->route('creditcard.pay', ['order_id' => $order_id]);
             default:
