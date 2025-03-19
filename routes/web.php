@@ -72,7 +72,7 @@ use App\Http\Controllers\FilterProductController;
   //Giỏ hàng
       Route::prefix('cart')->group(function () {
           Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
-          Route::post('/store', [CartController::class, 'store'])->name('cart.store'); // Thêm sản phẩm vào giỏ hàng
+          Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add'); // Thêm sản phẩm vào giỏ hàng
           Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
           Route::delete('/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy'); // Xóa sản phẩm khỏi giỏ hàng
           Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
@@ -80,16 +80,16 @@ use App\Http\Controllers\FilterProductController;
 
     });
 
-          
+
       });
-    
-  
-  // Thanh toán  
+
+
+  // Thanh toán
 Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/checkout', [ClientOrderController::class, 'checkout'])->name('checkout');
     Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
     Route::get('/checkout-success', [ClientOrderController::class, 'success'])->name('order.success');
-    Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');  
+    Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
     Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
 
@@ -102,11 +102,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/creditcard/{order_id}', [CreditCardController::class, 'pay'])->name('creditcard.pay');
     });
 });
-    
 
-   
-      
-    
+
+
+
+
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 //Route ADMIN
