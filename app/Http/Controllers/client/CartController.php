@@ -7,74 +7,88 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Product_image;
+use App\Models\Voucher;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Hiển thị giỏ hàng
     public function index()
+{
+    $user = Auth::user();
+    $cartItems = Cart::where('id_user', $user->id)
+                     ->with(['variant.product', 'variant.color', 'variant.size', 'variant.images'])
+                     ->get();
+    return view('home.cart', compact('cartItems'));
+}
+
+    // Thêm sản phẩm vào giỏ hàng
+    public function add(Request $request)
     {
-        $product_images = Product_image::take(1)->get(); // Lấy 1 ảnh của sản phẩm để hiển thị
-        $products = Product::take(1)->get(); // Lấy 1 sản phẩm để hiển thị
-        $cartItems = Cart::take(3)->get(); // Lấy 3 mục đầu tiên trong giỏ hàng
-        $cartTotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
-        $shippingCost = 10; // Ví dụ về chi phí vận chuyển
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
 
-        return view('home.Cart', compact('cartItems', 'cartTotal', 'shippingCost', 'products', 'product_images'));
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $product = Product::find($request->product_id);
+        $product = Product::findOrFail($request->product_id);
+        $user = Auth::user();
 
-        $cartItem = new Cart();
-        $cartItem->product_id = $product->id;
-        $cartItem->name = $product->name;
-        $cartItem->price = $product->price;
-        $cartItem->quantity = $request->quantity;
-        $cartItem->image = $product->image;
-        $cartItem->save();
+        if ($product->stock < $request->quantity) {
+            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
+        }
 
-        return redirect()->route('cart.index');
-    }
+        $cartItem = Cart::updateOrCreate(
+            ['user_id' => $user->id, 'product_id' => $product->id],
+            ['quantity' => $request->quantity, 'price' => $product->price]
+        );
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $cartItem = Cart::find($id);
-        $cartItem->quantity = $request->quantity;
-        $cartItem->save();
-
-        return redirect()->route('cart.index');
+        return response()->json(['message' => 'Sản phẩm đã được thêm vào giỏ hàng', 'cartItem' => $cartItem]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    public function update(Request $request, $id)
     {
-        $cartItem = Cart::find($id);
+        $request->validate(['quantity' => 'required|integer|min:1']);
+
+        $cartItem = Cart::findOrFail($id);
+        $product = Product::findOrFail($cartItem->product_id);
+
+        if ($product->stock < $request->quantity) {
+            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
+        }
+
+        $cartItem->update(['quantity' => $request->quantity]);
+
+        return response()->json(['message' => 'Cập nhật thành công', 'cartItem' => $cartItem]);
+    }
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    public function remove($id)
+    {
+        $cartItem = Cart::findOrFail($id);
         $cartItem->delete();
 
-        return redirect()->route('cart.index');
+        return response()->json(['message' => 'Xóa sản phẩm thành công']);
     }
 
-    /**
-     * Apply a coupon code to the cart.
-     */
-    public function applyCoupon(Request $request)
+    // Áp dụng mã giảm giá
+    public function applyDiscount(Request $request)
     {
-        // Example coupon application logic
-        $couponCode = $request->coupon_code;
-        // Apply coupon logic here
+        $request->validate(['code' => 'required|string']);
 
-        return redirect()->route('cart.index');
+        $discount = Voucher::where('code', $request->code)->first();
+
+        if (!$discount) {
+            return response()->json(['message' => 'Mã giảm giá không hợp lệ'], 400);
+        }
+
+        $user = Auth::user();
+        $cartItems = Cart::where('user_id', $user->id)->get();
+        $total = $cartItems->sum(fn($item) => $item->quantity * $item->price);
+
+        $discountAmount = ($discount->percentage / 100) * $total;
+        $newTotal = $total - $discountAmount;
+
+        return response()->json(['message' => 'Áp dụng mã giảm giá thành công', 'discountAmount' => $discountAmount, 'newTotal' => $newTotal]);
     }
 }

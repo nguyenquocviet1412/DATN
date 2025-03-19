@@ -15,9 +15,7 @@ class Product_image extends Model
         'is_primary',
     ];
 
-    /**
-     * Quan hệ với bảng Variants (Sản phẩm biến thể)
-     */
+    // Quan hệ với bảng Variants
     public function variant()
     {
         return $this->belongsTo(Variant::class, 'id_variant');

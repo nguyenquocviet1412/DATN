@@ -38,11 +38,12 @@
 </head>
 
 <body>
-
-    <!-- Bootstrap Toast Container -->
+<!-- Bootstrap Toast Container -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
     @if(session('success'))
-        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="toastSuccess" class="toast align-items-center text-bg-success border-0"
+             role="alert" aria-live="assertive" aria-atomic="true"
+             data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     🎉 {{ session('success') }}
@@ -53,7 +54,9 @@
     @endif
 
     @if(session('error'))
-        <div class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="toastError" class="toast align-items-center text-bg-danger border-0"
+             role="alert" aria-live="assertive" aria-atomic="true"
+             data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     ❌ {{ session('error') }}
@@ -63,6 +66,21 @@
         </div>
     @endif
 </div>
+
+<!-- JavaScript: Hiển thị Toast -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let toastElements = document.querySelectorAll(".toast");
+
+        toastElements.forEach(toastEl => {
+            let toast = new bootstrap.Toast(toastEl);
+            toast.show(); // Hiển thị ngay lập tức
+        });
+    });
+</script>
+<!-- Bootstrap Bundle (đã có Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
        <!-- Start Header Area -->
        <header class="header-area header-wide">
@@ -80,7 +98,7 @@
                                     <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Brand Logo">
                                 </a>
                             </div>
-                        </div>                        
+                        </div>
                         <!-- start logo area -->
                         <!-- main menu area start -->
                         <div class="col-lg-6 position-static">
@@ -89,7 +107,8 @@
                                     <!-- main menu navbar start -->
                                     <nav class="desktop-menu">
                                         <ul>
-                                            <li class=""><a href="index.html">Trang chủ <i class="fa"></i></a></li>
+                                            <li class=""><a href="{{route('home.index')}}">Trang chủ <i class="fa"></i></a>
+                                            </li>
                                             <li>
                                                 <a href="">Danh mục <i class="fa"></i></a>
                                                 <ul class="dropdown">
@@ -155,6 +174,7 @@
                                                 @endif
                                             </ul>
                                         </li>
+                                        @if(Auth::guard('web')->check())
                                         <li>
                                             <a href="wishlist.html">
                                                 <i class="pe-7s-like"></i>
@@ -167,6 +187,7 @@
                                                 <div class="notification">2</div>
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
