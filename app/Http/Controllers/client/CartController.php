@@ -39,36 +39,6 @@ public function add(Request $request)
         return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
     }
 
-
-
-    public function addToCart(Request $request)
-    {
-        $product = Product::find($request->product_id);
-
-        if ($product) {
-            $cartItem = Cart::where('product_id', $product->id)->first();
-            if ($cartItem) {
-                // If the product is already in the cart, increase the quantity
-                $cartItem->quantity += $request->quantity;
-            } else {
-                // If the product is not in the cart, add it
-                $cartItem = new Cart();
-                $cartItem->product_id = $product->id;
-                $cartItem->name = $product->name;
-                $cartItem->price = $product->price;
-                $cartItem->quantity = $request->quantity;
-                $cartItem->image = $product->image;
-            }
-            $cartItem->save();
-        }
-
-        return redirect()->route('home.index');
-    }
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-
     // Thêm vào giỏ hàng hoặc cập nhật số lượng nếu đã tồn tại
     $cartItem = Cart::updateOrCreate(
         [
@@ -89,7 +59,6 @@ public function add(Request $request)
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public function update(Request $request, $id)
-
     {
         $request->validate(['quantity' => 'required|integer|min:1']);
 
