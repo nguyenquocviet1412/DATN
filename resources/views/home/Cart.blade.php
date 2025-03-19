@@ -29,101 +29,119 @@
                 <div class="section-bg-color">
                     <div class="row">
                         <div class="col-lg-12">
-                            <!-- Cart Table Area -->
                             <div class="cart-table table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="pro-thumbnail">Thumbnail</th>
-                                            <th class="pro-title">Product</th>
-                                            <th class="pro-price">Price</th>
-                                            <th class="pro-quantity">Quantity</th>
-                                            <th class="pro-subtotal">Total</th>
-                                            <th class="pro-remove">Remove</th>
+                                            <th class="pro-thumbnail">Hình ảnh</th>
+                                            <th class="pro-title">Sản phẩm</th>
+                                            <th class="pro-price">Giá</th>
+                                            <th class="pro-quantity">Số lượng</th>
+                                            <th class="pro-subtotal">Tổng</th>
+                                            <th class="pro-remove">Xóa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($cartItems as $item)
                                             <tr>
-                                                <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
-                                                            src="{{ $item->image }}" alt="{{ $item->name }}" /></a></td>
-                                                <td class="pro-title"><a href="#">{{ $item->name }}</a></td>
-                                                <td class="pro-price"><span>${{ $item->price }}</span></td>
-                                                <td class="pro-quantity">
-                                                    <form action="{{ route('cart.update', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="pro-qty">
-                                                            <input type="number" name="quantity"
-                                                                value="{{ $item->quantity }}" min="1">
-                                                            <button type="submit" class="btn btn-sqr">Update</button>
-                                                        </div>
-                                                    </form>
+                                                <td class="pro-thumbnail">
+                                                    <a href="#">
+                                                        <img class="img-fluid" src="{{ $item->variant->getThumbnailAttribute() }}" alt="{{ optional($item->variant->product)->name }}" />
+                                                    </a>
                                                 </td>
-                                                <td class="pro-subtotal"><span>${{ $item->price * $item->quantity }}</span>
+                                                <td class="pro-title">
+                                                    <a href="#">
+                                                        {{ optional($item->variant->product)->name }} ({{ optional($item->variant->color)->name }}, {{ optional($item->variant->size)->size }})
+                                                    </a>
+                                                </td>
+                                                <td class="pro-price">
+                                                    <span>{{ number_format($item->variant->price, 0, ',', '.') }} VNĐ</span>
+                                                </td>
+                                                <td class="pro-quantity">
+                                                    <div class="pro-qty">
+                                                        <input type="number" value="{{ $item->quantity }}" min="1" data-id="{{ $item->id }}" class="update-cart">
+                                                    </div>
+                                                </td>
+                                                <td class="pro-subtotal">
+                                                    <span>{{ number_format($item->variant->price * $item->quantity, 0, ',', '.') }} VNĐ</span>
                                                 </td>
                                                 <td class="pro-remove">
-                                                    <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger"><i
-                                                                class="fa fa-trash-o"></i></button>
-                                                    </form>
+                                                    <a href="#" class="remove-cart-item" data-id="{{ $item->id }}">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- Cart Update Option -->
                             <div class="cart-update-option d-block d-md-flex justify-content-between">
                                 <div class="apply-coupon-wrapper">
-                                    <form action="{{ route('cart.applyCoupon') }}" method="POST" class="d-block d-md-flex">
+                                    <form action="{{ route('cart.applyCoupon') }}" method="post" class="d-block d-md-flex">
                                         @csrf
-                                        <input type="text" name="coupon_code" placeholder="Enter Your Coupon Code"
-                                            required />
-                                        <button class="btn btn-sqr">Apply Coupon</button>
+                                        <input type="text" name="coupon_code" placeholder="Nhập mã giảm giá" required />
+                                        <button class="btn btn-sqr">Áp dụng</button>
                                     </form>
-                                </div>
-                                <div class="cart-update">
-                                    <a href="{{ route('cart.index') }}" class="btn btn-sqr">Update Cart</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-5 ml-auto">
-                            <!-- Cart Calculation Area -->
                             <div class="cart-calculator-wrapper">
                                 <div class="cart-calculate-items">
-                                    <h6>Cart Totals</h6>
+                                    <h6>Tổng giỏ hàng</h6>
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tr>
-                                                <td>Sub Total</td>
-                                                <td>{{ $cartTotal }} VND</td>
+                                                <td>Tạm tính</td>
+                                                {{-- <td>{{ number_format($cartTotal, 0, ',', '.') }} VNĐ</td> --}}
                                             </tr>
                                             <tr>
-                                                <td>Shipping</td>
-                                                <td>{{ $shippingCost }} VND</td>
+                                                <td>Phí vận chuyển</td>
+                                                {{-- <td>{{ number_format($shippingFee, 0, ',', '.') }} VNĐ</td> --}}
                                             </tr>
                                             <tr class="total">
-                                                <td>Total</td>
-                                                <td class="total-amount">{{ $cartTotal + $shippingCost }} VND</td>
+                                                <td>Tổng cộng</td>
+                                                {{-- <td class="total-amount">{{ number_format($cartTotal + $shippingFee, 0, ',', '.') }} VNĐ</td> --}}
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
-                                <form action="{{ route('checkout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit">Tiến hành thanh toán</button>
-                                </form>
+                                <a href="{{ route('checkout') }}" class="btn btn-sqr d-block">Thanh toán</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            document.querySelectorAll('.update-cart').forEach(input => {
+                input.addEventListener('change', function() {
+                    let id = this.dataset.id;
+                    let quantity = this.value;
+
+                    fetch(`/cart/update/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        body: JSON.stringify({ quantity: quantity })
+                    }).then(response => location.reload());
+                });
+            });
+
+            document.querySelectorAll('.remove-cart-item').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    let id = this.dataset.id;
+
+                    fetch(`/cart/destroy/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                    }).then(response => location.reload());
+                });
+            });
+        </script>
         <!-- cart main wrapper end -->
     </main>
 
