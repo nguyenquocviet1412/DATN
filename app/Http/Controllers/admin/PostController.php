@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -33,6 +34,14 @@ class PostController extends Controller
         if ($request->isMethod('POST')) {
             # code...
             $params = $request->except('_token');
+            if ($request->hasFile('image')) {
+                # code...
+                $filename = $request->file('image')->store('uploads/posts', 'public');
+            } else {
+                $filename = null;
+            }
+            $params['image'] = $filename;
+
             Post::create($params);
 
             return redirect()->route('post.index');
@@ -61,13 +70,27 @@ class PostController extends Controller
         ]);
         
 
-        if ($request->isMethod('PUT')) {
-
-            $params = $request->except('_token', '_method');
-            $post = Post::query()->findOrFail($id);
-            $post->update($params);
-            return redirect()->route('products.index')->with('success', 'Cập nhật sản phầm thành công!');
-    }
+            if ($request->isMethod('PUT')) {
+                # code...
+                $params = $request->except('_token','_method');
+    
+                $post = Post::query()->findOrFail($id);
+    
+                if ($request->hasFile('image')) {
+                    # code...
+                        if ($post->image && Storage::disk('public')->exists($post->image)) {
+                            # code...
+                            Storage::disk('public')->delete($post->image);
+                        }
+                        $params['image'] = $request->file('image')->store('uploads/posts','public');
+                } else {
+                    $params['image'] = $post->image;
+                }
+    
+                $post->update($params);
+    
+                return redirect()->route('products.index')->with('success', 'Cập nhật sản phầm thành công!');
+            }
 }
 
     /**

@@ -18,6 +18,10 @@ Thêm Bài Viết
                             <label class="control-label">Username</label>
                             <input class="form-control" type="text" name="username" required>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Title</label>
                             <input class="form-control" type="text" name="title" required>

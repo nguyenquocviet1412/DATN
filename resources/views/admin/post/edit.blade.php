@@ -36,10 +36,11 @@
                                 <input class="form-control" type="text" name="content" value="{{ $post->content }}"
                                     required>
                             </div>
-                            {{-- <div class="form-group col-md-3">
-                            <label class="control-label">Image</label>
-                            <input class="form-control" type="number" name="phone" value="" required>
-                        </div> --}}
+                            <div class="mb-3">
+                                <label class="form-label">Image</label>
+                                <input type="file" name="hinh_anh" class="form-control">
+                                <img src="{{ Storage::url($post->image) }}" alt="Hình ảnh bài viết" width="150px">
+                            </div>
                             <div class="form-group col-md-3">
                                 <label class="control-label">Status</label>
                                 <select class="form-control" name="status" required>

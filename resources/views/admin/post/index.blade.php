@@ -75,6 +75,7 @@
                                 <th>ID</th>
                                 <th>Username</th>
                                 <th>Title</th>
+                                <th>Image</th>
                                 <th>Content</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -93,6 +94,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
+                                    <td><img src="{{ Storage::url($post->image) }}" alt="Hình ảnh bài viết" width="150px"></td>
                                     <td>{{ $post->content }}</td>
                                     <td class="text-center">
                                         @if ($post->status == 'published')
