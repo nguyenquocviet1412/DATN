@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Product;
 use DB;
 use Illuminate\Http\Request;
@@ -26,21 +27,6 @@ class HomeController extends Controller
             $query->where('id_category', $request->category);
         }
 
-        // Sắp xếp theo giá, lượt xem hoặc yêu thích
-        if ($request->has('sort')) {
-            switch ($request->sort) {
-                case 'price_asc':
-                    $query->orderBy('price', 'asc');
-                    break;
-                case 'price_desc':
-                    $query->orderBy('price', 'desc');
-                    break;
-                case 'views':
-                    $query->orderBy('view', 'desc'); // Đổi từ 'views' thành 'view' (theo cột trong database)
-                    break;
-            }
-        }
-
         // Lấy 8 sản phẩm mới nhất
         $latestProducts = Product::orderBy('created_at', 'desc')->take(8)->get();
 
@@ -62,7 +48,22 @@ class HomeController extends Controller
         $products = $query->paginate(9);
         $categories = Category::all();
 
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts'));
+        // Lấy 4 sản phẩm được đánh giá tốt nhất
+        $topRatedProducts = Product::select('products.*', DB::raw('AVG(rates.rating) as avg_rating'))
+            ->join('rates', 'products.id', '=', 'rates.id_product')
+            ->groupBy('products.id')
+            ->orderByDesc('avg_rating')
+            ->take(4)
+            ->get();
+        // Lấy 3 bài viết mới nhất
+        $latestPosts = Post::where('status', 'published') // Lọc bài viết đang hoạt động
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts','latestPosts'));
+
     }
 
 
