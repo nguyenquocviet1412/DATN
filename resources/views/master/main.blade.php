@@ -86,42 +86,6 @@
        <header class="header-area header-wide">
         <!-- main header start -->
         <div class="main-header d-none d-lg-block">
-            <!-- header top start -->
-            <div class="header-top bdr-bottom">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <div class="welcome-message">
-                                <p>Welcome to Corano Jewelry online store</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 text-right">
-                            <div class="header-top-settings">
-                                <ul class="nav align-items-center justify-content-end">
-                                    <li class="curreny-wrap">
-                                        $ Currency
-                                        <i class="fa"></i>
-                                        <ul class="dropdown-list curreny-list">
-                                            <li><a href="#">$ USD</a></li>
-                                            <li><a href="#">€ EURO</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="language">
-                                        <img src="{{asset('assets/img/icon/en.png')}}" alt="flag"> English
-                                        <i class="fa"></i>
-                                        <ul class="dropdown-list">
-                                            <li><a href="#"><img src="{{asset('assets/img/icon/en.png')}}" alt="flag"> english</a></li>
-                                            <l><a href="#"><img src="{{asset('assets/img/icon/fr.png')}}" alt="flag"> french</a></l>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- header top end -->
-
             <!-- header middle area start -->
             <div class="header-main-area sticky">
                 <div class="container">
@@ -143,43 +107,37 @@
                                     <!-- main menu navbar start -->
                                     <nav class="desktop-menu">
                                         <ul>
-                                            <li class=""><a href="{{route('home.index')}}">Home <i class="fa"></i></a>
-
+                                            <li class=""><a href="{{route('home.index')}}">Trang chủ <i class="fa"></i></a>
                                             </li>
                                             <li>
                                                 <a href="">Danh mục <i class="fa"></i></a>
-                                                <ul class=" dropdown">
-
+                                                <ul class="dropdown">
                                                     @foreach ($categories as $category)
                                                         <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>
-
-                                            <li><a href="shop.html">shop <i class="fa"></i></a>
+                                            <li><a href="shop.html">Cửa hàng <i class="fa"></i></a>
                                                 <ul class="dropdown">
-                                                    <li><a href="#">shop grid layout <i class="fa fa-angle-right"></i></a>
+                                                    <li><a href="#">Bố cục cửa hàng <i class="fa fa-angle-right"></i></a>
                                                         <ul class="dropdown">
-                                                            <li><a href="shop.html">shop grid left sidebar</a></li>
-
+                                                            <li><a href="shop.html">Cửa hàng - Thanh bên trái</a></li>
                                                         </ul>
                                                     </li>
-
                                                 </ul>
                                             </li>
                                             <li><a href="blog-left-sidebar.html">Blog <i class="fa"></i></a>
                                                 <ul class="dropdown">
-                                                    <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
-
+                                                    <li><a href="blog-left-sidebar.html">Blog - Thanh bên trái</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact-us.html">Contact us</a></li>
+                                            <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>
                                     <!-- main menu navbar end -->
                                 </div>
                             </div>
-                        </div>
+                        </div>                        
                         <!-- main menu area end -->
 
                         <!-- mini cart area start -->
@@ -449,7 +407,7 @@
     <!-- Scroll to Top End -->
 
     <!-- footer area start -->
-    <footer class="footer-widget-area">
+    <footer class="footer-widget-area bg-white text-dark">
         <div class="footer-top section-padding">
             <div class="container">
                 <div class="row">
@@ -458,24 +416,24 @@
                             <div class="widget-title">
                                 <div class="widget-logo">
                                     <a href="index.html">
-                                        <img src="{{asset('assets/img/logo/logo.png')}}" alt="brand logo">
+                                        <img src="{{asset('assets/img/logo/logo.png')}}" alt="logo thương hiệu">
                                     </a>
                                 </div>
                             </div>
                             <div class="widget-body">
-                                <p>We are a team of designers and developers that create high quality wordpress, shopify, Opencart </p>
+                                <p>Chúng tôi là một nhóm thiết kế và phát triển tạo ra các sản phẩm chất lượng cao trên WordPress, Shopify, Opencart.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="widget-item">
-                            <h6 class="widget-title">Contact Us</h6>
+                            <h6 class="widget-title">Liên hệ với chúng tôi</h6>
                             <div class="widget-body">
                                 <address class="contact-block">
                                     <ul>
-                                        <li><i class="pe-7s-home"></i> 4710-4890 Breckinridge USA</li>
-                                        <li><i class="pe-7s-mail"></i> <a href="mailto:demo@plazathemes.com">demo@yourdomain.com </a></li>
-                                        <li><i class="pe-7s-call"></i> <a href="tel:(012)800456789987">(012) 800 456 789-987</a></li>
+                                        <li><i class="pe-7s-home"></i> Nam Từ Liêm, Hà Nội</li>
+                                        <li><i class="pe-7s-mail"></i> <a href="">Nhom45DATN@gmail.com</a></li>
+                                        <li><i class="pe-7s-call"></i> <a href="tel:(012)800456789987">098765432</a></li>
                                     </ul>
                                 </address>
                             </div>
@@ -483,22 +441,22 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="widget-item">
-                            <h6 class="widget-title">Information</h6>
+                            <h6 class="widget-title">Thông tin</h6>
                             <div class="widget-body">
                                 <ul class="info-list">
-                                    <li><a href="#">about us</a></li>
-                                    <li><a href="#">Delivery Information</a></li>
-                                    <li><a href="#">privet policy</a></li>
-                                    <li><a href="#">Terms & Conditions</a></li>
-                                    <li><a href="#">contact us</a></li>
-                                    <li><a href="#">site map</a></li>
+                                    <li><a href="#">Về chúng tôi</a></li>
+                                    <li><a href="#">Thông tin giao hàng</a></li>
+                                    <li><a href="#">Chính sách & bảo mật</a></li>
+                                    <li><a href="#">Điều khoản & điều kiện</a></li>
+                                    <li><a href="#">Liên hệ</a></li>
+                                    <li><a href="#">Sơ đồ trang web</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="widget-item">
-                            <h6 class="widget-title">Follow Us</h6>
+                            <h6 class="widget-title">Theo dõi chúng tôi</h6>
                             <div class="widget-body social-link">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -511,40 +469,39 @@
                 <div class="row align-items-center mt-20">
                     <div class="col-md-6">
                         <div class="newsletter-wrapper">
-                            <h6 class="widget-title-text">Signup for newsletter</h6>
+                            <h6 class="widget-title-text">Đăng ký nhận bản tin</h6>
                             <form class="newsletter-inner" id="mc-form">
-                                <input type="email" class="news-field" id="mc-email" autocomplete="off" placeholder="Enter your email address">
-                                <button class="news-btn" id="mc-submit">Subscribe</button>
+                                <input type="email" class="news-field" id="mc-email" autocomplete="off" placeholder="Nhập địa chỉ email của bạn">
+                                <button class="news-btn" id="mc-submit">Đăng ký</button>
                             </form>
-                            <!-- mail-chimp-alerts Start -->
                             <div class="mailchimp-alerts">
-                                <div class="mailchimp-submitting"></div><!-- mail-chimp-submitting end -->
-                                <div class="mailchimp-success"></div><!-- mail-chimp-success end -->
-                                <div class="mailchimp-error"></div><!-- mail-chimp-error end -->
+                                <div class="mailchimp-submitting"></div>
+                                <div class="mailchimp-success"></div>
+                                <div class="mailchimp-error"></div>
                             </div>
-                            <!-- mail-chimp-alerts end -->
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="footer-payment">
-                            <img src="{{asset('assets/img/payment.png" al')}}t="payment method">
+                            <img src="{{ asset('assets/img/payment.png') }}" alt="Phương thức thanh toán">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-bottom bg-light text-dark">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="copyright-text text-center">
-                            <p>&copy; 2022 <b>Corano</b> Made with <i class="fa fa-heart text-danger"></i> by <a href="https://hasthemes.com/"><b>HasThemes</b></a></p>
+                            <p>&copy; 2022 <b>Corano</b> Được tạo với <i class="fa fa-heart text-danger"></i> bởi <a href="https://hasthemes.com/"><b>HasThemes</b></a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
+    
     <!-- footer area end -->
 
     <!-- Quick view modal start -->
