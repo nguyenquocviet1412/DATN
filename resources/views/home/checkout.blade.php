@@ -159,7 +159,7 @@
                     <label class="form-label mt-3">Địa chỉ giao hàng</label>
                     <input type="text" name="shipping_address" class="form-control" value="{{ old('shipping_address') }}" required>
 
-                    <!-- Căn chỉnh lại Phương thức thanh toán -->
+                    <!--  Phương thức thanh toán -->
                     <label class="form-label mt-3">Phương thức thanh toán</label>
                     <div class="d-flex flex-wrap">
                         <div class="form-check me-3">
@@ -173,11 +173,7 @@
                         <div class="form-check me-3">
                             <input class="form-check-input" type="radio" name="payment_method" value="vnpay">
                             <label class="form-check-label">VNPay</label>
-                        </div>
-                        <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="payment_method" value="paypal">
-                            <label class="form-check-label">PayPal</label>
-                        </div>
+                        </div>p
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payment_method" value="credit_card">
                             <label class="form-check-label">Thẻ tín dụng</label>

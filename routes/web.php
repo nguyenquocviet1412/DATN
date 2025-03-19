@@ -98,7 +98,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{order_id}', [PaymentController::class, 'processPayment'])->name('payment.process');
         Route::get('/momo/{order_id}', [MomoController::class, 'pay'])->name('momo.pay');
         Route::get('/vnpay/{order_id}', [VnPayController::class, 'pay'])->name('vnpay.pay');
-        Route::get('/paypal/{order_id}', [PaypalController::class, 'pay'])->name('paypal.pay');
         Route::get('/creditcard/{order_id}', [CreditCardController::class, 'pay'])->name('creditcard.pay');
     });
 });

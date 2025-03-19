@@ -86,8 +86,6 @@ public function placeOrder(Request $request)
             return redirect()->route('momo.pay', ['order_id' => $order->id]);
         case 'vnpay':
             return redirect()->route('vnpay.pay', ['order_id' => $order->id]);
-        case 'paypal':
-            return redirect()->route('paypal.pay', ['order_id' => $order->id]);
         case 'credit_card':
             return redirect()->route('creditcard.pay', ['order_id' => $order->id]);
         default:
