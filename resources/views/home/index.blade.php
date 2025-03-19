@@ -469,70 +469,68 @@
                         <!-- Kết thúc tiêu đề danh mục -->
     
                        <!-- Bắt đầu danh sách sản phẩm bán chạy -->
-<div class="group-list-item-wrapper">
-    <div class="group-list-carousel">
-        @foreach($bestSellingProducts as $product)
-            <div class="group-slide-item">
-                <div class="group-item">
-                    <div class="group-item-thumb">
-                        <a href="">
-                            <img src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}">
-                        </a>
-                    </div>
-                    <div class="group-item-desc">
-                        <h5 class="group-product-name">
-                            <a href="">{{ $product->name }}</a>
-                        </h5>
-                        <div class="price-box">
-                            <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                        <div class="group-list-item-wrapper">
+                            <div class="group-list-carousel">
+                                @foreach($bestSellingProducts as $product)
+                                    <div class="group-slide-item">
+                                        <div class="group-item">
+                                            <div class="group-item-thumb">
+                                                <a href="">
+                                                    <img src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}">
+                                                </a>
+                                            </div>
+                                            <div class="group-item-desc">
+                                                <h5 class="group-product-name">
+                                                    <a href="">{{ $product->name }}</a>
+                                                </h5>
+                                                <div class="price-box">
+                                                    <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }} VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</div>
-<!-- Kết thúc danh sách sản phẩm -->
+                        <!-- Kết thúc danh sách sản phẩm -->
 
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="categories-group-wrapper">
-                        <!-- Tiêu đề danh mục -->
                         <div class="section-title-append">
-                            <h4>Sản phẩm giảm giá</h4>
+                            <h4>Sản phẩm đánh giá cao</h4>
                             <div class="slick-append"></div>
                         </div>
-                        <!-- Kết thúc tiêu đề danh mục -->
-    
-                        <!-- Bắt đầu danh sách sản phẩm giảm giá -->
                         <div class="group-list-item-wrapper">
                             <div class="group-list-carousel">
-                                <!-- Sản phẩm bắt đầu -->
-                                <div class="group-slide-item">
-                                    <div class="group-item">
-                                        <div class="group-item-thumb">
-                                            <a href="product-details.html">
-                                                <img src="assets/img/product/product-17.jpg" alt="Dây chuyền vàng">
-                                            </a>
-                                        </div>
-                                        <div class="group-item-desc">
-                                            <h5 class="group-product-name">
-                                                <a href="product-details.html">Dây chuyền vàng thủ công</a>
-                                            </h5>
-                                            <div class="price-box">
-                                                <span class="price-regular">{{ number_format(1200000, 0, ',', '.') }}₫</span>
-                                                <span class="price-old"><del>{{ number_format(800000, 0, ',', '.') }}₫</del></span>
+                                @foreach($topRatedProducts as $product)
+                                    <div class="group-slide-item">
+                                        <div class="group-item">
+                                            <div class="group-item-thumb">
+                                                <a href="">
+                                                    <img src="{{ $product->getThumbnailAttribute() }}" alt="{{ $product->name }}">
+                                                </a>
+                                            </div>
+                                            <div class="group-item-desc">
+                                                <h5 class="group-product-name">
+                                                    <a href="">{{ $product->name }}</a>
+                                                </h5>
+                                                <div class="price-box">
+                                                    <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                                </div>
+                                                <div class="rating">
+                                                    ⭐ {{ number_format($product->avg_rating, 1) }} / 5
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Sản phẩm kết thúc -->
+                                @endforeach
                             </div>
                         </div>
-                        <!-- Kết thúc danh sách sản phẩm -->
                     </div>
                 </div>
+                
             </div>
         </div>
     </section>
@@ -543,39 +541,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <!-- Tiêu đề -->
                     <div class="section-title text-center">
                         <h2 class="title">Bài viết mới nhất</h2>
                         <p class="sub-title">Những tin tức và xu hướng giày mới nhất</p>
                     </div>
-                    <!-- Kết thúc tiêu đề -->
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <div class="blog-carousel-active slick-row-10 slick-arrow-style">
-                        <!-- Bài viết blog bắt đầu -->
+                @foreach($latestPosts as $post)
+                    <div class="col-md-4">
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
-                                <a href="blog-details.html">
-                                    <img src="assets/img/blog/blog-img1.jpg" alt="Hình ảnh blog">
+                                <a href="">
+                                    <img src="{{ $post->image ?? asset('assets/img/blog/default.jpg') }}" alt="{{ $post->title }}" style="width: 100%; height: 200px; object-fit: cover;">
                                 </a>
                             </figure>
                             <div class="blog-content">
                                 <div class="blog-meta">
-                                    <p>25/03/2024 | <a href="#">SneakerWorld</a></p>
+                                    <p>{{ $post->created_at->format('d/m/Y') }}</p>
                                 </div>
                                 <h5 class="blog-title">
-                                    <a href="blog-details.html">Xu hướng giày sneaker hot nhất năm 2024</a>
+                                    <a href="">{{ $post->title }}</a>
                                 </h5>
+                                <p class="blog-excerpt">
+                                    {{ Str::limit($post->content, 100, '...') }}
+                                </p>
+                                <a href="" class="read-more">Đọc thêm</a>
                             </div>
                         </div>
-                        <!-- Bài viết blog kết thúc -->
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
-    </section>    
+    </section>
+     
     <!-- latest blog area end -->
 
     <!-- brand logo area start -->
