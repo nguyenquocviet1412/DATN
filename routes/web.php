@@ -68,6 +68,7 @@ Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('pro
 //Người dùng đăng nhập để thao tác
 Route::prefix('')->middleware(['user.auth'])->group(function () {
 
+
     //Giỏ hàng
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart.index'); // Hiển thị giỏ hàng
