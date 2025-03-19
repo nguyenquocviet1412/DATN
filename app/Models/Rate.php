@@ -41,4 +41,6 @@ class Rate extends Model
     {
         return $this->belongsTo(Order_item::class, 'id_order_item');
     }
+
+    
 }

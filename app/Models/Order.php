@@ -20,7 +20,10 @@ class Order extends Model
         'total_price',
         'user_points',
         'points_earned',
+        'fullname',
+        'phone',
         'shipping_address',
+        'payment_method',
         'payment_status'
     ];
     public function user()
@@ -119,4 +122,21 @@ private function calculateCartTotal()
 {
     return $this->orderItems()->sum('subtotal');
 }
+// Tính tổng tiền trước khi giảm giá
+public function getTotalBeforeDiscountAttribute()
+{
+    return $this->orderItems->sum('subtotal');
+}
+const PAYMENT_STATUS = [
+    'waiting_payment' => 'Chờ thanh toán',
+    'pending' => 'Chờ xử lý',
+    'shipping' => 'Đang vận chuyển',
+    'completed' => 'Hoàn tất',
+    'failed' => 'Thất bại'
+];
+
+const PAYMENT_METHOD = [
+    'COD' => 'Thanh toán khi nhận hàng',
+    'Online' => 'Thanh toán trực tuyến'
+];
 }

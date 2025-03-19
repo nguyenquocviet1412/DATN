@@ -75,6 +75,13 @@ Thêm voucher
                     @enderror
                 </div>
                 <div class="form-group col-md-4">
+                    <label class="control-label">Số Lần Sử Dụng Tối Đa</label>
+                    <input class="form-control @error('usage_limit') is-invalid @enderror" name="usage_limit" type="number" required>
+                    @error('usage_limit')
+                        <span class="invalid-feedback d-block">{{$message}}</span>
+                    @enderror
+                </div>
+                <div class="form-group col-md-4">
                     <label class="control-label">Trạng Thái</label>
                     <select name="status" class="form-control @error('status') is-invalid @enderror">
                         <option value="1">Hoạt động</option>

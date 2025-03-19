@@ -24,24 +24,29 @@ class EmployeeAuthController extends Controller
 
             // Lưu toàn bộ thông tin của nhân viên vào session
             session(['employee' => $employee]);
+
             // Ghi log
-            LogHelper::logAction('đăng nhập vào hệ thống');
+            LogHelper::logAction('Đăng nhập vào hệ thống');
+
             return redirect()->route('admin.dashboard');
         }
-        return back()->with('message', 'Email hoặc mật khẩu không chính xác.');
+
+        // Trả về thông báo lỗi sử dụng SweetAlert2
+        return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
     }
 
-    //Đăng xuất tài khoản quản trị viên
     public function logout()
-{
-    // Xóa session
-    session()->forget('employee');
+    {
+        // Xóa session
+        session()->forget('employee');
 
-    // Đăng xuất tài khoản
-    Auth::guard('employee')->logout();
-    // Ghi log
-    LogHelper::logAction('đăng xuất khỏi hệ thống');
-    // Chuyển hướng về trang đăng nhập kèm thông báo
-    return redirect()->route('admin.login')->with('logout_success', true);
-}
+        // Đăng xuất tài khoản
+        Auth::guard('employee')->logout();
+
+        // Ghi log
+        LogHelper::logAction('Đăng xuất khỏi hệ thống');
+
+        // Chuyển hướng về trang đăng nhập kèm thông báo
+        return redirect()->route('admin.login')->with('logout_success', true);
+    }
 }

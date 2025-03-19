@@ -1,3 +1,4 @@
+
 @extends('admin.layout')
 @section('title', 'Danh sách Bài Viết| Quản trị Admin')
 @section('title2', 'Danh sách Bài Viết')
@@ -24,7 +25,6 @@
                         </script>
                     @endif
 
-
                     {{-- Thông báo lỗi --}}
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     @if (session('error'))
@@ -39,7 +39,6 @@
                             });
                         </script>
                     @endif
-
 
                     <div class="row element-button">
                         <div class="col-sm-6">
@@ -61,13 +60,6 @@
                         </div>
                     </div>
 
-
-                    <!-- Tím kiếm  -->
-
-
-
-                    <!-- Dropdown sắp xếp -->
-
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr class="text-center">
@@ -75,7 +67,6 @@
                                 <th>ID</th>
                                 <th>Username</th>
                                 <th>Title</th>
-                                <th>Image</th>
                                 <th>Content</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -94,12 +85,11 @@
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
-                                    <td><img src="{{ Storage::url($post->image) }}" alt="Hình ảnh bài viết" width="150px"></td>
                                     <td>{{ $post->content }}</td>
                                     <td class="text-center">
-                                        @if ($post->status == 'published')
+                                        @if ($post->status === 'published')
                                             <span class="badge bg-success">Đã xuất bản</span>
-                                        @elseif ($post->status == 'draft')
+                                        @else
                                             <span class="badge bg-danger">Nháp</span>
                                         @endif
                                     </td>
@@ -112,7 +102,6 @@
                                         <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-
 
                                         <form action="{{ route('post.delete', $post->id) }}" method="POST"
                                             style="display:inline;">
@@ -129,7 +118,6 @@
                         </tbody>
                     </table>
 
-                    <!-- Phân trang -->
                     <script>
                         document.getElementById('select-all').addEventListener('change', function() {
                             let checkboxes = document.querySelectorAll('input[name="check1"]');

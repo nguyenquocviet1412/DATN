@@ -16,13 +16,27 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Xác thực dữ liệu đầu vào
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
 
-        if (Auth::guard('web')->attempt($credentials)) {
-            return redirect()->route('/');
+        // Lấy thông tin đăng nhập
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // Kiểm tra checkbox Remember Me
+
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
+            return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!');
         }
 
-        return back()->with('message', 'Email hoặc mật khẩu không chính xác.');
+        return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
+    }
+
+    public function logoutUser()
+    {
+        Auth::guard('web')->logout();
+        return redirect()->route('login')->with('success', 'Bạn đã đăng xuất thành công!');
     }
 
     public function getRegister()
@@ -31,22 +45,23 @@ class AuthController extends Controller
     }
 
     public function postRegister(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|confirmed',
-        ]);
+{
+    $data = $request->validate([
+        'fullname' => 'required|min:3',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:5|confirmed',
+        'phone' => 'required|digits:10|unique:users,phone',
+        'address' => 'required|string|max:255',
+        'gender' => 'required|in:male,female,other',
+    ]);
 
-        $data['password'] = bcrypt($data['password']);
-        User::create($data);
+    $data['password'] = bcrypt($data['password']);
+    $data['role'] = 'user'; // Mặc định user
+    $data['status'] = 1; // Tài khoản đang hoạt động
 
-        return redirect()->route('login')->with('message', 'Đăng ký thành công.');
-    }
+    User::create($data);
 
-    public function logout()
-    {
-        Auth::guard('web')->logout();
-        return redirect()->route('login');
-    }
+    return redirect()->route('login')->with('message', 'Đăng ký thành công.');
+}
+
 }

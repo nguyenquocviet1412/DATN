@@ -25,6 +25,7 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'id_category');
     }
+   
 
     /**
      * Quan hệ với bảng Variants (Các biến thể của sản phẩm)
@@ -45,5 +46,11 @@ class Product extends Model
         }
         return asset('default-image.jpg');
     }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class, 'id_product');
+    }
+
 
 }

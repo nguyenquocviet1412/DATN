@@ -18,12 +18,6 @@ class Variant extends Model
         'status',
     ];
 
-    // Quan hệ với sản phẩm
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'id_product');
-    }
-
     // Quan hệ với màu sắc
     public function color()
     {
@@ -42,17 +36,24 @@ class Variant extends Model
         return $this->hasMany(Order_item::class, 'id_variant');
     }
 
+   // Quan hệ với sản phẩm
+   public function product()
+   {
+       return $this->belongsTo(Product::class, 'id_product');
+   }
+
    // Quan hệ với bảng ProductImage (Ảnh sản phẩm)
    public function images()
    {
-       return $this->hasMany(Product_image::class, 'id_variant'); // Sửa từ Image thành ProductImage
+       return $this->hasMany(Product_image::class, 'id_variant');
    }
 
-    /**
-     * Lấy ảnh đầu tiên của biến thể
-     */
-    public function getThumbnailAttribute()
-    {
-        return $this->images()->exists() ? asset($this->images->first()->image_url) : asset('default-image.jpg');
-    }
+   /**
+    * Lấy ảnh đầu tiên của biến thể hoặc ảnh mặc định
+    */
+   public function getThumbnailAttribute()
+   {
+       $firstImage = $this->images()->first();
+       return $firstImage ? asset($firstImage->image_url) : asset('default-image.jpg');
+   }
 }

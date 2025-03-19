@@ -47,41 +47,59 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-        $request->validate([
-            'password' => 'required|string|max:255',
-            'fullname' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|numeric|unique:users,phone',
-            'address' => 'required|string',
-        ]);
+{
+    // Xác thực dữ liệu đầu vào
+    $request->validate([
+        'password' => 'required|string|max:255',
+        'fullname' => 'required|string',
+        'email' => 'required|email|unique:users,email',
+        'phone' => 'required|numeric|unique:users,phone',
+        'address' => 'required|string',
+    ]);
 
-        $users = User::create([
-            'password' => Hash::make($request->input('password')),
-            'fullname' => $request->input('fullname'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-        ]);
-        // Ghi log
-        LogHelper::logAction('Tạo mới tài khoản người dùng có id: ' . $users->id);
+    // Tạo tài khoản người dùng
+    $user = User::create([
+        'password' => Hash::make($request->input('password')),
+        'fullname' => $request->input('fullname'),
+        'email' => $request->input('email'),
+        'phone' => $request->input('phone'),
+        'address' => $request->input('address'),
+        'gender' => $request->input('gender'),
+    ]);
 
-        return redirect()->route('user.index')->with('success', 'User created successfully');
-    }
+    // Tạo ví tiền mặc định cho user vừa tạo
+    Wallet::create([
+        'id_user' => $user->id,
+        'balance' => 0, // Mặc định số dư ban đầu là 0
+        'currency' => 'VND', // Hoặc có thể là USD tùy vào hệ thống của bạn
+        'status' => 'active', // Mặc định ví sẽ hoạt động
+    ]);
+
+    // Ghi log thao tác
+    LogHelper::logAction('Tạo mới tài khoản người dùng có id: ' . $user->id);
+
+    return redirect()->route('user.index')->with('success', 'User created successfully with wallet');
+}
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        $user = User::findOrFail($id);
-        $wallet = Wallet::findOrFail($id);
-        $wallet_transactions = WalletTransaction::findOrFail($id);
-        // Ghi log
-        LogHelper::logAction('Xem chi tiết tài khoản người dùng có id: ' . $user->id);
-        return view('admin.user.show', compact('wallet', 'user', 'wallet_transactions'));
-    }
+{
+    $user = User::findOrFail($id);
+    $wallet = Wallet::where('id_user', $id)->first(); // Lấy ví theo id_user
+
+    // if (!$wallet) {
+    //     return back()->with('error', 'Người dùng chưa có ví.');
+    // }
+
+    // Nếu không có ví, vẫn cho phép truy cập, chỉ gán transactions = []
+    $wallet_transactions = $wallet ? WalletTransaction::where('id_wallet', $wallet->id)->get() : collect();
+    // Ghi log
+    LogHelper::logAction('Xem chi tiết tài khoản người dùng có id: ' . $user->id);
+    return view('admin.user.show', compact('user', 'wallet', 'wallet_transactions'));
+}
+
 
     /**
      * Show the form for editing the specified resource.
