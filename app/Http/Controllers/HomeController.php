@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
@@ -66,7 +67,11 @@ class HomeController extends Controller
 
     }
 
-
+    public function count()
+    {
+        $count = Cart::getContent()->count();
+        return response()->json(['count' => $count]);
+    }
 
 
     public function login()

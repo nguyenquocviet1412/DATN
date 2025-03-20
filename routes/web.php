@@ -74,6 +74,7 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update'); // Cập nhật số lượng sản phẩm trong giỏ hàng
         Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove'); // Xóa sản phẩm khỏi giỏ hàng
         Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
+        Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count'); // Đếm số lượng sản phẩm trong giỏ hàng
     });
  });
 
