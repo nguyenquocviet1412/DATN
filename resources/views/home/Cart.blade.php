@@ -85,15 +85,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="cart-update-option d-block d-md-flex justify-content-between">
-                            <div class="apply-coupon-wrapper">
-                                <form action="{{ route('cart.applyCoupon') }}" method="post" class="d-block d-md-flex">
-                                    @csrf
-                                    <input type="text" name="coupon_code" placeholder="Nhập mã giảm giá" required />
-                                    <button class="btn btn-sqr">Áp dụng</button>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="row">

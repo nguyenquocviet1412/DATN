@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Wallet;
 
 class AuthController extends Controller
 {
@@ -59,7 +60,14 @@ class AuthController extends Controller
     $data['role'] = 'user'; // Mặc định user
     $data['status'] = 1; // Tài khoản đang hoạt động
 
-    User::create($data);
+    $user = User::create($data);
+    // Tạo ví tiền mặc định cho user vừa tạo
+    Wallet::create([
+        'id_user' => $user->id,
+        'balance' => 0, // Mặc định số dư ban đầu là 0
+        'currency' => 'VND', // Hoặc có thể là USD tùy vào hệ thống của bạn
+        'status' => 'active', // Mặc định ví sẽ hoạt động
+    ]);
 
     return redirect()->route('login')->with('message', 'Đăng ký thành công.');
 }
