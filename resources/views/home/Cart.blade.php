@@ -11,7 +11,7 @@
                     <div class="breadcrumb-wrap">
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{route('home.index')}}"><i class="fa fa-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">cart</li>
                             </ul>
@@ -45,12 +45,12 @@
                                     @foreach ($cartItems as $item)
                                     <tr>
                                         <td class="pro-thumbnail">
-                                            <a href="#">
+                                            <a href="{{route('product.show',$item->variant->product->id)}}">
                                                 <img class="img-fluid" src="{{ $item->variant->getThumbnailAttribute() }}" alt="{{ optional($item->variant->product)->name }}" />
                                             </a>
                                         </td>
                                         <td class="pro-title">
-                                            <a href="#">
+                                            <a href="{{route('product.show',$item->variant->product->id)}}">
                                                 {{ optional($item->variant->product)->name }} ({{ optional($item->variant->color)->name }}, {{ optional($item->variant->size)->size }})
                                             </a>
                                         </td>
@@ -58,8 +58,10 @@
                                             <span>{{ number_format($item->variant->price, 0, ',', '.') }} VNĐ</span>
                                         </td>
                                         <td class="pro-quantity">
-                                            <div class="pro-qty">
+                                            <div class="input-group quantity-input">
+                                                <button class="btn btn-sm btn-decrease" data-id="{{ $item->id }}">-</button>
                                                 <input type="number" value="{{ $item->quantity }}" min="1" data-id="{{ $item->id }}" class="update-cart">
+                                                <button class="btn btn-sm btn-increase" data-id="{{ $item->id }}">+</button>
                                             </div>
                                         </td>
                                         <td class="pro-subtotal">
@@ -116,23 +118,87 @@
         </div>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        function updateCartQuantity(id, quantity) {
+            fetch(`/cart/update/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ quantity: quantity })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Cập nhật thành công') {
+                    updateCart();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+
+
         document.querySelectorAll('.update-cart').forEach(input => {
             input.addEventListener('change', function() {
                 let id = this.dataset.id;
-                let quantity = this.value;
-
-                fetch(`/cart/update/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ quantity: quantity })
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Cập nhật thành công') {
-                        updateCart();
-                    }
-                });
+                let quantity = parseInt(this.value);
+                if (quantity < 1) quantity = 1;
+                updateCartQuantity(id, quantity);
             });
         });
+
+        document.querySelectorAll('.btn-increase').forEach(button => {
+            button.addEventListener('click', function() {
+                let input = this.parentNode.querySelector('.update-cart');
+                let id = input.dataset.id;
+                let quantity = parseInt(input.value) + 1;
+                input.value = quantity;
+                updateCartQuantity(id, quantity);
+            });
+        });
+
+        document.querySelectorAll('.btn-decrease').forEach(button => {
+            button.addEventListener('click', function() {
+                let input = this.parentNode.querySelector('.update-cart');
+                let id = input.dataset.id;
+                let quantity = parseInt(input.value) - 1;
+                if (quantity < 1) quantity = 1;
+                input.value = quantity;
+                updateCartQuantity(id, quantity);
+            });
+        });
+
+        function updateCart() {
+            let subtotal = 0; // Biến tổng phụ
+
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const quantityInput = row.querySelector('.update-cart');
+                if (!quantityInput) return;
+
+                const quantity = parseInt(quantityInput.value);
+                const priceText = row.querySelector('.pro-price span').textContent.replace(/[^0-9]/g, "");
+                const price = parseInt(priceText); // Chuyển về số nguyên đúng
+
+                const itemSubtotal = quantity * price; // Tổng tiền của từng sản phẩm
+                subtotal += itemSubtotal; // Cộng dồn tổng phụ
+
+                // Cập nhật tổng tiền của sản phẩm đó
+                row.querySelector('.pro-subtotal span').textContent = itemSubtotal.toLocaleString('vi-VN') + " VNĐ";
+            });
+
+            // Cập nhật tổng giỏ hàng
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN') + " VNĐ";
+
+            const shippingFee = 30000; // Phí vận chuyển
+            const total = subtotal + shippingFee; // Tổng tiền giỏ hàng
+
+            // Cập nhật tổng cộng
+            document.getElementById('total').textContent = total.toLocaleString('vi-VN') + " VNĐ";
+        }
+
+    });
 
         document.querySelectorAll('.remove-cart-item').forEach(button => {
             button.addEventListener('click', function(e) {
@@ -152,27 +218,6 @@
             });
         });
 
-        function updateCart() {
-            let subtotal = 0;
-            document.querySelectorAll('tbody tr').forEach(row => {
-                const quantity = parseInt(row.querySelector('.update-cart').value);
-                const price = parseFloat(row.querySelector('.pro-price span').textContent.replace(/[^0-9.-]+/g, ""));
-                subtotal += quantity * price;
-                row.querySelector('.pro-subtotal span').textContent = (quantity * price).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                });
-            });
-            document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            });
-            const shippingFee = parseFloat(document.querySelector('tr td:nth-child(2)').textContent.replace(/[^0-9.-]+/g, ""));
-            document.getElementById('total').textContent = (subtotal + shippingFee).toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            });
-        }
     </script>
     <!-- cart main wrapper end -->
 </main>

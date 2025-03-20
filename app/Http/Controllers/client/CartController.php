@@ -59,20 +59,30 @@ public function add(Request $request)
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public function update(Request $request, $id)
-    {
-        $request->validate(['quantity' => 'required|integer|min:1']);
+{
+    $request->validate(['quantity' => 'required|integer|min:1']);
 
-        $cartItem = Cart::findOrFail($id);
-        $product = Product::findOrFail($cartItem->product_id);
+    $cartItem = Cart::findOrFail($id);
+    $variant = Variant::findOrFail($cartItem->id_variant);
 
-        if ($product->stock < $request->quantity) {
-            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
-        }
-
-        $cartItem->update(['quantity' => $request->quantity]);
-
-        return response()->json(['message' => 'Cập nhật thành công', 'cartItem' => $cartItem]);
+    if ($variant->quantity < $request->quantity) {
+        return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
     }
+
+    $cartItem->update(['quantity' => $request->quantity]);
+
+    // Tính tổng giá trị giỏ hàng
+    $cartItems = Cart::where('id_user', Auth::id())->get();
+    $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->variant->price);
+    $total = $subtotal + 30000; // Cộng phí vận chuyển
+
+    return response()->json([
+        'message' => 'Cập nhật thành công',
+        'cartItem' => $cartItem,
+        'subtotal' => $subtotal,
+        'total' => $total
+    ]);
+}
 
     // Xóa sản phẩm khỏi giỏ hàng
     public function remove($id)

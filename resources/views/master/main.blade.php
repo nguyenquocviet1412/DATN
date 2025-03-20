@@ -172,7 +172,6 @@
                                                 @endif
                                             </ul>
                                         </li>
-                                        @if(Auth::guard('web')->check())
                                         <li>
                                             <a href="wishlist.html">
                                                 <i class="pe-7s-like"></i>
@@ -180,12 +179,11 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" class="minicart-btn">
+                                            <a href="{{route('cart.index')}}" class="minicart-btn">
                                                 <i class="pe-7s-shopbag"></i>
                                                 <div class="notification">2</div>
                                             </a>
                                         </li>
-                                        @endif
                                     </ul>
                                 </div>
                             </div>

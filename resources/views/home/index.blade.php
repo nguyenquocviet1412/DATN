@@ -2,7 +2,26 @@
 @section('title', 'Trang chủ')
 @section('main')
 
+<style>
+    .image-container {
+    width: 300px;  /* Đặt kích thước cố định cho khung */
+    height: 300px; /* Đặt chiều cao cố định */
+    overflow: hidden; /* Giữ ảnh trong khung, không để bị thò ra */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd; /* Viền nhẹ để làm khung */
+    border-radius: 10px; /* Bo góc */
+    background: #f9f9f9; /* Màu nền để tránh nền trắng quá trống */
+}
 
+.main-image {
+    width: 100%;  /* Đảm bảo ảnh lấp đầy khung */
+    height: 100%; /* Đảm bảo chiều cao phù hợp */
+    object-fit: cover; /* Giữ tỷ lệ ảnh và cắt phần dư nếu cần */
+    border-radius: 10px; /* Đảm bảo ảnh không bị méo */
+}
+</style>
 <main>
     <!-- hero slider area start -->
     <section class="slider-area">
@@ -18,7 +37,7 @@
                                     <h4 class="slide-desc">Giày phù hợp với nhịp sống của bạn, thiết kế thanh lịch.</h4>
                                     <a href="shop.html" class="btn btn-hero">Mua ngay</a>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -37,7 +56,7 @@
                                     <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +72,7 @@
                                     <h2 class="slide-title text-white">Bước đi phong cách<span>Sản phẩm mới</span></h2>
                                     <h4 class="slide-desc">Giày thời trang, chất lượng cao cho mọi người.</h4>
                                     <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +136,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <!-- service policy area end -->
 
     <!-- banner statistics area start -->
@@ -173,9 +192,9 @@
                                     @foreach($latestProducts as $product)
                                         <div class="product-item">
                                             <figure class="product-thumb">
-                                                <a href="">
-                                                    <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
-                                                    <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                <a href="{{route('product.show',$product->id)}}" class="image-container">
+                                                    <img class="pri-img main-image" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                    <img class="sec-img main-image" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                 </a>
                                                 <div class="product-badge">
                                                     <div class="product-label new">
@@ -198,11 +217,11 @@
                                             </figure>
                                             <div class="product-caption text-center">
                                                 <h6 class="product-name">
-                                                    <a href="">{{ $product->name }}</a>
+                                                    <a href="{{route('product.show',$product->id)}}">{{ $product->name }}</a>
                                                 </h6>
                                                 <div class="price-box">
                                                     <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}VND</span>
-                                                </div>                                                
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -215,7 +234,7 @@
             </div>
         </div>
     </section>
-    
+
     <!-- product area end -->
 
     <!-- product banner statistics area start -->
@@ -314,7 +333,7 @@
                                     @foreach($mostViewedProducts as $product)
                                         <div class="product-item">
                                             <figure class="product-thumb">
-                                                <a href="#">
+                                                <a href="{{route('product.show',$product->id)}}">
                                                     <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                     <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                                 </a>
@@ -339,11 +358,11 @@
                                             </figure>
                                             <div class="product-caption text-center">
                                                 <h6 class="product-name">
-                                                    <a href="#">{{ $product->name }}</a>
+                                                    <a href="{{route('product.show',$product->id)}}">{{ $product->name }}</a>
                                                 </h6>
                                                 <div class="price-box">
                                                     <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }} VND</span>
-                                                </div>                                                
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -357,8 +376,8 @@
         </div>
     </section>
 
-    
-    
+
+
     <!-- featured product area end -->
 
     <!-- testimonial area start -->
@@ -443,7 +462,7 @@
                 </div>
             </div>
         </div>
-    </section>    
+    </section>
     <!-- testimonial area end -->
 
     <!-- group product start -->
@@ -467,7 +486,7 @@
                             <div class="slick-append"></div>
                         </div>
                         <!-- Kết thúc tiêu đề danh mục -->
-    
+
                        <!-- Bắt đầu danh sách sản phẩm bán chạy -->
                         <div class="group-list-item-wrapper">
                             <div class="group-list-carousel">
@@ -475,13 +494,13 @@
                                     <div class="group-slide-item">
                                         <div class="group-item">
                                             <div class="group-item-thumb">
-                                                <a href="">
+                                                <a href="{{route('product.show',$product->id)}}">
                                                     <img src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}">
                                                 </a>
                                             </div>
                                             <div class="group-item-desc">
                                                 <h5 class="group-product-name">
-                                                    <a href="">{{ $product->name }}</a>
+                                                    <a href="{{route('product.show',$product->id)}}">{{ $product->name }}</a>
                                                 </h5>
                                                 <div class="price-box">
                                                     <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }} VND</span>
@@ -508,13 +527,13 @@
                                     <div class="group-slide-item">
                                         <div class="group-item">
                                             <div class="group-item-thumb">
-                                                <a href="">
+                                                <a href="{{route('product.show',$product->id)}}">
                                                     <img src="{{ $product->getThumbnailAttribute() }}" alt="{{ $product->name }}">
                                                 </a>
                                             </div>
                                             <div class="group-item-desc">
                                                 <h5 class="group-product-name">
-                                                    <a href="">{{ $product->name }}</a>
+                                                    <a href="{{route('product.show',$product->id)}}">{{ $product->name }}</a>
                                                 </h5>
                                                 <div class="price-box">
                                                     <span class="price-regular">{{ number_format($product->price, 0, ',', '.') }}₫</span>
@@ -530,7 +549,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </section>
@@ -574,7 +593,7 @@
             </div>
         </div>
     </section>
-     
+
     <!-- latest blog area end -->
 
     <!-- brand logo area start -->
