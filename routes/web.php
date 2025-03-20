@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/creditcard/{order_id}', [CreditCardController::class, 'pay'])->name('creditcard.pay');
     });
 });
-  
+
     // Route Bài vi
     Route::get('/blogs', [BlogsController::class, 'index'])->name('blogs.index');
     Route::get('/blogs-details', [BlogsController::class, 'details'])->name('blogs.details');
@@ -125,6 +125,8 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::post('/store', [ProductController::class, 'store'])->name('product.store');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.update');
+        Route::post('/products/{id}/update-all', [ProductController::class, 'updateAll'])->name('products.updateAll');
+
         Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     });
     //route variant
