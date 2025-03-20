@@ -12,6 +12,7 @@ use App\Models\Product_image;
 use App\Models\Size;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -126,14 +127,14 @@ LogHelper::logAction('Thêm biến thể mới có id: ' . $variant->id. ' cho s
 // Hiển thị form sửa
 public function edit($id)
 {
-    $product = Product::with('variants')->findOrFail($id);
+    $product = Product::with('variants.images', 'variants.color', 'variants.size')->findOrFail($id);
     $categories = Category::all();
     $colors = Color::all();
     $sizes = Size::all();
 
     // Ghi log
     LogHelper::logAction('Vào trang sửa sản phẩm: ' . $product->id);
-    return view('admin.product.editproduct', compact('product', 'categories'));
+    return view('admin.product.editproduct', compact('product', 'categories','colors', 'sizes'));
 }
 
 
@@ -166,4 +167,69 @@ public function update(Request $request, $id)
 
         return redirect()->route('product.index')->with('success', 'Sản phẩm đã được xóa.');
     }
+
+
+    //Cập nhật tất cả
+    public function updateAll(Request $request, $id)
+    {
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'id_category' => 'required|exists:categories,id',
+            'price' => 'required|numeric',
+            'status' => 'required|boolean',
+            'variants.*.id' => 'required|exists:variants,id',
+            'variants.*.id_color' => 'required|exists:colors,id',
+            'variants.*.id_size' => 'required|exists:sizes,id',
+            'variants.*.price' => 'required|numeric',
+            'variants.*.quantity' => 'required|integer|min:1',
+            'deleted_images' => 'array',
+            'deleted_images.*' => 'exists:product_images,id',
+            'variant_images.*.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->update([
+            'name' => $request->name,
+            'id_category' => $request->id_category,
+            'price' => $request->price,
+            'status' => $request->status,
+        ]);
+
+        // Cập nhật biến thể
+        foreach ($request->variants as $variantData) {
+            $variant = Variant::findOrFail($variantData['id']);
+            $variant->update([
+                'id_color' => $variantData['id_color'],
+                'id_size' => $variantData['id_size'],
+                'price' => $variantData['price'],
+                'quantity' => $variantData['quantity'],
+            ]);
+
+            // Thêm ảnh mới nếu có
+            if ($request->hasFile("variant_images.{$variant->id}")) {
+                foreach ($request->file("variant_images.{$variant->id}") as $image) {
+                    $path = $image->store('product', 'public'); // Lưu ảnh vào storage/app/public/product
+                    Product_image::create([
+                        'id_variant' => $variant->id,
+                        'image_url' => 'storage/' .$path,
+                    ]);
+                }
+            }
+        }
+
+        // Xóa ảnh đã chọn
+        if (!empty($request->deleted_images)) {
+            foreach ($request->deleted_images as $imageId) {
+                $image = Product_image::find($imageId);
+                if ($image) {
+                    Storage::delete($image->image_url);
+                    $image->delete();
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Sản phẩm và biến thể đã được cập nhật.');
+    }
+
 }
