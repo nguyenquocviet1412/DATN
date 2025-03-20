@@ -16,7 +16,7 @@ class DetailProductController extends Controller
 {
     public function show($id)
     {
-        $product = Product::with(['variants.color', 'variants.size', 'rates'])->findOrFail($id);
+        $product = Product::with(['variants.color', 'variants.size', 'rates.user'])->findOrFail($id);
 
         // Tăng số lượt xem mỗi khi người dùng vào xem chi tiết
         $product->increment('view');
@@ -29,12 +29,25 @@ class DetailProductController extends Controller
         $averageRating = $product->rates->avg('rating');
         $reviewsCount = $product->rates->count();
 
+        // Tính toán số lượng đánh giá theo từng số sao
+        $starCounts = [
+            5 => $product->rates->where('rating', 5)->count(),
+            4 => $product->rates->where('rating', 4)->count(),
+            3 => $product->rates->where('rating', 3)->count(),
+            2 => $product->rates->where('rating', 2)->count(),
+            1 => $product->rates->where('rating', 1)->count(),
+        ];
+
         // Lấy các sản phẩm liên quan cùng danh mục
-        $relatedProducts = Product::where('id_category', $product->category_id)
+        $relatedProducts = Product::where('id_category', $product->id_category)
                                   ->where('id', '!=', $product->id)
                                   ->take(4)
-                                  ->get();
+                                  ->get()
+                                  ->map(function ($relatedProduct) {
+                                      $relatedProduct->average_rating = $relatedProduct->rates->avg('rating');
+                                      return $relatedProduct;
+                                  });
 
-        return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes', 'averageRating', 'reviewsCount', 'relatedProducts'));
+        return view('home.detailproduct', compact('product', 'categories', 'colors', 'sizes', 'averageRating', 'reviewsCount', 'starCounts', 'relatedProducts'));
     }
 }
