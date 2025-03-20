@@ -156,6 +156,7 @@
                                                 @if(Auth::guard('web')->check())
                                                 {{-- Người dùng (User) đã đăng nhập --}}
                                                 <li><a href="">Tài khoản của tôi</a></li>
+                                                <li><a href="{{route('user.orders')}}">Đơn hàng</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}"
                                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

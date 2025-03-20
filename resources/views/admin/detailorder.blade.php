@@ -37,8 +37,16 @@
                 <tr>
                     <th>💳 Phương thức thanh toán:</th>
                     <td>
-                        @if ($order->payment_method == 'COD')
+                        @if ($order->payment_method == 'COD' || $order->payment_method == 'cod')
                             <span class="badge bg-secondary">Thanh toán khi nhận hàng (COD)</span>
+                        @elseif ($order->payment_method == 'momo')
+                            <span class="badge bg-primary">Momo</span>
+                        @elseif ($order->payment_method == 'zalopay')
+                            <span class="badge bg-primary">ZaloPay</span>
+                        @elseif ($order->payment_method == 'bank_transfer')
+                            <span class="badge bg-primary">Chuyển khoản ngân hàng</span>
+                        @elseif ($order->payment_method == 'online_payment')
+                            <span class="badge bg-primary">Thanh toán online</span>
                         @else
                             <span class="badge bg-primary">Thanh toán trực tuyến</span>
                         @endif
