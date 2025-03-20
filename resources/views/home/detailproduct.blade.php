@@ -2,6 +2,8 @@
 @section('title', 'Chi tiết sản phẩm')
 @section('main')
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <main>
     <div class="container mt-5">
         <div class="row">
@@ -13,30 +15,17 @@
                             @foreach ($product->variants as $variant)
                                 @foreach ($variant->images as $key => $image)
                                     <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                        <img id="mainImage" src="{{ asset($image->image_url) }}" class="d-block w-100"
-                                             style="max-height: 400px; object-fit: contain; cursor: pointer;"
-                                             onclick="openFullScreen('{{ asset($image->image_url) }}')">
+                                        <img src="{{ asset($image->image_url) }}" class="d-block w-100" style="max-height: 400px; object-fit: contain;" alt="Ảnh sản phẩm">
                                     </div>
                                 @endforeach
                             @endforeach
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         </button>
-                    </div>
-
-                    <!-- Danh sách ảnh nhỏ -->
-                    <div class="d-flex justify-content-center mt-3">
-                        @foreach ($product->variants as $variant)
-                            @foreach ($variant->images as $image)
-                                <img src="{{ asset($image->image_url) }}" class="img-thumbnail mx-1"
-                                     style="width: 70px; height: 70px; object-fit: contain; cursor: pointer;"
-                                     onclick="changeMainImage('{{ asset($image->image_url) }}')">
-                            @endforeach
-                        @endforeach
                     </div>
                 </div>
             </div>
@@ -44,31 +33,26 @@
             <!-- Thông tin sản phẩm -->
             <div class="col-md-6">
                 <h1>{{ $product->name }}</h1>
-                <p><strong>Danh mục:</strong> {{ $product->category->name }}</p>
+                <p><strong>Danh mục:</strong> <span class="badge bg-secondary">{{ $product->category->name ?? 'Không có danh mục' }}</span></p>
                 <p>{{ $product->description }}</p>
                 <h4 class="text-danger" id="productPrice">{{ number_format($product->price, 0, ',', '.') }} VNĐ</h4>
-                <p><strong>Lượt xem:</strong> {{ $product->view }}</p>
-                <p><strong>Trạng thái:</strong>
-                    <span class="badge bg-{{ $product->status ? 'success' : 'danger' }}">
-                        {{ $product->status ? 'Còn hàng' : 'Hết hàng' }}
+
+                <!-- Hiển thị điểm trung bình và số lượng đánh giá -->
+                <div class="mb-3">
+                    <span class="fw-bold">Điểm trung bình:</span>
+                    <span class="text-warning">
+                        @for ($i = 0; $i < 5; $i++)
+                            @if ($i < $averageRating)
+                                <i class="fas fa-star"></i>
+                            @else
+                                <i class="far fa-star"></i>
+                            @endif
+                        @endfor
                     </span>
-                </p>
+                    <span>({{ $reviewsCount }} đánh giá)</span>
+                </div>
 
-                <!-- Hiển thị đánh giá -->
-                <p><strong>Đánh giá trung bình:</strong>
-                    @for ($i = 1; $i <= 5; $i++)
-                        @if ($i <= $averageRating)
-                            <i class="fa fa-star text-warning"></i>
-                        @elseif ($i - $averageRating < 1)
-                            <i class="fa fa-star-half-alt text-warning"></i>
-                        @else
-                            <i class="fa fa-star text-secondary"></i>
-                        @endif
-                    @endfor
-                    ({{ count($product->rates) }} đánh giá)
-                </p>
-
-                <!-- Chọn biến thể -->
+                <!-- Chọn biến thể sản phẩm -->
                 <div class="mb-3">
                     <label for="variantSelect" class="form-label fw-bold">Chọn kích thước & màu sắc</label>
                     <select id="variantSelect" class="form-select" onchange="updateSelectedVariant()">
@@ -93,7 +77,66 @@
 
                 <!-- Nút thêm vào giỏ hàng -->
                 <div class="d-grid gap-3">
-                    <button id="addToCartBtn" class="btn btn-primary btn-lg fw-bold shadow-lg py-3" onclick="addToCart()" disabled>🛒 Thêm vào giỏ hàng</button>
+                    <button id="addToCartBtn" class="btn btn-primary btn-lg fw-bold shadow-lg py-3" onclick="addToBag()" disabled>🛒 Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hiển thị các đánh giá -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3>Đánh giá sản phẩm</h3>
+                <div class="list-group">
+                    @foreach ($product->rates as $rate)
+                        <div class="list-group-item">
+                            <h5 class="mb-1">{{ $rate->user->name }}</h5>
+                            <p class="mb-1">{{ $rate->review }}</p>
+                            <small class="text-muted">
+                                @for ($i = 0; $i < 5; $i++)
+                                    @if ($i < $rate->rating)
+                                        <i class="fas fa-star"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
+                            </small>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Hiển thị các sản phẩm liên quan -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3>Sản phẩm liên quan</h3>
+                <div class="row">
+                    @foreach ($relatedProducts as $relatedProduct)
+                        <div class="col-md-3">
+                            <div class="card mb-4 shadow-sm">
+                                <img src="{{ asset($relatedProduct->image_url) }}" class="card-img-top" alt="{{ $relatedProduct->name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $relatedProduct->name }}</h5>
+                                    <p class="card-text">{{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ</p>
+                                    <p class="card-text">Đã bán {{ $relatedProduct->sold_count }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a href="{{ route('product.show', $relatedProduct->id) }}" class="btn btn-sm btn-outline-secondary">Xem chi tiết</a>
+                                        </div>
+                                        <small class="text-muted">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                @if ($i < $relatedProduct->average_rating)
+                                                    <i class="fas fa-star"></i>
+                                                @else
+                                                    <i class="far fa-star"></i>
+                                                @endif
+                                            @endfor
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -133,6 +176,37 @@
         }
     }
 
+    function addToBag() {
+        if (!selectedVariant) {
+            alert("Vui lòng chọn biến thể trước khi thêm vào giỏ hàng.");
+            return;
+        }
+
+        if (!{{ Auth::check() ? 'true' : 'false' }}) {
+            alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+            window.location.href = "{{ route('login') }}";
+            return;
+        }
+
+        let quantity = document.getElementById('quantityInput').value;
+
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                id_variant: selectedVariant,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => console.error("Lỗi:", error));
+    }
     function changeMainImage(imageUrl) {
         document.getElementById('mainImage').src = imageUrl;
     }
@@ -181,5 +255,4 @@
         });
     }
 </script>
-
 @endsection
