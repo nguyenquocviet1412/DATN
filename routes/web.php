@@ -60,6 +60,7 @@ Route::post('/logout', [AuthController::class, 'logoutUser'])->name('logout');
 
 //Route home
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/products', [FilterProductController::class, 'index'])->name('products.index');
 Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
 
 // chi tiết sản phẩm
