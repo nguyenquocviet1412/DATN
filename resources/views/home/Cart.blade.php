@@ -51,17 +51,22 @@
                                         </td>
                                         <td class="pro-title">
                                             <a href="{{route('product.show',$item->variant->product->id)}}">
-                                                {{ optional($item->variant->product)->name }} ({{ optional($item->variant->color)->name }}, {{ optional($item->variant->size)->size }})
+                                                {{ optional($item->variant->product)->name }} 
+                                                <select class="variant-select" data-id="{{ $item->id }}">
+                                                    @foreach ($item->variant->product->variants as $variant)
+                                                        <option value="{{ $variant->id }}" {{ $variant->id == $item->variant->id ? 'selected' : '' }}>
+                                                            {{ optional($variant->color)->name }}, {{ optional($variant->size)->size }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </a>
                                         </td>
                                         <td class="pro-price">
                                             <span>{{ number_format($item->variant->price, 0, ',', '.') }} VNĐ</span>
                                         </td>
                                         <td class="pro-quantity">
-                                            <div class="input-group quantity-input">
-                                                <button class="btn btn-sm btn-decrease" data-id="{{ $item->id }}">-</button>
+                                            <div class="pro-qty">  
                                                 <input type="number" value="{{ $item->quantity }}" min="1" data-id="{{ $item->id }}" class="update-cart">
-                                                <button class="btn btn-sm btn-increase" data-id="{{ $item->id }}">+</button>
                                             </div>
                                         </td>
                                         <td class="pro-subtotal">
@@ -101,11 +106,11 @@
                                         </tr>
                                         <tr>
                                             <td>Phí vận chuyển</td>
-                                            <td> 30.000 VNĐ</td>
+                                            <td>30.000 VNĐ</td>
                                         </tr>
                                         <tr class="total">
                                             <td>Tổng cộng</td>
-                                            <td id="total">{{ number_format($cartItems->sum(fn($item) => $item->quantity * $item->variant->price) + 30000 , 0, ',', '.') }} VNĐ</td>
+                                            <td id="total">{{ number_format($cartItems->sum(fn($item) => $item->quantity * $item->variant->price) + 30000, 0, ',', '.') }} VNĐ</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -218,18 +223,75 @@
             });
         });
 
+        document.querySelectorAll('.qtybtn').forEach(button => {
+            button.addEventListener('click', function() {
+                let input = this.parentElement.querySelector('.update-cart');
+                let quantity = parseInt(input.value);
+                if (this.classList.contains('inc')) {
+                    quantity++;
+                } else if (this.classList.contains('dec') && quantity > 1) {
+                    quantity--;
+                }
+                input.value = quantity;
+                input.dispatchEvent(new Event('change'));
+            });
+        });
+
+        document.querySelectorAll('.variant-select').forEach(select => {
+            select.addEventListener('change', function() {
+                let id = this.dataset.id;
+                let variantId = this.value;
+
+                fetch(`/cart/update-variant/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({ variant_id: variantId })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Cập nhật thành công') {
+                        location.reload(); // Reload the page to reflect changes
+                    }
+                });
+            });
+        });
+
+        //function updateCart() {
+        //  let subtotal = 0;
+        //  document.querySelectorAll('tbody tr').forEach(row => {
+        //      const quantity = parseInt(row.querySelector('.update-cart').value);
+        //      const price = parseFloat(row.querySelector('.pro-price span').textContent.replace(/[^0-9.-]+/g, ""));
+        //      subtotal += quantity * price;
+        //      row.querySelector('.pro-subtotal span').textContent = (quantity * price).toLocaleString('vi-VN', {
+        //          style: 'currency',
+        //          currency: 'VND'
+        //      });
+        //  });
+        //  document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN', {
+        //      style: 'currency',
+        //      currency: 'VND'
+        //  });
+        //  const shippingFee = 30000; // Fixed shipping fee
+        //  document.getElementById('total').textContent = (subtotal + shippingFee).toLocaleString('vi-VN', {
+        //      style: 'currency',
+        //     currency: 'VND'
+        //  });
+        //}
+        
     </script>
     <!-- cart main wrapper end -->
 </main>
 
 <style>
+    .pro-qty {
+        display: flex;
+        align-items: center;
+    }
+
     .pro-qty input {
         width: 60px;
         text-align: center;
-    }
-
-    .btn-sqr {
-        margin-left: 10px;
+        border: 1px solid #ddd;
+        margin: 0 5px;
     }
 </style>
 @endsection

@@ -40,12 +40,12 @@
 </head>
 
 <body>
-<!-- Bootstrap Toast Container -->
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-    @if(session('success'))
+    <!-- Bootstrap Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        @if(session('success'))
         <div id="toastSuccess" class="toast align-items-center text-bg-success border-0"
-             role="alert" aria-live="assertive" aria-atomic="true"
-             data-bs-autohide="true" data-bs-delay="3000">
+            role="alert" aria-live="assertive" aria-atomic="true"
+            data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     🎉 {{ session('success') }}
@@ -53,12 +53,12 @@
                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
-    @endif
+        @endif
 
-    @if(session('error'))
+        @if(session('error'))
         <div id="toastError" class="toast align-items-center text-bg-danger border-0"
-             role="alert" aria-live="assertive" aria-atomic="true"
-             data-bs-autohide="true" data-bs-delay="3000">
+            role="alert" aria-live="assertive" aria-atomic="true"
+            data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     ❌ {{ session('error') }}
@@ -66,26 +66,26 @@
                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
-    @endif
-</div>
+        @endif
+    </div>
 
-<!-- JavaScript: Hiển thị Toast -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let toastElements = document.querySelectorAll(".toast");
+    <!-- JavaScript: Hiển thị Toast -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let toastElements = document.querySelectorAll(".toast");
 
-        toastElements.forEach(toastEl => {
-            let toast = new bootstrap.Toast(toastEl);
-            toast.show(); // Hiển thị ngay lập tức
+            toastElements.forEach(toastEl => {
+                let toast = new bootstrap.Toast(toastEl);
+                toast.show(); // Hiển thị ngay lập tức
+            });
         });
-    });
-</script>
-<!-- Bootstrap Bundle (đã có Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </script>
+    <!-- Bootstrap Bundle (đã có Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
-       <!-- Start Header Area -->
-       <header class="header-area header-wide">
+    <!-- Start Header Area -->
+    <header class="header-area header-wide">
         <!-- main header start -->
         <div class="main-header d-none d-lg-block">
             <!-- header middle area start -->
@@ -115,7 +115,7 @@
                                                 <a href="">Danh mục <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     @foreach ($categories as $category)
-                                                        <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
+                                                    <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>
@@ -154,21 +154,21 @@
                                             <a href="#"><i class="pe-7s-user"></i></a>
                                             <ul class="dropdown-list">
                                                 @if(Auth::guard('web')->check())
-                                                    {{-- Người dùng (User) đã đăng nhập --}}
-                                                    <li><a href="">Tài khoản của tôi</a></li>
-                                                    <li>
-                                                        <a href="{{ route('logout') }}"
-                                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                            Đăng xuất
-                                                        </a>
-                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                                            @csrf
-                                                        </form>
-                                                    </li>
+                                                {{-- Người dùng (User) đã đăng nhập --}}
+                                                <li><a href="">Tài khoản của tôi</a></li>
+                                                <li>
+                                                    <a href="{{ route('logout') }}"
+                                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                        Đăng xuất
+                                                    </a>
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                        @csrf
+                                                    </form>
+                                                </li>
                                                 @else
-                                                    {{-- Chưa đăng nhập --}}
-                                                    <li><a href="{{ route('login') }}">Đăng nhập</a></li>
-                                                    <li><a href="{{ route('register') }}">Đăng ký</a></li>
+                                                {{-- Chưa đăng nhập --}}
+                                                <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                                                <li><a href="{{ route('register') }}">Đăng ký</a></li>
                                                 @endif
                                             </ul>
                                         </li>
@@ -179,9 +179,9 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{route('cart.index')}}" class="minicart-btn">
+                                            <a href="{{ route('cart.index') }}" class="minicart-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <div class="notification">2</div>
+                                                <div class="notification">10</div>
                                             </a>
                                         </li>
                                     </ul>
@@ -211,10 +211,10 @@
                                 </a>
                             </div>
                             <div class="mobile-menu-toggler">
-                                <div class="mini-cart-wrap">
+                            <div class="mini-cart-wrap">
                                     <a href="cart.html">
                                         <i class="pe-7s-shopbag"></i>
-                                        <div class="notification">0</div>
+                                        <div class="notification"></div>
                                     </a>
                                 </div>
                                 <button class="mobile-menu-btn">
@@ -396,7 +396,7 @@
     <!-- end Header Area -->
 
     @yield('main')
-      <!-- Scroll to top start -->
+    <!-- Scroll to top start -->
     <div class="scroll-top not-visible">
         <i class="fa fa-angle-up"></i>
     </div>
@@ -585,9 +585,9 @@
                                     </div>
                                     <div class="useful-links">
                                         <a href="#" data-bs-toggle="tooltip" title="Compare"><i
-                                            class="pe-7s-refresh-2"></i>compare</a>
+                                                class="pe-7s-refresh-2"></i>compare</a>
                                         <a href="#" data-bs-toggle="tooltip" title="Wishlist"><i
-                                            class="pe-7s-like"></i>wishlist</a>
+                                                class="pe-7s-like"></i>wishlist</a>
                                     </div>
                                     <div class="like-icon">
                                         <a class="facebook" href="#"><i class="fa fa-facebook"></i>like</a>
@@ -605,84 +605,6 @@
     </div>
     <!-- Quick view modal end -->
 
-    <!-- offcanvas mini cart start -->
-    <div class="offcanvas-minicart-wrapper">
-        <div class="minicart-inner">
-            <div class="offcanvas-overlay"></div>
-            <div class="minicart-inner-content">
-                <div class="minicart-close">
-                    <i class="pe-7s-close"></i>
-                </div>
-                <div class="minicart-content-box">
-                    <div class="minicart-item-wrapper">
-                        <ul>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="{{asset('assets/img/cart/cart-1.')}}jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$100.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="{{asset('assets/img/cart/cart-2.')}}jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$80.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="minicart-pricing-box">
-                        <ul>
-                            <li>
-                                <span>sub-total</span>
-                                <span><strong>$300.00</strong></span>
-                            </li>
-                            <li>
-                                <span>Eco Tax (-2.00)</span>
-                                <span><strong>$10.00</strong></span>
-                            </li>
-                            <li>
-                                <span>VAT (20%)</span>
-                                <span><strong>$60.00</strong></span>
-                            </li>
-                            <li class="total">
-                                <span>total</span>
-                                <span><strong>$370.00</strong></span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="minicart-button">
-                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> View Cart</a>
-                        <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- offcanvas mini cart end -->
 
     <!-- JS
 ============================================ -->
@@ -715,8 +637,32 @@
     <script src="{{asset('assets/js/plugins/google-map.js')}}"></script>
     <!-- Main JS -->
     <script src="{{asset('assets/js/main.js')}}"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM fully loaded and parsed");
 
+        // Hàm để lấy số lượng sản phẩm trong giỏ hàng
+        function updateCartCount() {
+            console.log("Calling updateCartCount");
+            fetch("{{ route('cart.count') }}")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Cart count data:", data);
+                    document.querySelectorAll('.minicart-btn .notification').forEach(element => {
+                        element.textContent = data.count;
+                    });
+                })
+                .catch(error => console.error('Error fetching cart count:', error));
+        }
+
+        // Gọi hàm để cập nhật số lượng sản phẩm trong giỏ hàng khi trang được tải
+        updateCartCount();
+    });
+</script>
 </body>
-
-
 </html>
