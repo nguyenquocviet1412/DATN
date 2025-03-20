@@ -37,6 +37,10 @@
     <!-- main style css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 
+    <!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons (tùy chọn) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -391,6 +395,41 @@
                 </div>
             </div>
         </aside>
+        <div class="container mt-4">
+            <div class="card shadow-sm p-2">
+                <h5 class="mb-3 fw-bold">🔍 Bộ lọc sản phẩm</h5>
+                <form method="GET" action="{{ route('products.index') }}">
+                    <div class="row g-2 align-items-end">
+                        <!-- Lọc khoảng giá -->
+                        <div class="col-md-4">
+                            <label class="form-label small">Khoảng giá (VNĐ)</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="min_price" value="{{ request('min_price', 0) }}" class="form-control" placeholder="Từ">
+                                <span class="input-group-text">-</span>
+                                <input type="number" name="max_price" value="{{ request('max_price', 100000000) }}" class="form-control" placeholder="Đến">
+                            </div>
+                        </div>
+
+                        <!-- Sắp xếp theo -->
+                        <div class="col-md-4">
+                            <label class="form-label small">Sắp xếp theo</label>
+                            <select name="sort_by" class="form-select form-select-sm">
+                                <option value="">Mặc định</option>
+                                <option value="price_asc" {{ request('sort_by') == 'price_asc' ? 'selected' : '' }}>Giá thấp đến cao</option>
+                                <option value="price_desc" {{ request('sort_by') == 'price_desc' ? 'selected' : '' }}>Giá cao đến thấp</option>
+                                <option value="view" {{ request('sort_by') == 'view' ? 'selected' : '' }}>Lượt xem</option>
+                                <option value="likes" {{ request('sort_by') == 'likes' ? 'selected' : '' }}>Yêu thích</option>
+                            </select>
+                        </div>
+
+                        <!-- Nút lọc -->
+                        <div class="col-md-2 text-end">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">Lọc</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <!-- off-canvas menu end -->
         <!-- offcanvas mobile menu end -->
     </header>
