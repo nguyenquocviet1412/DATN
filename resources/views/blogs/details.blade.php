@@ -29,88 +29,48 @@
                 <div class="col-lg-3 order-2">
                     <aside class="blog-sidebar-wrapper">
                         <div class="blog-sidebar">
-                            <h5 class="title">search</h5>
-                            <div class="sidebar-serch-form">
-                                <form action="#">
-                                    <input type="text" class="search-field" placeholder="search here">
-                                    <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
-                                </form>
-                            </div>
-                        </div> <!-- single sidebar end -->
-                        <div class="blog-sidebar">
-                            <h5 class="title">categories</h5>
-                            <ul class="blog-archive blog-category">
-                                <li><a href="#">Barber (10)</a></li>
-                                <li><a href="#">fashion (08)</a></li>
-                                <li><a href="#">handbag (07)</a></li>
-                                <li><a href="#">Jewelry (14)</a></li>
-                                <li><a href="#">food (10)</a></li>
-                            </ul>
-                        </div> <!-- single sidebar end -->
-                        <div class="blog-sidebar">
-                            <h5 class="title">Blog Archives</h5>
-                            <ul class="blog-archive">
-                                <li><a href="#">January (10)</a></li>
-                                <li><a href="#">February (08)</a></li>
-                                <li><a href="#">March (07)</a></li>
-                                <li><a href="#">April (14)</a></li>
-                                <li><a href="#">May (10)</a></li>
-                            </ul>
-                        </div> <!-- single sidebar end -->
-                        <div class="blog-sidebar">
                             <h5 class="title">recent post</h5>
                             <div class="recent-post">
                                 <div class="recent-post-item">
                                     <figure class="product-thumb">
-                                        <a href="blog-details.html">
+                                        <a href="{{route('blogs.details')}}">
                                             <img src="assets/img/blog/blog-img1.jpg" alt="blog image">
                                         </a>
                                     </figure>
                                     <div class="recent-post-description">
                                         <div class="product-name">
-                                            <h6><a href="blog-details.html">Auctor gravida enim</a></h6>
+                                            <h6><a href="{{route('blogs.details')}}">Auctor gravida enim</a></h6>
                                             <p>march 10 2019</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="recent-post-item">
                                     <figure class="product-thumb">
-                                        <a href="blog-details.html">
+                                        <a href="{{route('blogs.details')}}">
                                             <img src="assets/img/blog/blog-img2.jpg" alt="blog image">
                                         </a>
                                     </figure>
                                     <div class="recent-post-description">
                                         <div class="product-name">
-                                            <h6><a href="blog-details.html">gravida auctor dnim</a></h6>
+                                            <h6><a href="{{route('blogs.details')}}">gravida auctor dnim</a></h6>
                                             <p>march 18 2019</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="recent-post-item">
                                     <figure class="product-thumb">
-                                        <a href="blog-details.html">
+                                        <a href="{{route('blogs.details')}}">
                                             <img src="assets/img/blog/blog-img3.jpg" alt="blog image">
                                         </a>
                                     </figure>
                                     <div class="recent-post-description">
                                         <div class="product-name">
-                                            <h6><a href="blog-details.html">enim auctor gravida</a></h6>
+                                            <h6><a href="{{route('blogs.details')}}">enim auctor gravida</a></h6>
                                             <p>march 14 2019</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- single sidebar end -->
-                        <div class="blog-sidebar">
-                            <h5 class="title">Tags</h5>
-                            <ul class="blog-tags">
-                                <li><a href="#">camera</a></li>
-                                <li><a href="#">computer</a></li>
-                                <li><a href="#">bag</a></li>
-                                <li><a href="#">watch</a></li>
-                                <li><a href="#">smartphone</a></li>
-                                <li><a href="#">shoes</a></li>
-                            </ul>
                         </div> <!-- single sidebar end -->
                     </aside>
                 </div>
@@ -184,87 +144,9 @@
                         <!-- blog post item end -->
 
                         <!-- comment area start -->
-                        <div class="comment-section section-padding">
-                            <h5>03 Comment</h5>
-                            <ul>
-                                <li>
-                                    <div class="author-avatar">
-                                        <img src="assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            15 Dec, 2019 at 9:30pm
-                                        </div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?</p>
-                                    </div>
-                                </li>
-                                <li class="comment-children">
-                                    <div class="author-avatar">
-                                        <img src="assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            20 Nov, 2019 at 9:30pm
-                                        </div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-avatar">
-                                        <img src="assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            25 Jan, 2019 at 9:30pm
-                                        </div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- comment area end -->
 
                         <!-- start blog comment box -->
-                        <div class="blog-comment-wrapper">
-                            <h5>Leave a reply</h5>
-                            <p>Your email address will not be published. Required fields are marked *</p>
-                            <form action="#">
-                                <div class="comment-post-box">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label>Comment</label>
-                                            <textarea name="commnet" placeholder="Write a comment"></textarea>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Name</label>
-                                            <input type="text" class="coment-field" placeholder="Name">
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Email</label>
-                                            <input type="text" class="coment-field" placeholder="Email">
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Website</label>
-                                            <input type="text" class="coment-field" placeholder="Website">
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="coment-btn">
-                                                <input class="btn btn-sqr" type="submit" name="submit" value="Post Comment">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                       
                         <!-- start blog comment box -->
                     </div>
                 </div>
@@ -282,107 +164,7 @@
     <!-- Scroll to Top End -->
 
     <!-- footer area start -->
-    <footer class="footer-widget-area">
-        <div class="footer-top section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="widget-item">
-                            <div class="widget-title">
-                                <div class="widget-logo">
-                                    <a href="index.html">
-                                        <img src="assets/img/logo/logo.png" alt="brand logo">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="widget-body">
-                                <p>We are a team of designers and developers that create high quality wordpress, shopify,
-                                    Opencart </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="widget-item">
-                            <h6 class="widget-title">Contact Us</h6>
-                            <div class="widget-body">
-                                <address class="contact-block">
-                                    <ul>
-                                        <li><i class="pe-7s-home"></i> 4710-4890 Breckinridge USA</li>
-                                        <li><i class="pe-7s-mail"></i> <a
-                                                href="mailto:demo@plazathemes.com">demo@yourdomain.com </a></li>
-                                        <li><i class="pe-7s-call"></i> <a href="tel:(012)800456789987">(012) 800 456
-                                                789-987</a></li>
-                                    </ul>
-                                </address>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="widget-item">
-                            <h6 class="widget-title">Information</h6>
-                            <div class="widget-body">
-                                <ul class="info-list">
-                                    <li><a href="#">about us</a></li>
-                                    <li><a href="#">Delivery Information</a></li>
-                                    <li><a href="#">privet policy</a></li>
-                                    <li><a href="#">Terms & Conditions</a></li>
-                                    <li><a href="#">contact us</a></li>
-                                    <li><a href="#">site map</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="widget-item">
-                            <h6 class="widget-title">Follow Us</h6>
-                            <div class="widget-body social-link">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row align-items-center mt-20">
-                    <div class="col-md-6">
-                        <div class="newsletter-wrapper">
-                            <h6 class="widget-title-text">Signup for newsletter</h6>
-                            <form class="newsletter-inner" id="mc-form">
-                                <input type="email" class="news-field" id="mc-email" autocomplete="off"
-                                    placeholder="Enter your email address">
-                                <button class="news-btn" id="mc-submit">Subscribe</button>
-                            </form>
-                            <!-- mail-chimp-alerts Start -->
-                            <div class="mailchimp-alerts">
-                                <div class="mailchimp-submitting"></div><!-- mail-chimp-submitting end -->
-                                <div class="mailchimp-success"></div><!-- mail-chimp-success end -->
-                                <div class="mailchimp-error"></div><!-- mail-chimp-error end -->
-                            </div>
-                            <!-- mail-chimp-alerts end -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="footer-payment">
-                            <img src="assets/img/payment.png" alt="payment method">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="copyright-text text-center">
-                            <p>&copy; 2022 <b>Corano</b> Made with <i class="fa fa-heart text-danger"></i> by <a
-                                    href="https://hasthemes.com/"><b>HasThemes</b></a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+
     <!-- footer area end -->
 
     <!-- Quick view modal start -->
