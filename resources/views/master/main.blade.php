@@ -172,7 +172,6 @@
                                                 @endif
                                             </ul>
                                         </li>
-                                        @if(Auth::guard('web')->check())
                                         <li>
                                             <a href="wishlist.html">
                                                 <i class="pe-7s-like"></i>
@@ -185,7 +184,6 @@
                                                 <div class="notification">10</div>
                                             </a>
                                         </li>
-                                        @endif
                                     </ul>
                                 </div>
                             </div>
@@ -667,5 +665,4 @@
     });
 </script>
 </body>
-
 </html>
