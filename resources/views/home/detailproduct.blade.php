@@ -1,3 +1,4 @@
+{{-- filepath: c:\laragon\www\DATN\resources\views\home\detailproduct.blade.php --}}
 @extends('master.main')
 @section('title', 'Chi tiết sản phẩm')
 @section('main')
@@ -74,8 +75,8 @@
                 <label for="variantSelect" class="form-label fw-bold">Chọn kích thước & màu sắc</label>
                 <div class="mb-3">
                     <label for=""></label>
-                    <select id="variantSelect" class="form-select" onchange="updateSelectedVariant()">
-                        <option value="" data-price="{{ $product->price }}">Chọn biến thể</option>
+                    <select id="variantSelect" class="form-select text-align" onchange="updateSelectedVariant()">
+                        <option class="text-align" value="" data-price="{{ $product->price }}"><b class="text-align">Màu - Size</b></option>
                         @foreach ($product->variants as $variant)
                             <option value="{{ $variant->id }}" data-price="{{ $variant->price }}" data-stock="{{ $variant->quantity }}">
                                 {{ optional($variant->color)->name }} - Size {{ optional($variant->size)->size }} (Còn {{ $variant->quantity }})
@@ -84,6 +85,8 @@
                     </select>
                 </div>
 
+                <!-- Add a new input for custom quantity -->
+            
                 
                 <div class="mb-3">
                     <label for="">số lượng</label>
@@ -102,77 +105,75 @@
             </div>
         </div>
 
-      <!-- Hiển thị các đánh giá -->
-<div class="row mt-5">
-    <div class="col-md-12">
-        <h3 class="mb-4">Đánh giá sản phẩm</h3>
-        <div class="list-group">
-            @foreach ($product->rates as $rate)
-                <div class="list-group-item review-item p-3 rounded shadow-sm mb-3 border">
-                    <h5 class="mb-1 fw-bold">{{ $rate->user->fullname }}</h5>
-                    <p class="mb-2 text-secondary">{{ $rate->review }}</p>
-                    <div class="rating text-warning">
-                        @for ($i = 0; $i < 5; $i++)
-                            @if ($i < $rate->rating)
-                                <i class="fas fa-star"></i>
-                            @else
-                                <i class="far fa-star"></i>
-                            @endif
-                        @endfor
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-
-
-<div class="row mt-5">
-    <div class="col-md-12">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Sản phẩm liên quan</h3>
-            <a href="{{ route('home.index') }}" class="btn btn-primary btn-sm">
-                Xem tất cả
-            </a>
-        </div>
-        <div class="row g-4">
-            @foreach ($relatedProducts as $relatedProduct)
-                <div class="col-md-3">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="overflow-hidden" style="height: 200px;">
-                            <img src="{{ asset($relatedProduct->image_url) }}" 
-                                 class="card-img-top" 
-                                 alt="{{ $relatedProduct->name }}"
-                                 style="height: 100%; object-fit: cover;">
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold">{{ $relatedProduct->name }}</h5>
-                            <p class="card-text text-danger fw-bold">
-                                {{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ
-                            </p>
-                            <p class="card-text">Đã bán {{ $relatedProduct->sold_count }}</p>
-
-                            <!-- Hiển thị đánh giá sao vàng -->
-                            <div class="mb-2">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <i class="fas fa-star {{ $i <= $relatedProduct->average_rating ? 'text-warning' : 'text-secondary' }}"></i>
+        <!-- Hiển thị các đánh giá -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="mb-4">Đánh giá sản phẩm</h3>
+                <div class="list-group">
+                    @foreach ($product->rates as $rate)
+                        <div class="list-group-item review-item p-3 rounded shadow-sm mb-3 border">
+                            <h5 class="mb-1 fw-bold">{{ $rate->user->fullname }}</h5>
+                            <p class="mb-2 text-secondary">{{ $rate->review }}</p>
+                            <div class="rating text-warning">
+                                @for ($i = 0; $i < 5; $i++)
+                                    @if ($i < $rate->rating)
+                                        <i class="fas fa-star"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
                                 @endfor
-                                
                             </div>
-
-                            <a href="{{ route('product.show', $relatedProduct->id) }}" 
-                               class="btn btn-sm btn-outline-secondary">
-                                Xem chi tiết
-                            </a>
+                            <small class="text-muted">Đánh giá vào ngày: {{ $rate->created_at->format('d/m/Y') }}</small>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
         </div>
-    </div>
-</div>
 
-        
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Sản phẩm liên quan</h3>
+                    <a href="{{ route('filter-product', $product->category->id) }}" class="btn btn-primary btn-sm">
+                        Xem tất cả
+                    </a>
+                </div>
+                <div class="row g-4">
+                    @foreach ($relatedProducts as $relatedProduct)
+                        <div class="col-md-3">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="overflow-hidden" style="height: 200px;">
+                                    <img src="{{ asset($relatedProduct->image_url) }}" 
+                                         class="card-img-top" 
+                                         alt="{{ $relatedProduct->name }}"
+                                         style="height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title fw-bold">{{ $relatedProduct->name }}</h5>
+                                    <p class="card-text text-danger fw-bold">
+                                        {{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ
+                                    </p>
+                                    <p class="card-text">Đã bán {{ $relatedProduct->sold_count }}</p>
+
+                                    <!-- Hiển thị đánh giá sao vàng -->
+                                    <div class="mb-2">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="fas fa-star {{ $i <= $relatedProduct->average_rating ? 'text-warning' : 'text-secondary' }}"></i>
+                                        @endfor
+                                        
+                                    </div>
+
+                                    <a href="{{ route('product.show', $relatedProduct->id) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
