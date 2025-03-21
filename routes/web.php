@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\client\DetailProductController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\ClientOrderController;
+use App\Http\Controllers\client\FavoriteController;
 use App\Http\Controllers\Client\Payment\MomoController;
 use App\Http\Controllers\Client\Payment\VnPayController;
 use App\Http\Controllers\Client\Payment\PaypalController;
@@ -78,8 +79,15 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
         Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count'); // Đếm số lượng sản phẩm trong giỏ hàng
     });
- });
 
+    //Yêu thích
+    Route::prefix('favorite')->group(function () {
+        Route::get('/', [FavoriteController::class, 'index'])->name('favorite.index'); // Hiển thị yêu thích
+        Route::post('/add', [FavoriteController::class, 'add'])->name('favorite.add'); // Thêm sản phẩm vào yêu thích
+        Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');// Thêm sản phẩm vào yêu thích
+        Route::delete('/remove/{id}', [FavoriteController::class, 'remove'])->name('favorite.remove'); // Xóa sản phẩm khỏi yêu thích
+ });
+});
 
   // Thanh toán
 Route::middleware(['auth'])->group(function () {

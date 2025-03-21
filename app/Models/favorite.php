@@ -12,4 +12,14 @@ class favorite extends Model
         'id_user',
         'id_product'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'id_product');
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(Variant::class, 'id_variant');
+    }
 }

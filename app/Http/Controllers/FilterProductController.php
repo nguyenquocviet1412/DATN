@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\favorite;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class FilterProductController extends Controller
 {
@@ -34,15 +36,17 @@ class FilterProductController extends Controller
                 $query->orderBy('view', 'desc');
             } elseif ($request->sort_by == 'likes') {
                 $query->leftJoin('favorites', 'products.id', '=', 'favorites.id_product')
-                      ->selectRaw('products.*, COUNT(favorites.id) as likes')
-                      ->groupBy('products.id')
-                      ->orderBy('likes', 'desc');
+                    ->selectRaw('products.*, COUNT(favorites.id) as likes')
+                    ->groupBy('products.id')
+                    ->orderBy('likes', 'desc');
             }
         }
 
         $products = $query->paginate(12);
         $categories = Category::all();
 
-        return view('home.filter_product', compact('products', 'categories'));
+        $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
+
+        return view('home.filter_product', compact('products', 'categories', 'favoriteProductIds'));
     }
 }
