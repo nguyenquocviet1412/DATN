@@ -34,6 +34,7 @@ use App\Http\Controllers\Client\Payment\VnPayController;
 use App\Http\Controllers\Client\Payment\PaypalController;
 use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
+use App\Http\Controllers\client\UserControllerClient;
 use App\Http\Controllers\FilterProductController;
 
 /*
@@ -110,7 +111,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/blogs', [BlogsController::class, 'index'])->name('blogs.index');
     Route::get('/blogs-details', [BlogsController::class, 'details'])->name('blogs.details');
 
-
+    // route ng dùng
+    Route::get('/user/profile', [UserControllerClient::class, 'show'])->middleware('user.auth')->name('user.profile');
 
 
 

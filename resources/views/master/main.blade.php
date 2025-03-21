@@ -160,7 +160,7 @@
                                             <ul class="dropdown-list">
                                                 @if(Auth::guard('web')->check())
                                                 {{-- Người dùng (User) đã đăng nhập --}}
-                                                <li><a href="">Tài khoản của tôi</a></li>
+                                                <li><a href="{{ route('user.profile')}}">Tài khoản của tôi</a></li>
                                                 <li><a href="{{route('user.orders')}}">Đơn hàng</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}"
@@ -396,69 +396,6 @@
                 </div>
             </div>
         </aside>
-        <div class="p-2 filter-box" style="max-width: 1100px; margin: auto; border: none;">
-            <h6 class="mb-2 text-primary fw-bold">🔍 Bộ lọc sản phẩm</h6>
-            <form method="GET" action="{{ route('products.index') }}">
-                <div class="row g-2 align-items-center">
-                    <!-- Lọc khoảng giá bằng thanh trượt -->
-                    <div class="col-md-5">
-                        <label class="form-label small fw-bold">💰 Khoảng giá (VNĐ)</label>
-                        <div class="d-flex justify-content-between">
-                            <span id="minPriceLabel" class="badge bg-primary px-2 py-1">0 VNĐ</span>
-                            <span id="maxPriceLabel" class="badge bg-danger px-2 py-1" style="white-space: nowrap;">10.000.000 VNĐ</span>
-                        </div>
-                        <div class="px-2 position-relative">
-                            <input type="range" class="form-range w-100" id="minPrice" name="min_price" min="0" max="10000000" step="50000" value="0">
-                            <input type="range" class="form-range w-100 mt-1" id="maxPrice" name="max_price" min="0" max="10000000" step="50000" value="10000000">
-                        </div>
-                    </div>
-
-                    <!-- Sắp xếp theo -->
-                    <div class="col-md-4">
-                        <label class="form-label small fw-bold">📌 Sắp xếp theo</label>
-                        <select name="sort_by" class="form-select form-select-sm">
-                            <option value="">Mặc định</option>
-                            <option value="price_asc" {{ request('sort_by') == 'price_asc' ? 'selected' : '' }}>Giá thấp đến cao</option>
-                            <option value="price_desc" {{ request('sort_by') == 'price_desc' ? 'selected' : '' }}>Giá cao đến thấp</option>
-                            <option value="view" {{ request('sort_by') == 'view' ? 'selected' : '' }}>Lượt xem</option>
-                            <option value="likes" {{ request('sort_by') == 'likes' ? 'selected' : '' }}>Yêu thích</option>
-                        </select>
-                    </div>
-
-                    <!-- Nút lọc -->
-                    <div class="col-md-3 text-end">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">Lọc</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
-
-
-
-        <script>
-            function updatePrice() {
-                let minPrice = document.getElementById("minPrice");
-                let maxPrice = document.getElementById("maxPrice");
-                let minLabel = document.getElementById("minPriceLabel");
-                let maxLabel = document.getElementById("maxPriceLabel");
-
-                let minValue = parseInt(minPrice.value);
-                let maxValue = parseInt(maxPrice.value);
-
-                if (maxValue < minValue) {
-                    maxValue = minValue;
-                    maxPrice.value = maxValue;
-                }
-
-                minLabel.textContent = new Intl.NumberFormat('vi-VN').format(minValue) + " VNĐ";
-                maxLabel.textContent = new Intl.NumberFormat('vi-VN').format(maxValue) + " VNĐ";
-            }
-
-            document.addEventListener("DOMContentLoaded", updatePrice);
-        </script>
-
 
         <!-- off-canvas menu end -->
         <!-- offcanvas mobile menu end -->

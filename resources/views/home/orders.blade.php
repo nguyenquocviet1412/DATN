@@ -3,7 +3,23 @@
 
 @section('main')
 <main>
+
+
     <div class="container my-5">
+        <!-- Sidebar -->
+<div class="col-md-3">
+    <div class="list-group shadow-lg rounded-3 overflow-hidden">
+        <a href="{{ route('user.profile') }}" class="list-group-item list-group-item-action active d-flex align-items-center">
+            <i class="bi bi-person-circle me-2"></i> Hồ Sơ
+        </a>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+            <i class="bi bi-wallet2 me-2"></i> Ví tiền
+        </a>
+        <a href="{{ route('user.orders') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+            <i class="bi bi-card-list me-2"></i> Đơn Hàng
+        </a>
+    </div>
+</div>
         <h2 class="text-center mb-4">🛍️ Lịch Sử Đơn Hàng</h2>
 
         @if ($orders->isEmpty())
@@ -40,13 +56,19 @@
                                 <td><strong class="text-danger">{{ number_format($order->total_price) }}₫</strong></td>
                                 <td>
                                     <span class="badge
-                                        @if($order->payment_status == 'waiting_payment') bg-secondary
-                                        @elseif($order->payment_status == 'pending') bg-warning
+                                        @if($order->payment_status == 'pending') bg-warning
+                                        @elseif($order->payment_status == 'confirmed') bg-info
+                                        @elseif($order->payment_status == 'preparing') bg-primary
+                                        @elseif($order->payment_status == 'handed_over') bg-dark
                                         @elseif($order->payment_status == 'shipping') bg-primary
                                         @elseif($order->payment_status == 'completed') bg-success
-                                        @else bg-danger @endif">
-                                        {{ \App\Models\Order::PAYMENT_STATUS[$order->payment_status] ?? 'Không xác định' }}
+                                        @elseif($order->payment_status == 'cancelled') bg-danger
+                                        @elseif($order->payment_status == 'failed') bg-danger
+                                        @elseif($order->payment_status == 'refunded') bg-secondary
+                                        @else bg-secondary @endif">
+                                        {{ \App\Models\Order::ORDER_STATUS[$order->payment_status] ?? 'Không xác định' }}
                                     </span>
+
                                 </td>
                                 <td>
                                     <a href="{{ route('user.order.detail', $order->id) }}" class="btn btn-sm btn-info">Xem</a>

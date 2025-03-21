@@ -28,7 +28,7 @@ class ClientOrderController extends Controller
             ->get();
 
         // Tính tổng tiền trước giảm giá
-        $cartTotalBeforeDiscount = $cartItems->sum(fn($item) => $item->quantity * $item->price);
+        $cartTotalBeforeDiscount = $cartItems->sum(fn($item) => $item->quantity * $item->price + 30000); // 30000 là phí vận chuyển cố định
 
         // Giả lập giảm giá nếu có mã giảm giá
         $cartDiscount = session('cart_discount', 0);
@@ -114,25 +114,30 @@ public function placeOrder(Request $request)
         }
     }
 
-        //Lấy id voucher đã áp dụng
-        if (session('id_voucher')) {
-            $voucherId = session('id_voucher');
-        }
-        // Kiểm tra voucher (nếu có)
-        if ($voucherId) {
-            $voucher = Voucher::find($voucherId);
-            if ($voucher && $voucher->quantity > 0) {
-                $discountAmount = session('discount_amount');
-                $voucher->quantity -= 1;
-                $voucher->save();
+         // Kiểm tra voucher nếu có
+            $voucherId = session('id_voucher') ?? null; // Lấy voucher từ session
+            $discountAmount = 0; // Mặc định không có giảm giá
+            $voucher = null;
 
-                User_voucher::create([
-                    'id_user' => $user->id,
-                    'id_voucher' => $voucher->id,
-                ]);
+            if ($voucherId) { // Chỉ kiểm tra nếu có voucher
+                $voucher = Voucher::find($voucherId);
+                if ($voucher && $voucher->quantity > 0) {
+                    $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
+                    $voucher->quantity -= 1;
+                    $voucher->save();
+
+                    User_voucher::create([
+                        'id_user' => $user->id,
+                        'id_voucher' => $voucher->id,
+                    ]);
+                }
             }
-        }
 
+    // Tính tổng tiền của các sản phẩm trong giỏ hàng
+    $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
+    $shippingFee = 30000; // Phí vận chuyển
+
+    // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
     // Tính toán giảm giá
     $discountAmount = session('discount_amount');
     $totalAfterDiscount = session('cart_total_after_discount');
@@ -143,9 +148,9 @@ public function placeOrder(Request $request)
         'phone' => $request->phone,
         'shipping_address' => $request->shipping_address,
         'id_user' => Auth::id(),
-        'total_price' => $totalAfterDiscount,
+        'total_price' => $voucher ? $totalAfterDiscount : $cartTotal + $shippingFee, // Nếu không có voucher thì cộng phí ship
         'id_voucher' => $voucher ? $voucher->id : null,
-        'discount_amount' => $discountAmount,
+        'discount_amount' => $voucher ? $discountAmount : 0, // Nếu không có voucher thì giảm giá = 0
         'payment_method' => $request->payment_method,
         'status' => 'pending',
     ]);
