@@ -56,13 +56,19 @@
                                 <td><strong class="text-danger">{{ number_format($order->total_price) }}₫</strong></td>
                                 <td>
                                     <span class="badge
-                                        @if($order->payment_status == 'waiting_payment') bg-secondary
-                                        @elseif($order->payment_status == 'pending') bg-warning
+                                        @if($order->payment_status == 'pending') bg-warning
+                                        @elseif($order->payment_status == 'confirmed') bg-info
+                                        @elseif($order->payment_status == 'preparing') bg-primary
+                                        @elseif($order->payment_status == 'handed_over') bg-dark
                                         @elseif($order->payment_status == 'shipping') bg-primary
                                         @elseif($order->payment_status == 'completed') bg-success
-                                        @else bg-danger @endif">
-                                        {{ \App\Models\Order::PAYMENT_STATUS[$order->payment_status] ?? 'Không xác định' }}
+                                        @elseif($order->payment_status == 'cancelled') bg-danger
+                                        @elseif($order->payment_status == 'failed') bg-danger
+                                        @elseif($order->payment_status == 'refunded') bg-secondary
+                                        @else bg-secondary @endif">
+                                        {{ \App\Models\Order::ORDER_STATUS[$order->payment_status] ?? 'Không xác định' }}
                                     </span>
+
                                 </td>
                                 <td>
                                     <a href="{{ route('user.order.detail', $order->id) }}" class="btn btn-sm btn-info">Xem</a>
