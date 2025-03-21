@@ -184,9 +184,9 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ route('cart.index') }}" class="minicart-btn">
+                                            <a href="#" class="minicart-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <div class="notification">10</div>
+                                                <div class="notification">2</div>
                                             </a>
                                         </li>
                                     </ul>
@@ -673,6 +673,77 @@
         </div>
     </div>
     <!-- Quick view modal end -->
+
+    @php
+    
+
+    $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->variant->product->price);
+    $shippingFee = 30000; // Phí vận chuyển cố định
+    $discount = 0; // Tạm thời không có mã giảm giá
+    $total = $subtotal + $shippingFee - $discount;
+@endphp
+
+<div class="offcanvas-minicart-wrapper">
+    <div class="minicart-inner">
+        <div class="offcanvas-overlay"></div>
+        <div class="minicart-inner-content">
+            <div class="minicart-close">
+                <i class="pe-7s-close"></i>
+            </div>
+            <div class="minicart-content-box">
+                <div class="minicart-item-wrapper">
+                    <ul>
+                        @foreach ($cartItems as $item)
+                            <li class="minicart-item">
+                                <div class="minicart-thumb">
+                                    <a href="#">
+                                        <img src="{{ asset('storage/' . $item->variant->images->first()->image_path ?? 'default.png') }}" 
+                                        alt="{{ $item->variant->product->name }}" 
+                                         onerror="this.onerror=null; this.src='{{ asset('assets/img/default.png') }}';">
+
+                                    </a>
+                                </div>
+                                <div class="minicart-content">
+                                    <h3 class="product-name">
+                                        <a href="#">{{ $item->variant->product->name }}</a>
+                                    </h3>
+                                    <p>
+                                        <span class="cart-quantity">{{ $item->quantity }} <strong>&times;</strong></span>
+                                        <span class="cart-price">{{ number_format($item->variant->product->price, 0) }} VND</span>
+                                    </p>
+                                </div>
+                                <button class="minicart-remove" data-id="{{ $item->id }}">
+                                    <i class="pe-7s-close"></i>
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="minicart-pricing-box">
+                    <ul>
+                        <li><span>Tổng giá sản phẩm</span><span><strong>{{ number_format($subtotal, 0) }} VND</strong></span></li>
+                        <li><span>Mã giảm giá</span><span><strong>- {{ number_format($discount, 0) }} VND</strong></span></li>
+                        <li><span>Phí vận chuyển</span><span><strong>{{ number_format($shippingFee, 0) }} VND</strong></span></li>
+                        <li class="total">
+                            <span>Tổng tiền đơn hàng</span>
+                            <span><strong>{{ number_format($total, 0) }} VND</strong></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="minicart-button">
+                    <a href="{{ route('cart.index') }}"><i class="fa fa-shopping-cart"></i> Xem giỏ hàng</a>
+                    <a href="{{ route('checkout') }}"><i class="fa fa-share"></i> Thanh toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    
 
 
     <!-- JS
