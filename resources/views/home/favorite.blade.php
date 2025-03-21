@@ -29,22 +29,24 @@
                                 @foreach($favoriteItems as $item)
                                 <tr>
                                     <td class="pro-thumbnail">
-                                        @if($item->variant && $item->variant->images->isNotEmpty())
-                                        <img src="{{ asset($item->variant->images->first()->url) }}" alt="{{ $item->variant->product->name }}" class="img-fluid">
+                                        @if($item->product && $item->product->images->isNotEmpty())    
+                                                
+                                        <img src="{{ asset($item->product->images->first()->image_url) }}" alt="{{ $item->product->name }}" class="img-fluid">
                                         @else
                                         <img src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image" class="img-fluid">
                                         @endif
                                     </td>
+
                                     <td class="pro-title">
-                                        @if($item->variant)
-                                        <h2>{{ $item->variant->product->name }}</h2>
+                                        @if($item->product)
+                                        <h2>{{ $item->product->name }}</h2>
                                         @else
                                         <h2>Unknown Product</h2>
                                         @endif
                                     </td>
                                     <td class="pro-price">
-                                        @if($item->variant)
-                                        <span>{{ number_format($item->variant->price, 0, ',', '.') }} VNĐ</span>
+                                        @if($item->product)
+                                        <span>{{ number_format($item->product->price, 0, ',', '.') }} VNĐ</span>
                                         @else
                                         <span>Unknown Price</span>
                                         @endif

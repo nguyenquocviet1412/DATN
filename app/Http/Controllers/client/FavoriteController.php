@@ -16,7 +16,7 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
         $favoriteItems = favorite::where('id_user', $user->id)
-            ->with(['variant.product', 'variant.images' , 'variant.price'])
+            ->with(['product.images']) // Load quan hệ product và images
             ->get();
         $favoriteProductIds = $favoriteItems->pluck('id_product')->toArray();
         return view('home.favorite', compact('favoriteItems', 'favoriteProductIds'));
