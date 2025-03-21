@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\favorite;
 use App\Models\Post;
 use App\Models\Product;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -62,8 +64,8 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts','latestPosts'));
+            $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts','latestPosts','favoriteProductIds'));
 
     }
 
