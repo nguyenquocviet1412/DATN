@@ -155,7 +155,7 @@
                                             <ul class="dropdown-list">
                                                 @if(Auth::guard('web')->check())
                                                 {{-- Người dùng (User) đã đăng nhập --}}
-                                                <li><a href="">Tài khoản của tôi</a></li>
+                                                <li><a href="{{ route('user.profile')}}">Tài khoản của tôi</a></li>
                                                 <li><a href="{{route('user.orders')}}">Đơn hàng</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}"
