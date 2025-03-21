@@ -130,50 +130,54 @@
             </div>
         </div>
 
-        <div class="row mt-5">
-            <div class="col-md-12">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3>Sản phẩm liên quan</h3>
-                    <a href="{{ route('filter-product', $product->category->id) }}" class="btn btn-primary btn-sm">
-                        Xem tất cả
-                    </a>
-                </div>
-                <div class="row g-4">
-                    @foreach ($relatedProducts as $relatedProduct)
-                        <div class="col-md-3">
-                            <div class="card mb-4 shadow-sm">
-                                <div class="overflow-hidden" style="height: 200px;">
-                                    <img src="{{ asset($relatedProduct->image_url) }}" 
-                                         class="card-img-top" 
-                                         alt="{{ $relatedProduct->name }}"
-                                         style="height: 100%; object-fit: cover;">
-                                </div>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title fw-bold">{{ $relatedProduct->name }}</h5>
-                                    <p class="card-text text-danger fw-bold">
-                                        {{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ
-                                    </p>
-                                    <p class="card-text">Đã bán {{ $relatedProduct->sold_count }}</p>
-
-                                    <!-- Hiển thị đánh giá sao vàng -->
-                                    <div class="mb-2">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i class="fas fa-star {{ $i <= $relatedProduct->average_rating ? 'text-warning' : 'text-secondary' }}"></i>
-                                        @endfor
-                                        
-                                    </div>
-
-                                    <a href="{{ route('product.show', $relatedProduct->id) }}" 
-                                       class="btn btn-sm btn-outline-secondary">
-                                        Xem chi tiết
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+   {{-- // Hiển thị sản phẩm liên quan --}}
+    <div class="row mt-5">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>Sản phẩm liên quan</h3>
+            <a href="{{ route('filter-product', $product->category->id) }}" class="btn btn-primary btn-sm">
+                Xem tất cả
+            </a>
         </div>
+        <div class="row g-4">
+            @foreach ($relatedProducts as $relatedProduct)
+                <div class="col-md-3">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="overflow-hidden" style="height: 200px;">
+                            <a href="{{ route('product.show', $relatedProduct->id) }}">
+                                <img src="{{ asset($relatedProduct->image_url) }}" 
+                                     class="card-img-top" 
+                                     alt="{{ $relatedProduct->name }}"
+                                     style="height: 100%; object-fit: cover;">
+                            </a>
+                        </div>
+                        <div class="card-body text-center">
+                            <a href="{{ route('product.show', $relatedProduct->id) }}" class="text-decoration-none text-dark">
+                                <h5 class="card-title fw-bold">{{ $relatedProduct->name }}</h5>
+                            </a>
+                            <p class="card-text text-danger fw-bold">
+                                {{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ
+                            </p>
+                            <p class="card-text">Đã bán {{ $relatedProduct->sold_count }}</p>
+
+                            <!-- Hiển thị đánh giá sao vàng -->
+                            <div class="mb-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star {{ $i <= $relatedProduct->average_rating ? 'text-warning' : 'text-secondary' }}"></i>
+                                @endfor
+                            </div>
+
+                            <a href="{{ route('product.show', $relatedProduct->id) }}" 
+                               class="btn btn-sm btn-outline-secondary">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
     </div>
 </main>
 
