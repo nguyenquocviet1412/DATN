@@ -127,12 +127,16 @@ public function getTotalBeforeDiscountAttribute()
 {
     return $this->orderItems->sum('subtotal');
 }
-const PAYMENT_STATUS = [
-    'waiting_payment' => 'Chờ thanh toán',
-    'pending' => 'Chờ xử lý',
-    'shipping' => 'Đang vận chuyển',
-    'completed' => 'Hoàn tất',
-    'failed' => 'Thất bại'
+const ORDER_STATUS = [
+    'pending' => 'Chờ xử lý',  // Đã đặt hàng nhưng chưa được xử lý
+    'confirmed' => 'Đã xác nhận',  // Đơn hàng đã được xác nhận
+    'preparing' => 'Đang chuẩn bị hàng',  // Đang đóng gói sản phẩm
+    'handed_over' => 'Đã bàn giao cho đơn vị vận chuyển',  // Giao cho đơn vị vận chuyển
+    'shipping' => 'Đang vận chuyển',  // Đang giao hàng
+    'completed' => 'Giao hàng thành công',  // Đã giao hàng thành công & hoàn tất đơn hàng
+    'cancelled' => 'Đã hủy',  // Đơn hàng bị hủy
+    'failed' => 'Thất bại',  // Thanh toán thất bại hoặc lỗi đơn hàng
+    'refunded' => 'Đã hoàn tiền'  // Hoàn tiền cho khách hàng
 ];
 
 const PAYMENT_METHOD = [

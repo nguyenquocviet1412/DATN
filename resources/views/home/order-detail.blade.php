@@ -73,7 +73,7 @@
                                 <img src="{{ asset($item->variant->images->first()->image_url ?? 'default-image.jpg') }}" alt="Ảnh sản phẩm" width="50">
                             </td>
                             <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
-                            <td>{{ $item->variant->size->name ?? '-' }}</td>
+                            <td>{{ $item->variant->size->size ?? '-' }}</td>
                             <td>{{ $item->variant->color->name ?? '-' }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price) }}₫</td>
