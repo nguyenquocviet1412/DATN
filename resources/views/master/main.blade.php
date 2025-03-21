@@ -38,10 +38,10 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 
     <!-- Bootstrap 5 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Bootstrap Icons (tùy chọn) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-</head>
+</head> --}}
 
 <body>
     <!-- Bootstrap Toast Container -->
@@ -159,7 +159,7 @@
                                             <ul class="dropdown-list">
                                                 @if(Auth::guard('web')->check())
                                                 {{-- Người dùng (User) đã đăng nhập --}}
-                                                <li><a href="">Tài khoản của tôi</a></li>
+                                                <li><a href="{{ route('user.profile')}}">Tài khoản của tôi</a></li>
                                                 <li><a href="{{route('user.orders')}}">Đơn hàng</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}"
@@ -395,7 +395,7 @@
                 </div>
             </div>
         </aside>
-        <div class="p-2 filter-box" style="max-width: 1100px; margin: auto; border: none;">
+        {{-- <div class="p-2 filter-box" style="max-width: 1100px; margin: auto; border: none;">
             <h6 class="mb-2 text-primary fw-bold">🔍 Bộ lọc sản phẩm</h6>
             <form method="GET" action="{{ route('products.index') }}">
                 <div class="row g-2 align-items-center">
@@ -430,7 +430,7 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </div> --}}
 
 
 

@@ -1,4 +1,4 @@
-{{-- filepath: c:\laragon\www\DATN\resources\views\home\detailproduct.blade.php --}}
+
 @extends('master.main')
 @section('title', 'Chi tiết sản phẩm')
 @section('main')
