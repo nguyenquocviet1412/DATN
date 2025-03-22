@@ -29,7 +29,7 @@
             <div class="section-bg-color">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="cart-table table-responsive">
+                        <div class="cart-table ">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -53,13 +53,13 @@
                                             <a href="{{route('product.show',$item->variant->product->id)}}">
                                                 {{ optional($item->variant->product)->name }}
                                             </a>
-                                                <select class="variant-select" data-id="{{ $item->id }}">
-                                                    @foreach ($item->variant->product->variants as $variant)
-                                                        <option value="{{ $variant->id }}" {{ $variant->id == $item->variant->id ? 'selected' : '' }}>
-                                                            {{ optional($variant->color)->name }}, {{ optional($variant->size)->size }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                            <select class="variant-select" data-id="{{ $item->id }}">
+                                                @foreach ($item->variant->product->variants as $variant)
+                                                <option value="{{ $variant->id }}" {{ $variant->id == $item->variant->id ? 'selected' : '' }}>
+                                                    {{ optional($variant->color)->name }}, {{ optional($variant->size)->size }}
+                                                </option>
+                                                @endforeach
+                                            </select>
 
                                         </td>
                                         <td class="pro-price">
@@ -118,86 +118,88 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        function updateCartQuantity(id, quantity) {
-            fetch(`/cart/update/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ quantity: quantity })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === 'Cập nhật thành công') {
-                    updateCart();
-                } else {
-                    alert(data.message);
-                }
+            function updateCartQuantity(id, quantity) {
+                fetch(`/cart/update/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            quantity: quantity
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Cập nhật thành công') {
+                            updateCart();
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+            }
+
+
+
+            document.querySelectorAll('.update-cart').forEach(input => {
+                input.addEventListener('change', function() {
+                    let id = this.dataset.id;
+                    let quantity = parseInt(this.value);
+                    if (quantity < 1) quantity = 1;
+                    updateCartQuantity(id, quantity);
+                });
             });
-        }
 
-
-
-        document.querySelectorAll('.update-cart').forEach(input => {
-            input.addEventListener('change', function() {
-                let id = this.dataset.id;
-                let quantity = parseInt(this.value);
-                if (quantity < 1) quantity = 1;
-                updateCartQuantity(id, quantity);
+            document.querySelectorAll('.btn-increase').forEach(button => {
+                button.addEventListener('click', function() {
+                    let input = this.parentNode.querySelector('.update-cart');
+                    let id = input.dataset.id;
+                    let quantity = parseInt(input.value) + 1;
+                    input.value = quantity;
+                    updateCartQuantity(id, quantity);
+                });
             });
+
+            document.querySelectorAll('.btn-decrease').forEach(button => {
+                button.addEventListener('click', function() {
+                    let input = this.parentNode.querySelector('.update-cart');
+                    let id = input.dataset.id;
+                    let quantity = parseInt(input.value) - 1;
+                    if (quantity < 1) quantity = 1;
+                    input.value = quantity;
+                    updateCartQuantity(id, quantity);
+                });
+            });
+
+            function updateCart() {
+                let subtotal = 0; // Biến tổng phụ
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const quantityInput = row.querySelector('.update-cart');
+                    if (!quantityInput) return;
+
+                    const quantity = parseInt(quantityInput.value);
+                    const priceText = row.querySelector('.pro-price span').textContent.replace(/[^0-9]/g, "");
+                    const price = parseInt(priceText); // Chuyển về số nguyên đúng
+
+                    const itemSubtotal = quantity * price; // Tổng tiền của từng sản phẩm
+                    subtotal += itemSubtotal; // Cộng dồn tổng phụ
+
+                    // Cập nhật tổng tiền của sản phẩm đó
+                    row.querySelector('.pro-subtotal span').textContent = itemSubtotal.toLocaleString('vi-VN') + " VNĐ";
+                });
+
+                // Cập nhật tổng giỏ hàng
+                document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN') + " VNĐ";
+
+                const shippingFee = 30000; // Phí vận chuyển
+                const total = subtotal + shippingFee; // Tổng tiền giỏ hàng
+
+                // Cập nhật tổng cộng
+                document.getElementById('total').textContent = total.toLocaleString('vi-VN') + " VNĐ";
+            }
+
         });
-
-        document.querySelectorAll('.btn-increase').forEach(button => {
-            button.addEventListener('click', function() {
-                let input = this.parentNode.querySelector('.update-cart');
-                let id = input.dataset.id;
-                let quantity = parseInt(input.value) + 1;
-                input.value = quantity;
-                updateCartQuantity(id, quantity);
-            });
-        });
-
-        document.querySelectorAll('.btn-decrease').forEach(button => {
-            button.addEventListener('click', function() {
-                let input = this.parentNode.querySelector('.update-cart');
-                let id = input.dataset.id;
-                let quantity = parseInt(input.value) - 1;
-                if (quantity < 1) quantity = 1;
-                input.value = quantity;
-                updateCartQuantity(id, quantity);
-            });
-        });
-
-        function updateCart() {
-            let subtotal = 0; // Biến tổng phụ
-
-            document.querySelectorAll('tbody tr').forEach(row => {
-                const quantityInput = row.querySelector('.update-cart');
-                if (!quantityInput) return;
-
-                const quantity = parseInt(quantityInput.value);
-                const priceText = row.querySelector('.pro-price span').textContent.replace(/[^0-9]/g, "");
-                const price = parseInt(priceText); // Chuyển về số nguyên đúng
-
-                const itemSubtotal = quantity * price; // Tổng tiền của từng sản phẩm
-                subtotal += itemSubtotal; // Cộng dồn tổng phụ
-
-                // Cập nhật tổng tiền của sản phẩm đó
-                row.querySelector('.pro-subtotal span').textContent = itemSubtotal.toLocaleString('vi-VN') + " VNĐ";
-            });
-
-            // Cập nhật tổng giỏ hàng
-            document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN') + " VNĐ";
-
-            const shippingFee = 30000; // Phí vận chuyển
-            const total = subtotal + shippingFee; // Tổng tiền giỏ hàng
-
-            // Cập nhật tổng cộng
-            document.getElementById('total').textContent = total.toLocaleString('vi-VN') + " VNĐ";
-        }
-
-    });
 
         document.querySelectorAll('.remove-cart-item').forEach(button => {
             button.addEventListener('click', function(e) {
@@ -205,15 +207,17 @@
                 let id = this.dataset.id;
 
                 fetch(`/cart/remove/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Xóa sản phẩm thành công') {
-                        this.closest('tr').remove();
-                        updateCart();
-                    }
-                });
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    }).then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Xóa sản phẩm thành công') {
+                            this.closest('tr').remove();
+                            updateCart();
+                        }
+                    });
             });
         });
 
@@ -223,18 +227,22 @@
                 let variantId = this.value;
 
                 fetch(`/cart/update-variant/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ variant_id: variantId })
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Cập nhật thành công') {
-                        location.reload(); // Reload the page to reflect changes
-                    }
-                });
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            variant_id: variantId
+                        })
+                    }).then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Cập nhật thành công') {
+                            location.reload(); // Reload the page to reflect changes
+                        }
+                    });
             });
         });
-
     </script>
     <!-- cart main wrapper end -->
 </main>
@@ -250,6 +258,61 @@
         text-align: center;
         border: 1px solid #ddd;
         margin: 0 5px;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .quantity-input .btn {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        color: #495057;
+        padding: 6px;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .quantity-input .btn:hover {
+        background-color: #e2e6ea;
+    }
+
+    .quantity-input input {
+        width: 60px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .quantity-input input:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .variant-select {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .variant-select:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
 </style>
 @endsection
