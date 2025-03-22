@@ -36,6 +36,7 @@ use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
 use App\Http\Controllers\client\UserControllerClient;
 use App\Http\Controllers\FilterProductController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +63,7 @@ Route::post('/logout', [AuthController::class, 'logoutUser'])->name('logout');
 
 //Route home
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/products', [FilterProductController::class, 'index'])->name('products.index');
-Route::get('/filter-product', [FilterProductController::class, 'index'])->name('filter-product');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 // chi tiết sản phẩm
 Route::get('/product/{id}', [DetailProductController::class, 'show'])->name('product.show');
