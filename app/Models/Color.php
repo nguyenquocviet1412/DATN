@@ -11,5 +11,9 @@ class Color extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name'];
+    public function variants()
+{
+    return $this->hasMany(Variant::class, 'id_color');
+}
 }
 

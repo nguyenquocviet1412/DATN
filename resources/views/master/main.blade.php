@@ -38,7 +38,9 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <!-- responsive css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
@@ -117,19 +119,11 @@
                                                 <a href="">Danh mục <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     @foreach ($categories as $category)
-                                                    <li><a href="{{ route('filter-product', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
+                                                    <li><a href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </li>
-                                            <li><a href="shop.html">Cửa hàng <i class="fa"></i></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="#">Bố cục cửa hàng <i class="fa fa-angle-right"></i></a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="shop.html">Cửa hàng - Thanh bên trái</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                            <li><a href="{{route('shop.index')}}">Cửa hàng <i class="fa"></i></a> </li>
                                             <li><a href="{{route('blogs.index')}}">Blog </a> </li>
                                             <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
@@ -145,8 +139,8 @@
                             <div class="header-right d-flex align-items-center justify-content-xl-between justify-content-lg-end">
                                 <div class="header-search-container">
                                     <button class="search-trigger d-xl-none d-lg-block"><i class="pe-7s-search"></i></button>
-                                    <form class="header-search-box d-lg-none d-xl-block" method="GET" action="{{ route('filter-product') }}">
-                                        <input type="text" name="keyword" placeholder="Tìm kiếm..." value="{{ request('keyword') }}" class="header-search-field">
+                                    <form class="header-search-box d-lg-none d-xl-block" method="GET" action="{{ route('shop.index') }}">
+                                        <input type="text" name="keyword" placeholder="Tìm kiếm..." value="{{ request('search') }}" class="header-search-field">
                                         <button class="header-search-btn"> <i class="pe-7s-search"></i></button>
                                     </form>
                                 </div>
@@ -609,7 +603,7 @@
     </div>
     <!-- Quick view modal end -->
 
-    
+
     @php
     // Kiểm tra nếu giỏ hàng trống, tránh lỗi khi truy cập thuộc tính
     $subtotal = $cartItems->sum(fn($item) => $item->quantity * optional($item->variant)->price);
@@ -635,7 +629,7 @@
                             <li class="minicart-item">
                                 <div class="minicart-thumb">
                                     <a href="#">
-                                        <img class="img-fluid" src="{{ $variant->getThumbnailAttribute() ?? asset('images/default-thumbnail.jpg') }}" 
+                                        <img class="img-fluid" src="{{ $variant->getThumbnailAttribute() ?? asset('images/default-thumbnail.jpg') }}"
                                             alt="{{ $product->name ?? 'Sản phẩm không tồn tại' }}" />
                                     </a>
                                 </div>

@@ -15,4 +15,8 @@ class Category extends Model
     ];
 
     protected $dates = ['deleted_at']; // Trường deleted_at dùng để lưu thời gian xóa
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'id_category');
+    }
 }

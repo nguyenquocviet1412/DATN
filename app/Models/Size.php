@@ -11,5 +11,9 @@ class Size extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['size'];
+    public function variants()
+{
+    return $this->hasMany(Variant::class, 'id_size');
+}
 }
 
