@@ -29,8 +29,8 @@
                                 @foreach($favoriteItems as $item)
                                 <tr>
                                     <td class="pro-thumbnail">
-                                        @if($item->product && $item->product->images->isNotEmpty())    
-                                                
+                                        @if($item->product && $item->product->images->isNotEmpty())
+
                                         <img src="{{ asset($item->product->images->first()->image_url) }}" alt="{{ $item->product->name }}" class="img-fluid">
                                         @else
                                         <img src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image" class="img-fluid">
@@ -39,16 +39,16 @@
 
                                     <td class="pro-title">
                                         @if($item->product)
-                                        <h2>{{ $item->product->name }}</h2>
+                                        <h2><a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a></h2>
                                         @else
-                                        <h2>Unknown Product</h2>
+                                        <h2>Không có sản phẩm</h2>
                                         @endif
                                     </td>
                                     <td class="pro-price">
                                         @if($item->product)
                                         <span>{{ number_format($item->product->price, 0, ',', '.') }} VNĐ</span>
                                         @else
-                                        <span>Unknown Price</span>
+                                        <span>Không có giá</span>
                                         @endif
                                     </td>
                                     <td class="pro-remove">
