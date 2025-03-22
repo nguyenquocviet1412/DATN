@@ -36,6 +36,7 @@ use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
 use App\Http\Controllers\client\UserControllerClient;
 use App\Http\Controllers\FilterProductController;
+use Spatie\FlareClient\Http\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
     Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
+    Route::put('/order/confirm-receipt/{id}', [ClientOrderController::class, 'confirmReceipt'])->name('order.confirmReceipt');
 
     // Xử lý thanh toán
     Route::prefix('payment')->group(function () {
@@ -278,6 +280,7 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
         Route::put('/update/{id}', [OrderController::class, 'update'])->name('order.update');
         Route::delete('/delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+        Route::put('/order/confirm-receipt/{id}', [OrderController::class, 'confirmReceipt'])->name('order.confirmReceipt');
     });
     //route Post
     Route::prefix('post')->group(function () {

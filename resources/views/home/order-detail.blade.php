@@ -12,8 +12,14 @@
         <div class="card shadow-lg p-4 mb-4">
             <h4 class="text-primary">🛒 Thông tin đơn hàng</h4>
             <table class="table">
-                <tr><th>📅 Ngày đặt hàng:</th><td>{{ $order->created_at->format('d/m/Y H:i') }}</td></tr>
-                <tr><th>💳 Phương thức thanh toán:</th><td class="text-uppercase">{{ $order->payment_method }}</td></tr>
+                <tr>
+                    <th>📅 Ngày đặt hàng:</th>
+                    <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                </tr>
+                <tr>
+                    <th>💳 Phương thức thanh toán:</th>
+                    <td class="text-uppercase">{{ $order->payment_method }}</td>
+                </tr>
                 <tr>
                     <th>📦 Trạng thái đơn hàng:</th>
                     <td>
@@ -31,9 +37,18 @@
                 <div class="card shadow p-4 mb-4">
                     <h4 class="text-success">👤 Thông tin người đặt hàng</h4>
                     <table class="table">
-                        <tr><th>Họ tên:</th><td>{{ $order->user->fullname }}</td></tr>
-                        <tr><th>📞 Điện thoại:</th><td>{{ $order->user->phone }}</td></tr>
-                        <tr><th>✉️ Email:</th><td>{{ $order->user->email }}</td></tr>
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td>{{ $order->user->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <th>📞 Điện thoại:</th>
+                            <td>{{ $order->user->phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>✉️ Email:</th>
+                            <td>{{ $order->user->email }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -41,9 +56,18 @@
                 <div class="card shadow p-4 mb-4">
                     <h4 class="text-danger">🚚 Thông tin người nhận</h4>
                     <table class="table">
-                        <tr><th>Họ tên:</th><td>{{ $order->fullname ?? $order->user->fullname }}</td></tr>
-                        <tr><th>📞 Điện thoại:</th><td>{{ $order->phone ?? $order->user->phone }}</td></tr>
-                        <tr><th>📍 Địa chỉ giao hàng:</th><td>{{ $order->shipping_address }}</td></tr>
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td>{{ $order->fullname ?? $order->user->fullname }}</td>
+                        </tr>
+                        <tr>
+                            <th>📞 Điện thoại:</th>
+                            <td>{{ $order->phone ?? $order->user->phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>📍 Địa chỉ giao hàng:</th>
+                            <td>{{ $order->shipping_address }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -67,18 +91,18 @@
                 </thead>
                 <tbody>
                     @foreach ($order->orderItems as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <img src="{{ asset($item->variant->images->first()->image_url ?? 'default-image.jpg') }}" alt="Ảnh sản phẩm" width="50">
-                            </td>
-                            <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
-                            <td>{{ $item->variant->size->size ?? '-' }}</td>
-                            <td>{{ $item->variant->color->name ?? '-' }}</td>
-                            <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->price) }}₫</td>
-                            <td>{{ number_format($item->subtotal) }}₫</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>
+                            <img src="{{ asset($item->variant->images->first()->image_url ?? 'default-image.jpg') }}" alt="Ảnh sản phẩm" width="50">
+                        </td>
+                        <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
+                        <td>{{ $item->variant->size->size ?? '-' }}</td>
+                        <td>{{ $item->variant->color->name ?? '-' }}</td>
+                        <td>{{ $item->quantity }}</td>
+                        <td>{{ number_format($item->price) }}₫</td>
+                        <td>{{ number_format($item->subtotal) }}₫</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -91,8 +115,33 @@
 
         <div class="text-center mt-4">
             <a href="{{ route('user.orders') }}" class="btn btn-secondary">🔙 Quay lại</a>
+            @if ($order->payment_status == 'shipping')
+            <button id="confirm-receipt" class="btn btn-success">✅ Nhận hàng thành công</button>
+            @endif
         </div>
     </div>
 </main>
+
+<script>
+    document.getElementById('confirm-receipt')?.addEventListener('click', function() {
+        if (confirm('Bạn có chắc chắn đã nhận hàng thành công?')) {
+            fetch(`/order/confirm-receipt/{{ $order->id }}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Cập nhật thành công') {
+                        alert('Đơn hàng đã được cập nhật thành công.');
+                        location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+        }
+    });
+</script>
 
 @endsection
