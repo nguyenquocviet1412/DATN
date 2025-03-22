@@ -19,10 +19,10 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="pro-thumbnail">Thumbnail</th>
-                                    <th class="pro-title">Product</th>
-                                    <th class="pro-price">Price</th>
-                                    <th class="pro-remove">Remove</th>
+                                    <th class="pro-thumbnail">Hình Ảnh</th>
+                                    <th class="pro-title">Tên sản phẩm</th>
+                                    <th class="pro-price">Giá tiền</th>
+                                    <th class="pro-remove">Xóa sản phẩm</th>
                                 </tr>
                             </thead>
                             <tbody>
