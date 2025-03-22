@@ -57,5 +57,16 @@ class OrderController extends Controller
         LogHelper::logAction('Cập nhật đơn hàng: ' . $order->id);
         return redirect()->route('order.index')->with('success', 'Cập nhật đơn hàng thành công');
     }
-
+    public function confirmReceipt($id)
+    {
+        $order = Order::find($id);
+        if ($order) {
+            $order->payment_status = 'completed';
+            $order->save();
+    
+            return response()->json(['message' => 'Cập nhật thành công']);
+        }
+    
+        return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
+    }
 }
