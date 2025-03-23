@@ -210,6 +210,19 @@ public function placeOrder(Request $request)
         $order = Order::where('id', $id)->where('id_user', Auth::id())->firstOrFail();
         return view('home.order-detail', compact('order'));
     }
+
+    public function confirmReceipt($id)
+{
+    $order = Order::find($id);
+    if ($order) {
+        $order->payment_status = 'completed';
+        $order->save();
+
+        return response()->json(['message' => 'Cập nhật thành công']);
+    }
+
+    return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
+}
     private function calculateCartTotal()
 {
     // Giả sử bạn có model Cart để lấy giỏ hàng của user
