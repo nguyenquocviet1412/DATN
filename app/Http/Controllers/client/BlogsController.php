@@ -24,8 +24,8 @@ class BlogsController extends Controller
             $query->where('title', 'like', "%$search%");
         }
 
-        $posts = $query->orderBy($sortBy, $sortOrder)->get();
-
+        $posts = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+        
         return view('blogs.index', compact('posts', 'sortBy', 'sortOrder', 'search'));
     }
     public function details(string $id)

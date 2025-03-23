@@ -58,7 +58,7 @@
             <div class="col-md-6 text-center">
                 <p><strong>Hình ảnh:</strong></p>
                 @if($post->image)
-                    <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid rounded" alt="Hình ảnh bài viết" style="max-width: 100%; height: auto;">
+                    <img src="{{ asset('storage/app/' . $post->image) }}" class="img-fluid rounded" alt="Hình ảnh bài viết" style="max-width: 100%; height: auto;">
                 @else
                     <p class="text-muted">Không có hình ảnh</p>
                 @endif
