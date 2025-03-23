@@ -100,8 +100,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
     Route::get('/checkout-success', [ClientOrderController::class, 'success'])->name('order.success');
     Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');
+
+    // Đơn hàng
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
     Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
+        //Xác nhận đơn hàng
+        Route::post('/orders/{id}/receive', [ClientOrderController::class, 'markAsReceived'])->name('user.order.receive');
+        //Hủy đơn hàng
+        Route::post('/order/{order}/return-item/{item}', [ClientOrderController::class, 'returnItem'])->name('order.return-item');
     Route::put('/order/confirm-receipt/{id}', [ClientOrderController::class, 'confirmReceipt'])->name('order.confirmReceipt');
 
     // Xử lý thanh toán

@@ -3,6 +3,7 @@
 @section('main')
 
 <main>
+
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
         <div class="container">
@@ -12,7 +13,7 @@
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{route('home.index')}}"><i class="fa fa-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('shop.index')}}">shop</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">cart</li>
                             </ul>
                         </nav>
@@ -42,7 +43,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if ($cartItems->isEmpty())
+                                        <tr>
+                                            <td colspan="6" class="text-center">Không có sản phẩm nào trong giỏ hàng</td>
+                                        </tr>
+                                    @endif
                                     @foreach ($cartItems as $item)
+
                                     <tr>
                                         <td class="pro-thumbnail">
                                             <a href="{{route('product.show',$item->variant->product->id)}}">

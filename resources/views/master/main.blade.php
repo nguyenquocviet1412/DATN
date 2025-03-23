@@ -68,6 +68,34 @@
             </div>
         </div>
         @endif
+
+        @if(session('warning'))
+    <div class="toast align-items-center text-bg-warning border-0 shadow-lg fade show"
+        role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-autohide="true" data-bs-delay="4000">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center">
+                <i class="fa-solid fa-triangle-exclamation text-white me-2 toast-icon pulse"></i>  <!-- Icon cảnh báo động -->
+                <span>{{ session('warning') }}</span>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    @endif
+
+    @if(session('message'))
+    <div class="toast align-items-center text-bg-info border-0 shadow-lg fade show"
+        role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-autohide="true" data-bs-delay="3500">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center">
+                <i class="fa-solid fa-circle-info text-white me-2 toast-icon rotate"></i>  <!-- Icon thông tin động -->
+                <span>{{ session('message') }}</span>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    @endif
     </div>
 
     <!-- JavaScript: Hiển thị Toast -->
@@ -83,7 +111,38 @@
     </script>
     <!-- Bootstrap Bundle (đã có Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- CSS Animation -->
+<style>
+    /* Hiệu ứng rung nhẹ khi hiển thị */
+    .toast-icon {
+        font-size: 1.5rem;
+    }
+    .shake {
+        animation: shake 0.5s ease-in-out infinite alternate;
+    }
+    .pulse {
+        animation: pulse 1s ease-in-out infinite;
+    }
+    .rotate {
+        animation: rotate 1s linear infinite;
+    }
 
+    @keyframes shake {
+        0% { transform: translateX(-2px); }
+        100% { transform: translateX(2px); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.9; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 
     <!-- Start Header Area -->
     <header class="header-area header-wide">

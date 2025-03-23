@@ -98,23 +98,32 @@
                     </table>
 
                     {{-- Cập nhật trạng thái đơn hàng --}}
-                    <h3>Trạng thái đơn hàng</h3>
+                    <h3 class="mb-3">🚚 Trạng thái đơn hàng</h3>
                     <div class="form-group">
-                        <label for="payment_status">Trạng thái đơn hàng:</label>
-                        <select class="form-control" name="payment_status">
+                        <label for="payment_status" class="fw-bold">📌 Trạng thái đơn hàng:</label>
+                        <select class="form-select shadow-sm p-2 rounded" name="payment_status">
                             @foreach ([
-                                'waiting_payment' => 'Chờ thanh toán',
-                                'pending' => 'Chờ xử lý',
-                                'shipping' => 'Đang vận chuyển',
-                                'completed' => 'Hoàn tất',
-                                'failed' => 'Thất bại'
-                            ] as $key => $value)
-                                <option value="{{ $key }}" {{ $order->payment_status == $key ? 'selected' : '' }}>
-                                    {{ $value }}
+                                'waiting_payment' => ['Chờ thanh toán', 'secondary', 'bi-wallet2'],
+                                'pending' => ['Chờ xử lý', 'warning', 'bi-hourglass-split'],
+                                'confirmed' => ['Đã xác nhận', 'info', 'bi-check-circle'],
+                                'preparing' => ['Đang chuẩn bị hàng', 'primary', 'bi-box-seam'],
+                                'handed_over' => ['Đã bàn giao cho vận chuyển', 'dark', 'bi-truck'],
+                                'shipping' => ['Đang vận chuyển', 'primary', 'bi-truck'],
+                                'completed' => ['Giao hàng thành công', 'success', 'bi-check2-circle'],
+                                'return_processing' => ['Đang xử lý trả hàng hoàn tiền', 'warning', 'bi-arrow-clockwise'],
+                                'refunded' => ['Đã hoàn tiền', 'secondary', 'bi-arrow-counterclockwise'],
+                                'cancelled' => ['Đã hủy', 'danger', 'bi-x-circle'],
+                                'failed' => ['Thất bại', 'danger', 'bi-exclamation-triangle'],
+                            ] as $key => [$label, $badgeColor, $icon])
+                                <option value="{{ $key }}"
+                                    class="fw-bold text-{{ $badgeColor }}"
+                                    {{ $order->payment_status == $key ? 'selected' : '' }}>
+                                    <i class="bi {{ $icon }}"></i> {{ $label }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
+
 
                     {{-- Cập nhật phương thức thanh toán --}}
                     <h3>Phương thức thanh toán</h3>
