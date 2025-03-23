@@ -21,7 +21,7 @@ class Variant extends Model
     // Quan hệ với màu sắc
     public function color()
     {
-        return $this->belongsTo(Color::class, 'id_color');
+        return $this->belongsTo(Color::class, 'id_color','id');
     }
 
     // Quan hệ với size

@@ -8,163 +8,204 @@
 {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
 <div class="shop-main-wrapper section-padding">
     <div class="container">
-        <div class="row d-flex gap-3">
-            <!-- Sidebar bộ lọc (Bên trái) -->
+        <div class="row g-4">
+            <!-- Sidebar -->
             <div class="col-lg-3">
-                <aside class="sidebar-wrapper p-3 shadow-sm bg-light">
+                <aside class="sidebar-wrapper p-4 shadow-sm bg-light rounded">
                     <form method="GET" action="{{ route('shop.index') }}">
 
                         <!-- Danh mục -->
-                        <div class="sidebar-single mb-3">
-                            <h5 class="sidebar-title text-start ps-2">Danh mục</h5>
-                            <div class="sidebar-body">
-                                <ul class="list-unstyled ps-2">
-                                    @foreach ($categories as $category)
-                                        <li class="py-1">
-                                            <a href="?id_category={{ $category->id }}" class="text-dark text-decoration-none">
-                                                {{ $category->name }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="sidebar-single mb-4 pb-3 border-bottom">
+                            <h5 class="sidebar-title text-start ps-2 fw-bold mb-3">Danh mục</h5>
+                            <ul class="list-unstyled ps-2">
+                                @foreach ($categories as $category)
+                                    <li class="py-1">
+                                        <a href="?id_category={{ $category->id }}" class="text-dark text-decoration-none">
+                                            {{ $category->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
 
                         <!-- Màu sắc -->
-                        <div class="sidebar-single mb-3">
-                            <h5 class="sidebar-title text-start ps-2">Màu sắc</h5>
-                            <div class="sidebar-body">
-                                <ul class="list-unstyled ps-2">
-                                    @foreach ($colors as $color)
-                                        <li class="py-1">
-                                            <input type="checkbox" name="color_id[]" value="{{ $color->id }}" class="me-1">
-                                            {{ $color->name }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="sidebar-single mb-4 pb-3 border-bottom">
+                            <h5 class="sidebar-title fw-bold mb-3">Màu sắc</h5>
+                            @foreach ($colors as $color)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="id_color[]"
+                                        value="{{ $color->id }}" id="color_{{ $color->id }}"
+                                        {{ request()->has('id_color') && in_array($color->id, (array) request('id_color')) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="color_{{ $color->id }}">
+                                        {{ $color->name }}
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
 
-                        <!-- Kích thước (Sửa lỗi dropdown và khoảng cách) -->
-                        <div class="sidebar-single mb-4 pb-2"> <!-- Thêm mb-4 để tạo khoảng cách -->
-                            <h5 class="sidebar-title text-start ps-2">Kích Thước</h5>
-                            <div class="sidebar-body">
-                                <select name="size_id" class="form-select border-0 ps-2">
-                                    <option value="">Chọn kích thước</option>
-                                    @foreach ($sizes as $size)
-                                        <option value="{{ $size->id }}">{{ $size->size }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <!-- Kích thước -->
+                        <div class="mb-5 pb-3 border-bottom">
+                            <label for="sizeFilter" class="form-label fw-bold mb-3">Chọn kích thước</label>
+                            <select name="id_size" id="sizeFilter" class="form-select">
+                                <option value="">Tất cả kích thước</option>
+                                @foreach($sizes as $size)
+                                    <option value="{{ $size->id }}" {{ request('id_size') == $size->id ? 'selected' : '' }}>
+                                        {{ $size->size }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <!-- Khoảng giá -->
-                        <div class="sidebar-single mt-5 mb-3">
-                            <h5 class="sidebar-title text-start ps-2">Khoảng giá</h5>
-                            <div class="sidebar-body ps-2">
-                                <div class="d-flex justify-content-between">
-                                    <span>0 VNĐ</span>
-                                    <span id="maxPriceLabel">0 VNĐ</span>
-                                </div>
-                                <input type="range" id="priceRange" min="0" max="10000000" step="100000"
-                                value="10000000" class="form-range" oninput="updatePrice()">
-                                <input type="hidden" name="max_price" id="maxPriceInput" value="10000000">
-
+                        <div class="sidebar-single mt-5 mb-4">
+                            <h5 class="sidebar-title fw-bold mb-3">Khoảng giá</h5>
+                            <div class="d-flex justify-content-between">
+                                <span>0 VNĐ</span>
+                                <span id="maxPriceLabel">10.000.000 VNĐ</span>
                             </div>
+                            <input type="range" id="priceRange" min="0" max="10000000" step="100000"
+                                value="10000000" class="form-range" oninput="updatePrice()">
+                            <input type="hidden" name="max_price" id="maxPriceInput" value="10000000">
                         </div>
 
-                        <script>
-                            function updatePrice() {
-                                let priceRange = document.getElementById("priceRange");
-                                let maxLabel = document.getElementById("maxPriceLabel");
-                                let maxInput = document.getElementById("maxPriceInput");
-
-                                let maxValue = parseInt(priceRange.value);
-
-                                // Cập nhật giá trị hiển thị
-                                maxLabel.textContent = new Intl.NumberFormat('vi-VN').format(maxValue) + " VNĐ";
-                                maxInput.value = maxValue;
-                            }
-
-                            // Đảm bảo thanh trượt ở mức tối đa khi load trang
-                            document.addEventListener("DOMContentLoaded", function() {
-                                document.getElementById("priceRange").value = 10000000;
-                                updatePrice();
-                            });
-                        </script>
-
-                        <!-- Nút lọc -->
-                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">Lọc</button>
                     </form>
                 </aside>
+
             </div>
 
-            <!-- Hiển thị sản phẩm (Bên phải) -->
-            <div class="col-lg-8">
-                <div class="shop-product-wrapper">
-                    <div class="row">
-                        @foreach ($products as $product)
-                            <div class="col-md-4 col-sm-6 mb-4">
-                                <div class="product-item border rounded shadow-sm p-3 position-relative">
-                                    <figure class="product-thumb position-relative">
-                                        <!-- Hình ảnh sản phẩm -->
-                                        <a href="{{ route('product.show', $product->id) }}" class="image-container d-block">
-                                            <img src="{{ $product->thumbnail }}" class="img-fluid rounded" alt="{{ $product->name }}">
-                                        </a>
+            <!-- Danh sách sản phẩm -->
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold">Danh sách sản phẩm</h5>
 
-                                        <!-- Huy hiệu "Mới" -->
-                                        @if($product->is_new)
-                                            <div class="product-badge">
-                                                <span class="badge bg-danger position-absolute top-0 start-0 m-2">Mới</span>
-                                            </div>
-                                        @endif
-
-                                        <!-- Nhóm nút thao tác -->
-                                        <div class="button-group position-absolute top-0 end-0 m-2">
-                                            <!-- Yêu thích -->
-                                            <div class="button-group">
-                                                <form action="{{ route('favorites.store') }}" method="POST" class="favorite-form">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                    <button type="submit" class="btn btn-add-to-wishlist" data-product-id="{{ $product->id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào danh sách yêu thích">
-                                                        <i class="fa fa-heart {{ in_array($product->id, $favoriteProductIds) ? 'text-danger' : '' }}"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view">
-                                                    <span data-bs-toggle="tooltip" data-bs-placement="left" title="Xem nhanh">
-                                                        <i class="pe-7s-search"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </figure>
-
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="product-caption text-center mt-3">
-                                        <h6 class="product-name">
-                                            <a href="{{ route('product.show', $product->id) }}" class="text-dark text-decoration-none">
-                                                {{ $product->name }}
-                                            </a>
-                                        </h6>
-                                        <div class="price-box">
-                                            <span class="price-regular text-danger fw-bold">
-                                                {{ number_format($product->price, 0, ',', '.') }} VND
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Phân trang -->
-                    <div class="mt-4 d-flex justify-content-center">
-                        {{ $products->links() }}
+                    <!-- Sort By -->
+                    <div class="d-flex align-items-center">
+                        <label for="sort_by" class="me-2 fw-bold">Sắp xếp:</label>
+                        <select id="sort_by" class="form-select w-auto" onchange="sortProducts()">
+                            <option value="default" {{ request('sort_by') == 'default' ? 'selected' : '' }}>Mặc định</option>
+                            <option value="name_asc" {{ request('sort_by') == 'name_asc' ? 'selected' : '' }}>Tên (A - Z)</option>
+                            <option value="name_desc" {{ request('sort_by') == 'name_desc' ? 'selected' : '' }}>Tên (Z - A)</option>
+                            <option value="price_asc" {{ request('sort_by') == 'price_asc' ? 'selected' : '' }}>Giá (Thấp - Cao)</option>
+                            <option value="price_desc" {{ request('sort_by') == 'price_desc' ? 'selected' : '' }}>Giá (Cao - Thấp)</option>
+                        </select>
                     </div>
                 </div>
 
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @if($products->count() > 0)
+                        @foreach($products as $product)
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0">
+                                <div class="position-relative">
+                                    <!-- Ảnh sản phẩm -->
+                                    <a href="{{route('product.show',$product->id)}}">
+                                        <img src="{{ $product->getThumbnailAttribute() }}" alt="{{ $product->name }}"style="height: 250px; object-fit: cover;">
+                                    </a>
+                                    <!-- Nút Thả Tym  -->
+                                </div>
+
+                                <div class="card-body text-center">
+                                    <!-- Tên sản phẩm -->
+                                    <h5 class="card-title fw-bold">
+                                        <a href="{{ route('product.show', $product->id) }}" class="text-dark text-decoration-none">{{ $product->name }}</a>
+                                        <div class="favorite">
+                                            <form action="{{ route('favorites.store') }}" method="POST" class="favorite-form">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <button type="submit" class="btn btn-add-to-wishlist" data-product-id="{{ $product->id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="Thêm vào danh sách yêu thích">
+                                                    <i class="fa fa-heart {{ in_array($product->id, $favoriteProductIds) ? 'text-danger' : '' }}"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </h5>
+
+                                    <!-- Giá tiền -->
+                                    <p class="text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }}₫</p>
+
+                                    <!-- Đánh giá -->
+                                    <p class="mb-0">
+                                        ⭐ {{ number_format($product->avg_rating, 1) }} / 5
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @endforeach
+                    @else
+                        <div class="col-12 text-center">
+                            <p class="alert alert-warning">Không tìm thấy sản phẩm phù hợp với bộ lọc.</p>
+                        </div>
+                    @endif
+                    <style>
+                        .product-image {
+                            width: 100px;  /* Điều chỉnh kích thước ảnh theo ý muốn */
+                            height: 100px;
+                            object-fit: cover; /* Giữ tỷ lệ ảnh mà không bị méo */
+                            border-radius: 8px; /* Làm bo góc ảnh nếu cần */
+                        }
+                        .group-product-name {
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start; /* Căn về bên trái cùng với text */
+                            gap: 5px; /* Giữ khoảng cách giữa tên sản phẩm và icon */
+                            white-space: nowrap; /* Tránh xuống dòng */
+                        }
+
+                        .favorite-form {
+                            margin-left: 5px; /* Dịch icon tim ra xa một chút */
+                        }
+
+                        .favorite-form button {
+                            border: none;
+                            background: none;
+                            padding: 0;
+                            font-size: 18px;
+                            cursor: pointer;
+                            transition: color 0.3s ease-in-out;
+                        }
+
+                        .favorite-form .fa-heart {
+                            color: #aaa; /* Màu xám mặc định */
+                        }
+
+                        .favorite-form .fa-heart.text-danger {
+                            color: red; /* Khi đã yêu thích */
+                        }
+                    </style>
+                </div>
+
+                <!-- Phân trang -->
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $products->links() }}
+                </div>
             </div>
+
         </div>
+
+        <script>
+            function updatePrice() {
+                let priceRange = document.getElementById("priceRange");
+                let maxLabel = document.getElementById("maxPriceLabel");
+                let maxInput = document.getElementById("maxPriceInput");
+                let maxValue = parseInt(priceRange.value);
+
+                maxLabel.textContent = new Intl.NumberFormat('vi-VN').format(maxValue) + " VNĐ";
+                maxInput.value = maxValue;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("priceRange").value = 10000000;
+                updatePrice();
+            });
+
+            function sortProducts() {
+                let sort_by = document.getElementById("sort_by").value;
+                let url = new URL(window.location.href);
+                url.searchParams.set("sort_by", sort_by);
+                window.location.href = url.toString();
+            }
+        </script>
     </div>
 </div>
 <script>

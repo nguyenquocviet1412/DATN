@@ -13,7 +13,7 @@ class Color extends Model
     protected $fillable = ['name'];
     public function variants()
 {
-    return $this->hasMany(Variant::class, 'id_color');
+    return $this->hasMany(Variant::class, 'id_color','id');
 }
 }
 

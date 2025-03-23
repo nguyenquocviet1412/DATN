@@ -135,9 +135,13 @@
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Sản phẩm liên quan</h3>
-            <a href="{{ route('shop.index', $product->category->id) }}" class="btn btn-primary btn-sm">
-                Xem tất cả
-            </a>
+            @if(isset($product) && $product->category)
+                <a href="{{ route('shop.index', $product->category->id) }}" class="btn btn-primary btn-sm">
+                    Xem tất cả
+                </a>
+            @else
+                <p class="text-muted">Không có danh mục liên kết</p>
+            @endif
         </div>
         <div class="row g-4">
             @foreach ($relatedProducts as $relatedProduct)
