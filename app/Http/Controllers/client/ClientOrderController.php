@@ -26,7 +26,10 @@ class ClientOrderController extends Controller
         $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
             ->where('id_user', $userId)
             ->get();
-
+        //Danh sách giỏ hàng trống
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('message', 'Không có sản phẩm trong giỏ hàng!.');
+        }
         // Tính tổng tiền trước giảm giá
         $cartTotalBeforeDiscount = $cartItems->sum(fn($item) => $item->quantity * $item->price + 30000); // 30000 là phí vận chuyển cố định
 
@@ -211,28 +214,42 @@ public function placeOrder(Request $request)
         return view('home.order-detail', compact('order'));
     }
 
-    public function confirmReceipt($id)
+    //Cập nhật trạng thái đơn hàng đã nhận hàng
+    public function markAsReceived($id)
 {
-    $order = Order::find($id);
-    if ($order) {
-        $order->payment_status = 'completed';
-        $order->save();
+    $order = Order::where('id', $id)->where('payment_status', 'shipping')->first();
 
-        return response()->json(['message' => 'Cập nhật thành công']);
+    if (!$order) {
+        return redirect()->back()->with('error', 'Không thể cập nhật đơn hàng.');
     }
 
-    return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
+    // Cập nhật trạng thái đơn hàng
+    $order->update(['payment_status' => 'completed']);
+
+    // Cập nhật trạng thái tất cả sản phẩm trong đơn hàng
+    $order->orderItems()->update(['status' => 'completed']);
+
+    return redirect()->back()->with('success', 'Bạn đã nhận hàng thành công!');
 }
-    private function calculateCartTotal()
+    //Trả hàng
+    public function returnItem(Request $request, Order $order, Order_item $item)
 {
-    // Giả sử bạn có model Cart để lấy giỏ hàng của user
-    $cartItems = Cart::where('id_user', auth()->id())->get();
+    // Kiểm tra thời gian trả hàng (chỉ trong vòng 7 ngày)
+    $orderDate = $order->updated_at;
+    if (now()->diffInDays($orderDate) > 7) {
+        return back()->with('error', 'Sản phẩm này không thể trả hàng vì đã quá 7 ngày.');
+    }
 
-    return $cartItems->sum(function ($item) {
-        return $item->quantity * $item->price; // Tổng tiền = số lượng * giá sản phẩm
-    });
+    // Cập nhật trạng thái sản phẩm trong đơn hàng
+    $item->status = 'return_processing';
+    $item->save();
+
+    // Kiểm tra nếu có ít nhất 1 sản phẩm được trả hàng -> Cập nhật trạng thái tổng thể đơn hàng
+    if ($order->orderItems->where('status', 'return_processing')->count() > 0) {
+        $order->payment_status = 'return_processing';
+        $order->save();
+    }
+
+    return back()->with('success', 'Sản phẩm đang được xử lý trả hàng.');
 }
-
-
-
 }

@@ -59,20 +59,36 @@
                                                 </td>
                                                 <td><strong class="text-danger">{{ number_format($order->total_price) }}₫</strong></td>
                                                 <td>
-                                                    <span class="badge
-                                                        @if($order->payment_status == 'pending') bg-warning
-                                                        @elseif($order->payment_status == 'confirmed') bg-info
-                                                        @elseif($order->payment_status == 'preparing') bg-primary
-                                                        @elseif($order->payment_status == 'handed_over') bg-dark
-                                                        @elseif($order->payment_status == 'shipping') bg-primary
-                                                        @elseif($order->payment_status == 'completed') bg-success
-                                                        @elseif($order->payment_status == 'cancelled') bg-danger
-                                                        @elseif($order->payment_status == 'failed') bg-danger
-                                                        @elseif($order->payment_status == 'refunded') bg-secondary
-                                                        @else bg-secondary @endif">
-                                                        {{ \App\Models\Order::ORDER_STATUS[$order->payment_status] ?? 'Không xác định' }}
-                                                    </span>
+                                                    @if ($order->payment_status == 'shipping')
+                                                        <form action="{{ route('user.order.receive', $order->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-success d-flex align-items-center">
+                                                                <i class="fas fa-box-open me-1"></i> Đã nhận hàng
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        @php
+                                                            $status = $order->payment_status;
+                                                            $statusData = [
+                                                                'pending' => ['color' => 'warning', 'icon' => '⏳', 'text' => 'Chờ xử lý'],
+                                                                'confirmed' => ['color' => 'info', 'icon' => '✅', 'text' => 'Đã xác nhận'],
+                                                                'preparing' => ['color' => 'primary', 'icon' => '📦', 'text' => 'Đang chuẩn bị hàng'],
+                                                                'handed_over' => ['color' => 'dark', 'icon' => '📤', 'text' => 'Đã bàn giao'],
+                                                                'shipping' => ['color' => 'info', 'icon' => '🚚', 'text' => 'Đang vận chuyển'],
+                                                                'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Hoàn thành'],
+                                                                'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
+                                                                'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
+                                                                'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
+                                                                'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
+                                                            ];
+                                                        @endphp
+
+                                                        <span class="badge bg-{{ $statusData[$status]['color'] ?? 'secondary' }} px-3 py-2">
+                                                            {!! $statusData[$status]['icon'] ?? '❓' !!} {{ $statusData[$status]['text'] ?? 'Không xác định' }}
+                                                        </span>
+                                                    @endif
                                                 </td>
+
                                                 <td>
                                                     <a href="{{ route('user.order.detail', $order->id) }}" class="btn btn-sm btn-info">Xem</a>
                                                 </td>

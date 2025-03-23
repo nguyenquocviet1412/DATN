@@ -81,6 +81,8 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove'); // Xóa sản phẩm khỏi giỏ hàng
         Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
         Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count'); // Đếm số lượng sản phẩm trong giỏ hàng
+
+        Route::post('/cart/update-variant', [CartController::class, 'updateVariant'])->name('cart.updateVariant');
     });
 
     //Yêu thích
@@ -98,8 +100,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
     Route::get('/checkout-success', [ClientOrderController::class, 'success'])->name('order.success');
     Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');
+
+    // Đơn hàng
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
     Route::get('/my-orders/{id}', [ClientOrderController::class, 'orderDetail'])->name('user.order.detail');
+        //Xác nhận đơn hàng
+        Route::post('/orders/{id}/receive', [ClientOrderController::class, 'markAsReceived'])->name('user.order.receive');
+        //Hủy đơn hàng
+        Route::post('/order/{order}/return-item/{item}', [ClientOrderController::class, 'returnItem'])->name('order.return-item');
     Route::put('/order/confirm-receipt/{id}', [ClientOrderController::class, 'confirmReceipt'])->name('order.confirmReceipt');
 
     // Xử lý thanh toán
