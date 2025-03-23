@@ -1,62 +1,104 @@
 @extends('master.main')
-@section('title', 'Trang chủ')
+@section('title', 'Blog')
 @section('main')
 
-    <main>
-        <!-- breadcrumb area start -->
-        <div class="breadcrumb-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="breadcrumb-wrap">
-                            <nav aria-label="breadcrumb">
-                                <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Blog </li>
-                                </ul>
-                            </nav>
-                        </div>
+<main>
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- breadcrumb area end -->
+    </div>
 
-        <!-- blog main wrapper start -->
-        <div class="blog-main-wrapper section-padding">
-            <div class="container">
-                <div class="row">
+    <div class="blog-main-wrapper section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                    <div class="col-lg-3 order-2 order-lg-1">
+                        <aside class="blog-sidebar-wrapper">
+                            <!-- Tìm kiếm -->
+                            <div class="blog-sidebar p-3 shadow-sm rounded bg-white">
+                                <h5 class="title text-uppercase fw-bold mb-3"><i class="fa fa-search"></i> Tìm kiếm bài viết</h5>
+                                <form method="GET" action="{{ route('blogs.index') }}" class="input-group">
+                                    <input type="text" name="search" class="form-control rounded-pill px-3 shadow-sm border-light"
+                                        placeholder="Nhập từ khóa..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary ms-2 px-4 rounded-pill shadow-sm">
+                                        <i class="fa fa-search"></i> Tìm
+                                    </button>
+                                </form>
+                            </div>
 
+                            <!-- Lọc theo thời gian -->
+                            <div class="blog-sidebar p-3 shadow-sm rounded bg-white mt-3">
+                                <h5 class="title text-uppercase fw-bold mb-3"><i class="fa fa-calendar"></i> Lọc bài viết</h5>
+                                <form method="GET" action="{{ route('blogs.index') }}">
+                                    <div class="input-group">
+                                        <input type="month" name="month_filter" class="form-control rounded-pill px-3 shadow-sm border-light"
+                                            value="{{ request('month_filter') }}">
+                                        <button type="submit" class="btn btn-success ms-2 px-4 rounded-pill shadow-sm">
+                                            <i class="fa fa-filter"></i> Lọc
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Bài viết mới nhất -->
+                            <div class="blog-sidebar">
+                                <h5 class="title">📰 Bài Viết Mới Nhất</h5>
+                                <ul class="list-group">
+                                    @foreach($latestPosts as $post)
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <div class="me-2">
+                                                <img src="{{ $post->image ? asset('storage/' . $post->image) : asset('images/placeholder.png') }}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                            </div>
+                                            <div>
+                                                <a href="{{ route('blogs.details', $post->id) }}" class="fw-bold">{{ $post->title }}</a>
+                                                <span class="text-muted d-block" style="font-size: 0.85rem;">{{ $post->created_at->format('d/m/Y') }}</span>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+
+                <!-- Blog Content -->
+                <div class="col-lg-9 order-1 order-lg-2">
                     <div class="blog-item-wrapper">
-                        <!-- blog item wrapper end -->
-                        <div class="row mbn-30">
-                            <!-- blog post item start -->
+                        @if(request('search') || request('month_filter'))
+                            <div class="alert alert-info">
+                                <strong>Kết quả tìm kiếm:</strong>
+                                @if(request('search'))
+                                    Từ khóa: <span class="badge bg-primary">{{ request('search') }}</span>
+                                @endif
+                                @if(request('month_filter'))
+                                    | Tháng: <span class="badge bg-success">{{ date('m/Y', strtotime(request('month_filter'))) }}</span>
+                                @endif
+                            </div>
+                        @endif
+                        <div class="row">
+                            @if($posts->count() > 0)
                             @foreach ($posts as $post)
                                 <div class="col-md-6">
-                                    <div class="blog-post-item mb-3">
+                                    <div class="blog-post-item">
                                         <figure class="blog-thumb">
                                             <a href="{{ route('blogs.details', $post->id) }}">
-                                                @if ($post->image)
-                                                    {{-- @dd(("storage/app/public/' . $post->image")) --}}
-                                                    <img src="{{ asset('storage/app/public/' . $post->image) }}"
-                                                        class="img-fluid rounded" alt="Hình ảnh bài viết"
-                                                        style="max-width: 100%; height: auto;">
-                                                @else
-                                                    <p class="text-muted">Không có hình ảnh</p>
-                                                @endif
+                                                <img src="{{ $post->image ? asset('storage/' . $post->image) : asset('images/placeholder.png') }}" class="img-fluid" alt="Hình ảnh bài viết">
                                             </a>
                                         </figure>
                                         <div class="blog-content">
                                             <div class="blog-meta">
-                                                <p>{{ $post->created_at->format('d/m/Y') }} |
-                                                    <a href="">
-                                                        @if (isset($post->employee->username))
-                                                            {{ $post->employee->username }}
-                                                        @else
-                                                            <span class="text-muted">Không xác định</span>
-                                                        @endif
-                                                    </a>
-                                                </p>
+                                                <p>{{ $post->created_at->format('d/m/Y') }} | {{ $post->employee->username ?? 'Không xác định' }}</p>
                                             </div>
                                             <h4 class="blog-title">
                                                 <a href="{{ route('blogs.details', $post->id) }}">{{ $post->title }}</a>
@@ -65,181 +107,125 @@
                                     </div>
                                 </div>
                             @endforeach
-                            <!-- blog post item end -->
+                            @else
+                                <!-- Hiển thị thông báo khi không có bài viết -->
+                                <div class="col-12 text-center">
+                                    <div class="alert alert-warning" role="alert">
+                                        <strong>Không tìm thấy bài viết!</strong><br>
+                                        @if(request('search') || request('month_filter'))
+                                            @if(request('search'))
+                                                Không có bài viết nào chứa từ khóa "<strong>{{ request('search') }}</strong>".
+                                            @endif
+                                            @if(request('month_filter'))
+                                                Không có bài viết nào trong tháng "<strong>{{ date('m/Y', strtotime(request('month_filter'))) }}</strong>".
+                                            @endif
+                                        @else
+                                            Không có bài viết nào để hiển thị.
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                         </div>
-                        <!-- blog item wrapper end -->
-
-                        <!-- start pagination area -->
-                        <div class="paginatoin-area text-center">
-                            {{ $posts->appends(request()->input())->links() }}
-                        </div>
-                        <!-- end pagination area -->
                     </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <!-- blog main wrapper end -->
-    </main>
-
-
-    <!-- Scroll to top start -->
-    <div class="scroll-top not-visible">
-        <i class="fa fa-angle-up"></i>
-    </div>
-    <!-- Scroll to Top End -->
-
-    <!-- footer area start -->
-
-    <!-- footer area end -->
-
-    <!-- Quick view modal start -->
-
-    <!-- Quick view modal end -->
-
-    <!-- offcanvas mini cart start -->
-    <div class="offcanvas-minicart-wrapper">
-        <div class="minicart-inner">
-            <div class="offcanvas-overlay"></div>
-            <div class="minicart-inner-content">
-                <div class="minicart-close">
-                    <i class="pe-7s-close"></i>
-                </div>
-                <div class="minicart-content-box">
-                    <div class="minicart-item-wrapper">
-                        <ul>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/cart/cart-1.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$100.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/cart/cart-2.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$80.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="minicart-pricing-box">
-                        <ul>
-                            <li>
-                                <span>sub-total</span>
-                                <span><strong>$300.00</strong></span>
-                            </li>
-                            <li>
-                                <span>Eco Tax (-2.00)</span>
-                                <span><strong>$10.00</strong></span>
-                            </li>
-                            <li>
-                                <span>VAT (20%)</span>
-                                <span><strong>$60.00</strong></span>
-                            </li>
-                            <li class="total">
-                                <span>total</span>
-                                <span><strong>$370.00</strong></span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="minicart-button">
-                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> View Cart</a>
-                        <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
+                    <div class="pagination-area text-center">
+                        {{ $posts->appends(request()->input())->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- offcanvas mini cart end -->
+</main>
 
-    <!-- JS
-                ============================================ -->
+<div class="scroll-top not-visible">
+    <i class="fa fa-angle-up"></i>
+</div>
 
-    <!-- Modernizer JS -->
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <!-- jQuery JS -->
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <!-- slick Slider JS -->
-    <script src="assets/js/plugins/slick.min.js"></script>
-    <!-- Countdown JS -->
-    <script src="assets/js/plugins/countdown.min.js"></script>
-    <!-- Nice Select JS -->
-    <script src="assets/js/plugins/nice-select.min.js"></script>
-    <!-- jquery UI JS -->
-    <script src="assets/js/plugins/jqueryui.min.js"></script>
-    <!-- Image zoom JS -->
-    <script src="assets/js/plugins/image-zoom.min.js"></script>
-    <!-- Images loaded JS -->
-    <script src="assets/js/plugins/imagesloaded.pkgd.min.js"></script>
-    <!-- mail-chimp active js -->
-    <script src="assets/js/plugins/ajaxchimp.js"></script>
-    <!-- contact form dynamic js -->
-    <script src="assets/js/plugins/ajax-mail.js"></script>
-    <!-- google map api -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfmCVTjRI007pC1Yk2o2d_EhgkjTsFVN8"></script>
-    <!-- google map active js -->
-    <script src="assets/js/plugins/google-map.js"></script>
-    <!-- Main JS -->
-    <script src="assets/js/main.js"></script>
-    <style>
-        .blog-post-item {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 30px;
-            background-color: #fff;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+<style>
+    .blog-post-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        background-color: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+    .blog-post-item:hover {
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+    }
+    .blog-thumb img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .blog-title {
+        font-size: 1.25rem;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .blog-meta {
+        font-size: 0.875rem;
+        color: #888;
+    }
+    .list-group-item a {
+        font-weight: bold;
+        color: #333;
+    }
+    .list-group-item a:hover {
+        color: #007bff;
+    }
+</style>
 
-        .blog-thumb img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
+<style>
+    .blog-sidebar {
+        padding: 15px;
+        border-radius: 10px;
+        background: #ffffff;
+        transition: all 0.3s ease-in-out;
+    }
+    .blog-sidebar:hover {
+        transform: translateY(-3px);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .blog-sidebar h5 {
+        color: #333;
+        font-weight: bold;
+    }
+    .form-control {
+        border-radius: 25px;
+        border: 1px solid #ddd;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        transition: 0.3s;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+    .btn {
+        font-weight: bold;
+        border-radius: 25px;
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+</style>
 
-        .blog-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
 
-        .blog-title {
-            font-size: 1.25rem;
-            margin-top: 10px;
-        }
-
-        .blog-meta {
-            font-size: 0.875rem;
-            color: #888;
-        }
-    </style>
 
 @endsection
