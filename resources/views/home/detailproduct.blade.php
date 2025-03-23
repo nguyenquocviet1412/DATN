@@ -21,7 +21,7 @@
         max-width: 60px;
         font-size: 18px;
     }
-</style> 
+</style>
 
 <main>
     <div class="container mt-5">
@@ -86,8 +86,8 @@
                 </div>
 
                 <!-- Add a new input for custom quantity -->
-            
-                
+
+
                 <div class="mb-3">
                     <label for="">số lượng</label>
                     <div class="input-group quantity-box">
@@ -96,7 +96,7 @@
                         <button class="btn btn-outline-primary quantity-btn" type="button" onclick="changeQuantity(1)">+</button>
                     </div>
                 </div>
-                
+
 
                 <!-- Nút thêm vào giỏ hàng -->
                 <div class="d-grid gap-3">
@@ -135,7 +135,7 @@
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Sản phẩm liên quan</h3>
-            <a href="{{ route('filter-product', $product->category->id) }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('shop.index', $product->category->id) }}" class="btn btn-primary btn-sm">
                 Xem tất cả
             </a>
         </div>
@@ -145,8 +145,8 @@
                     <div class="card mb-4 shadow-sm">
                         <div class="overflow-hidden" style="height: 200px;">
                             <a href="{{ route('product.show', $relatedProduct->id) }}">
-                                <img src="{{ asset($relatedProduct->image_url) }}" 
-                                     class="card-img-top" 
+                                <img src="{{ asset($relatedProduct->image_url) }}"
+                                     class="card-img-top"
                                      alt="{{ $relatedProduct->name }}"
                                      style="height: 100%; object-fit: cover;">
                             </a>
@@ -167,7 +167,7 @@
                                 @endfor
                             </div>
 
-                            <a href="{{ route('product.show', $relatedProduct->id) }}" 
+                            <a href="{{ route('product.show', $relatedProduct->id) }}"
                                class="btn btn-sm btn-outline-secondary">
                                 Xem chi tiết
                             </a>

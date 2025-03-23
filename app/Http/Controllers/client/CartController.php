@@ -113,4 +113,21 @@ class CartController extends Controller
 
         return response()->json(['message' => 'Áp dụng mã giảm giá thành công', 'discountAmount' => $discountAmount, 'newTotal' => $newTotal]);
     }
+    //Cập nhật biến thể sản phẩm
+    public function updateVariant(Request $request)
+{
+    $cartItem = Cart::find($request->cart_id);
+    $variant = Variant::find($request->variant_id);
+
+    if (!$cartItem || !$variant || $variant->quantity == 0) {
+        return redirect()->back()->with('error', 'Biến thể không hợp lệ hoặc hết hàng.');
+    }
+
+    $cartItem->id_variant = $variant->id;
+    $cartItem->quantity = min($cartItem->quantity, $variant->quantity); // Giới hạn số lượng theo tồn kho
+    $cartItem->save();
+
+    return redirect()->back()->with('success', 'Cập nhật biến thể thành công.');
+}
+
 }
