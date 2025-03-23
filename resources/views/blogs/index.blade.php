@@ -38,7 +38,7 @@
                                             <a href="{{ route('blogs.details', $post->id) }}">
                                                 @if ($post->image)
                                                     {{-- @dd(("storage/app/public/' . $post->image")) --}}
-                                                    <img src="{{ asset('storage/app/public/' . $post->image) }}"
+                                                    <img src="{{ asset('storage/' . $post->image) }}"
                                                         class="img-fluid rounded" alt="Hình ảnh bài viết"
                                                         style="max-width: 100%; height: auto;">
                                                 @else
