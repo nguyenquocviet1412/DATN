@@ -136,6 +136,7 @@ const ORDER_STATUS = [
     'completed' => 'Giao hàng thành công',  // Đã giao hàng thành công & hoàn tất đơn hàng
     'cancelled' => 'Đã hủy',  // Đơn hàng bị hủy
     'failed' => 'Thất bại',  // Thanh toán thất bại hoặc lỗi đơn hàng
+    'return_processing' => 'Đang xử lý trả hàng hoàn tiền',  // Đơn hàng đang trong quá trình xét duyệt trả hàng
     'refunded' => 'Đã hoàn tiền'  // Hoàn tiền cho khách hàng
 ];
 
