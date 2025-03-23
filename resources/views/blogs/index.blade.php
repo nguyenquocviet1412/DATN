@@ -26,63 +26,58 @@
         <div class="blog-main-wrapper section-padding">
             <div class="container">
                 <div class="row">
-                   
-                        <div class="blog-item-wrapper">
-                            <!-- blog item wrapper end -->
-                            <div class="row mbn-30">
-                                    <!-- blog post item start -->
-                                    @foreach ($posts as $post)
-                                    <div class="col-md-6">
-                                        <div class="blog-post-item mb-3">
-                                            <figure class="blog-thumb">
-                                                <a href="{{ route('blogs.details') }}">
-                                                    @if ($post->image)
-                                                        <img src="{{ asset('storage/' . $post->image) }}"
-                                                            class="img-fluid rounded" alt="Hình ảnh bài viết"
-                                                            style="max-width: 100%; height: auto;">
-                                                    @else
-                                                        <p class="text-muted">Không có hình ảnh</p>
-                                                    @endif
-                                                </a>
-                                            </figure>
-                                            <div class="blog-content">
-                                                <div class="blog-meta">
-                                                    <p>{{ $post->created_at->format('d/m/Y') }} |
-                                                        <a href="">
-                                                            @if (isset($post->employee->username))
-                                                                {{ $post->employee->username }}
-                                                            @else
-                                                                <span class="text-muted">Không xác định</span>
-                                                            @endif
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                                <h4 class="blog-title">
-                                                    <a href="{{ route('blogs.details') }}">{{ $post->title }}</a>
-                                                </h4>
+
+                    <div class="blog-item-wrapper">
+                        <!-- blog item wrapper end -->
+                        <div class="row mbn-30">
+                            <!-- blog post item start -->
+                            @foreach ($posts as $post)
+                                <div class="col-md-6">
+                                    <div class="blog-post-item mb-3">
+                                        <figure class="blog-thumb">
+                                            <a href="{{ route('blogs.details', $post->id) }}">
+                                                @if ($post->image)
+                                                    {{-- @dd(("storage/app/public/' . $post->image")) --}}
+                                                    <img src="{{ asset('storage/app/public/' . $post->image) }}"
+                                                        class="img-fluid rounded" alt="Hình ảnh bài viết"
+                                                        style="max-width: 100%; height: auto;">
+                                                @else
+                                                    <p class="text-muted">Không có hình ảnh</p>
+                                                @endif
+                                            </a>
+                                        </figure>
+                                        <div class="blog-content">
+                                            <div class="blog-meta">
+                                                <p>{{ $post->created_at->format('d/m/Y') }} |
+                                                    <a href="">
+                                                        @if (isset($post->employee->username))
+                                                            {{ $post->employee->username }}
+                                                        @else
+                                                            <span class="text-muted">Không xác định</span>
+                                                        @endif
+                                                    </a>
+                                                </p>
                                             </div>
+                                            <h4 class="blog-title">
+                                                <a href="{{ route('blogs.details', $post->id) }}">{{ $post->title }}</a>
+                                            </h4>
                                         </div>
                                     </div>
-                                    @endforeach
-                                    <!-- blog post item end -->
-                            </div>
-                            <!-- blog item wrapper end -->
-
-                            <!-- start pagination area -->
-                            <div class="paginatoin-area text-center">
-                                <ul class="pagination-box">
-                                    <li><a class="previous" href="#"><i class="pe-7s-angle-left"></i></a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a class="next" href="#"><i class="pe-7s-angle-right"></i></a></li>
-                                </ul>
-                            </div>
-                            <!-- end pagination area -->
+                                </div>
+                            @endforeach
+                            <!-- blog post item end -->
                         </div>
+                        <!-- blog item wrapper end -->
+
+                        <!-- start pagination area -->
+                        <div class="paginatoin-area text-center">
+                            {{ $posts->appends(request()->input())->links() }}
+                        </div>
+                        <!-- end pagination area -->
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <!-- blog main wrapper end -->
     </main>
@@ -182,7 +177,7 @@
     <!-- offcanvas mini cart end -->
 
     <!-- JS
-            ============================================ -->
+                ============================================ -->
 
     <!-- Modernizer JS -->
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -212,6 +207,39 @@
     <script src="assets/js/plugins/google-map.js"></script>
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <style>
+        .blog-post-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .blog-thumb img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            margin-top: 10px;
+        }
+
+        .blog-meta {
+            font-size: 0.875rem;
+            color: #888;
+        }
+    </style>
 
 @endsection

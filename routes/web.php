@@ -121,8 +121,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route Bài vi
     Route::get('/blogs', [BlogsController::class, 'index'])->name('blogs.index');
-    Route::get('/blogs-details', [BlogsController::class, 'details'])->name('blogs.details');
-
+    Route::get('/blogs/{id}', [BlogsController::class, 'details'])->name('blogs.details');
     // route ng dùng
     Route::get('/user/profile', [UserControllerClient::class, 'show'])->middleware('user.auth')->name('user.profile');
 
