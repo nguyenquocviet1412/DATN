@@ -11,6 +11,8 @@ use App\Models\Cart as CartModel; // Đổi tên alias tránh trùng với thư 
 use App\Models\Order_item;
 use App\Models\Variant;
 use App\Models\Voucher;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -93,106 +95,106 @@ class ClientOrderController extends Controller
 
     // Xử lý đặt hàng
 
-public function placeOrder(Request $request)
-{
-    $validated = $request->validate([
-        'fullname' => 'required',
-        'phone' => 'required',
-        'shipping_address' => 'required',
-        'payment_method' => 'required',
-        'voucher_code' => 'nullable|string',
-    ]);
-    $user = Auth::user();
-    // Lấy danh sách sản phẩm trong giỏ hàng
-    $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
-        ->where('id_user', $user->id)
-        ->get();
-    // Kiểm tra số lượng sản phẩm có đủ không
-    foreach ($cartItems as $item) {
-        $variant = Variant::find($item['id_variant']);
-        if (!$variant || $variant->quantity < $item['quantity']) {
-            return response()->json([
-                'error' => "Sản phẩm {$variant->product->name} {$variant->product->id} (Size: {$variant->size}, Color: {$variant->color}) không đủ hàng."
-            ], 400);
+    public function placeOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'fullname' => 'required',
+            'phone' => 'required',
+            'shipping_address' => 'required',
+            'payment_method' => 'required',
+            'voucher_code' => 'nullable|string',
+        ]);
+        $user = Auth::user();
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
+            ->where('id_user', $user->id)
+            ->get();
+        // Kiểm tra số lượng sản phẩm có đủ không
+        foreach ($cartItems as $item) {
+            $variant = Variant::find($item['id_variant']);
+            if (!$variant || $variant->quantity < $item['quantity']) {
+                return response()->json([
+                    'error' => "Sản phẩm {$variant->product->name} {$variant->product->id} (Size: {$variant->size}, Color: {$variant->color}) không đủ hàng."
+                ], 400);
+            }
+        }
+
+        // Kiểm tra voucher nếu có
+        $voucherId = session('id_voucher') ?? null; // Lấy voucher từ session
+        $discountAmount = 0; // Mặc định không có giảm giá
+        $voucher = null;
+
+        if ($voucherId) { // Chỉ kiểm tra nếu có voucher
+            $voucher = Voucher::find($voucherId);
+            if ($voucher && $voucher->quantity > 0) {
+                $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
+                $voucher->quantity -= 1;
+                $voucher->save();
+
+                User_voucher::create([
+                    'id_user' => $user->id,
+                    'id_voucher' => $voucher->id,
+                ]);
+            }
+        }
+
+        // Tính tổng tiền của các sản phẩm trong giỏ hàng
+        $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
+        $shippingFee = 30000; // Phí vận chuyển
+
+        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
+        // Tính toán giảm giá
+        $discountAmount = session('discount_amount');
+        $totalAfterDiscount = session('cart_total_after_discount');
+
+        // Tạo đơn hàng
+        $order = Order::create([
+            'fullname' => $request->fullname,
+            'phone' => $request->phone,
+            'shipping_address' => $request->shipping_address,
+            'id_user' => Auth::id(),
+            'total_price' => $voucher ? $totalAfterDiscount : $cartTotal + $shippingFee, // Nếu không có voucher thì cộng phí ship
+            'id_voucher' => $voucher ? $voucher->id : null,
+            'discount_amount' => $voucher ? $discountAmount : 0, // Nếu không có voucher thì giảm giá = 0
+            'payment_method' => $request->payment_method,
+            'status' => 'pending',
+        ]);
+
+        // Thêm sản phẩm vào đơn hàng
+        foreach ($cartItems as $item) {
+            Order_item::create([
+                'id_order' => $order->id,
+                'id_variant' => $item->id_variant,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'subtotal' => $item->price * $item->quantity,
+            ]);
+        }
+
+        // Xóa giỏ hàng sau khi đặt hàng
+        Cart::where('id_user', Auth::id())->delete();
+        // Xóa session voucher
+        session()->forget(['id_voucher', 'voucher_code', 'discount_amount', 'cart_total_after_discount']);
+
+        // Cập nhật sản phẩm khi đặt hàng
+        foreach ($cartItems as $item) {
+            $variant = Variant::find($item['id_variant']);
+            $variant->quantity -= $item['quantity'];
+            $variant->save();
+        }
+
+        // Xử lý thanh toán
+        switch ($order->payment_method) {
+            case 'momo':
+                return redirect()->route('momo.pay', ['order_id' => $order->id]);
+            case 'vnpay':
+                return redirect()->route('vnpay.pay', ['order_id' => $order->id]);
+            case 'credit_card':
+                return redirect()->route('creditcard.pay', ['order_id' => $order->id]);
+            default:
+                return redirect()->route('order.success')->with('success', 'Đơn hàng đã được đặt thành công!');
         }
     }
-
-         // Kiểm tra voucher nếu có
-            $voucherId = session('id_voucher') ?? null; // Lấy voucher từ session
-            $discountAmount = 0; // Mặc định không có giảm giá
-            $voucher = null;
-
-            if ($voucherId) { // Chỉ kiểm tra nếu có voucher
-                $voucher = Voucher::find($voucherId);
-                if ($voucher && $voucher->quantity > 0) {
-                    $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
-                    $voucher->quantity -= 1;
-                    $voucher->save();
-
-                    User_voucher::create([
-                        'id_user' => $user->id,
-                        'id_voucher' => $voucher->id,
-                    ]);
-                }
-            }
-
-    // Tính tổng tiền của các sản phẩm trong giỏ hàng
-    $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-    $shippingFee = 30000; // Phí vận chuyển
-
-    // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
-    // Tính toán giảm giá
-    $discountAmount = session('discount_amount');
-    $totalAfterDiscount = session('cart_total_after_discount');
-
-    // Tạo đơn hàng
-    $order = Order::create([
-        'fullname' => $request->fullname,
-        'phone' => $request->phone,
-        'shipping_address' => $request->shipping_address,
-        'id_user' => Auth::id(),
-        'total_price' => $voucher ? $totalAfterDiscount : $cartTotal + $shippingFee, // Nếu không có voucher thì cộng phí ship
-        'id_voucher' => $voucher ? $voucher->id : null,
-        'discount_amount' => $voucher ? $discountAmount : 0, // Nếu không có voucher thì giảm giá = 0
-        'payment_method' => $request->payment_method,
-        'status' => 'pending',
-    ]);
-
-    // Thêm sản phẩm vào đơn hàng
-    foreach ($cartItems as $item) {
-        Order_item::create([
-            'id_order' => $order->id,
-            'id_variant' => $item->id_variant,
-            'quantity' => $item->quantity,
-            'price' => $item->price,
-            'subtotal' => $item->price * $item->quantity,
-        ]);
-    }
-
-    // Xóa giỏ hàng sau khi đặt hàng
-    Cart::where('id_user', Auth::id())->delete();
-    // Xóa session voucher
-    session()->forget(['id_voucher', 'voucher_code', 'discount_amount', 'cart_total_after_discount']);
-
-    // Cập nhật sản phẩm khi đặt hàng
-    foreach ($cartItems as $item) {
-        $variant = Variant::find($item['id_variant']);
-        $variant->quantity -= $item['quantity'];
-        $variant->save();
-    }
-
-    // Xử lý thanh toán
-    switch ($order->payment_method) {
-        case 'momo':
-            return redirect()->route('momo.pay', ['order_id' => $order->id]);
-        case 'vnpay':
-            return redirect()->route('vnpay.pay', ['order_id' => $order->id]);
-        case 'credit_card':
-            return redirect()->route('creditcard.pay', ['order_id' => $order->id]);
-        default:
-            return redirect()->route('order.success')->with('success', 'Đơn hàng đã được đặt thành công!');
-    }
-}
 
     // Hiển thị trang đặt hàng thành công
     public function success()
@@ -216,40 +218,91 @@ public function placeOrder(Request $request)
 
     //Cập nhật trạng thái đơn hàng đã nhận hàng
     public function markAsReceived($id)
-{
-    $order = Order::where('id', $id)->where('payment_status', 'shipping')->first();
+    {
+        $order = Order::where('id', $id)->where('payment_status', 'shipping')->first();
 
-    if (!$order) {
-        return redirect()->back()->with('error', 'Không thể cập nhật đơn hàng.');
+        if (!$order) {
+            return redirect()->back()->with('error', 'Không thể cập nhật đơn hàng.');
+        }
+
+        // Cập nhật trạng thái đơn hàng
+        $order->update(['payment_status' => 'completed']);
+
+        // Cập nhật trạng thái tất cả sản phẩm trong đơn hàng
+        $order->orderItems()->update(['status' => 'completed']);
+
+        return redirect()->back()->with('success', 'Bạn đã nhận hàng thành công!');
     }
-
-    // Cập nhật trạng thái đơn hàng
-    $order->update(['payment_status' => 'completed']);
-
-    // Cập nhật trạng thái tất cả sản phẩm trong đơn hàng
-    $order->orderItems()->update(['status' => 'completed']);
-
-    return redirect()->back()->with('success', 'Bạn đã nhận hàng thành công!');
-}
     //Trả hàng
     public function returnItem(Request $request, Order $order, Order_item $item)
+    {
+        // Kiểm tra thời gian trả hàng (chỉ trong vòng 7 ngày)
+        $orderDate = $order->updated_at;
+        if (now()->diffInDays($orderDate) > 7) {
+            return back()->with('error', 'Sản phẩm này không thể trả hàng vì đã quá 7 ngày.');
+        }
+
+        // Cập nhật trạng thái sản phẩm trong đơn hàng
+        $item->status = 'return_processing';
+        $item->save();
+
+        // Kiểm tra nếu có ít nhất 1 sản phẩm được trả hàng -> Cập nhật trạng thái tổng thể đơn hàng
+        if ($order->orderItems->where('status', 'return_processing')->count() > 0) {
+            $order->payment_status = 'return_processing';
+            $order->save();
+        }
+
+        return back()->with('success', 'Sản phẩm đang được xử lý trả hàng.');
+    }
+    // Hủy đơn hàng
+    public function cancel(Order $order)
 {
-    // Kiểm tra thời gian trả hàng (chỉ trong vòng 7 ngày)
-    $orderDate = $order->updated_at;
-    if (now()->diffInDays($orderDate) > 7) {
-        return back()->with('error', 'Sản phẩm này không thể trả hàng vì đã quá 7 ngày.');
+    // Kiểm tra trạng thái đơn hàng có thể hủy không
+    if (!in_array($order->payment_status, ['pending', 'confirmed', 'preparing'])) {
+        return redirect()->back()->with('error', 'Không thể hủy đơn hàng ở trạng thái này.');
     }
 
-    // Cập nhật trạng thái sản phẩm trong đơn hàng
-    $item->status = 'return_processing';
-    $item->save();
+    // Cập nhật trạng thái đơn hàng thành "cancelled"
+    $order->payment_status = 'cancelled';
+    $order->save();
 
-    // Kiểm tra nếu có ít nhất 1 sản phẩm được trả hàng -> Cập nhật trạng thái tổng thể đơn hàng
-    if ($order->orderItems->where('status', 'return_processing')->count() > 0) {
-        $order->payment_status = 'return_processing';
-        $order->save();
+    // Cập nhật trạng thái tất cả sản phẩm trong đơn hàng
+    $order->orderItems()->update(['status' => 'cancelled']);
+
+    // Cập nhật số lượng sản phẩm trong kho
+    foreach ($order->orderItems as $item) {
+        $variant = Variant::find($item->id_variant);
+        $variant->quantity += $item->quantity;
+        $variant->save();
     }
 
-    return back()->with('success', 'Sản phẩm đang được xử lý trả hàng.');
+    // Hoàn tiền vào ví nếu thanh toán không phải là COD
+    if (strtolower($order->payment_method) !== 'cod') {
+        $wallet = Wallet::where('id_user', $order->id_user)->first();
+
+        if (!$wallet) {
+            return redirect()->back()->with('error', 'Không tìm thấy ví của khách hàng.');
+        }
+
+        // Lưu số dư trước khi cập nhật
+        $balance_before = $wallet->balance;
+
+        // Cộng lại số tiền vào ví
+        $wallet->balance += $order->total_price;
+        $wallet->save();
+
+        // Lưu lịch sử giao dịch ví
+        WalletTransaction::create([
+            'id_wallet'      => $wallet->id,
+            'transaction_type' => 'refund',
+            'amount'         => $order->total_price,
+            'balance_before' => $balance_before,
+            'balance_after'  => $wallet->balance,
+            'description'    => 'Hoàn tiền đơn hàng #' . $order->id,
+            'status'         => 'completed'
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công.');
 }
 }
