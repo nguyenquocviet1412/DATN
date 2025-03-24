@@ -80,7 +80,7 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::put('/update/{id}', [CartController::class, 'update'])->name('cart.update');
         Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove'); // Xóa sản phẩm khỏi giỏ hàng
         Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon'); // Áp dụng mã giảm giá
-        Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count'); // Đếm số lượng sản phẩm trong giỏ hàng
+        // Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count'); // Đếm số lượng sản phẩm trong giỏ hàng
 
         Route::post('/cart/update-variant', [CartController::class, 'updateVariant'])->name('cart.updateVariant');
     });
@@ -100,6 +100,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/place-order', [ClientOrderController::class, 'placeOrder'])->name('placeOrder');
     Route::get('/checkout-success', [ClientOrderController::class, 'success'])->name('order.success');
     Route::post('/apply-voucher', [ClientOrderController::class, 'applyVoucher'])->name('applyVoucher');
+
+    Route::match(['get','post'],'/momo-ipn', [ClientOrderController::class, 'handleMomoIPN'])->name('momo.ipn');
+
 
     // Đơn hàng
     Route::get('/my-orders', [ClientOrderController::class, 'userOrders'])->name('user.orders');
