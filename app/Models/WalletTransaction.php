@@ -10,7 +10,7 @@ class WalletTransaction extends Model
     use HasFactory;
 
     protected $table = 'wallet_transactions'; // Tên bảng
-
+    protected $guarded = [];
     protected $fillable = [
         'id_wallet',
         'transaction_type',
