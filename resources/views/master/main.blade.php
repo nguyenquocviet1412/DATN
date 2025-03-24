@@ -260,7 +260,7 @@
                         <div class="mobile-main-header">
                             <div class="mobile-logo">
                                 <a href="index.html">
-                                    <img src="{{asset('assets/img/logo/logo.png" alt="Brand Logo')}}">
+                                    <img src="{{asset('assets/img/logo/logo.png" ')}} alt="Brand Logo">
                                 </a>
                             </div>
                             <div class="mobile-menu-toggler">
@@ -759,7 +759,7 @@
     <script src="{{asset('assets/js/plugins/google-map.js')}}"></script>
     <!-- Main JS -->
     <script src="{{asset('assets/js/main.js')}}"></script>
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM fully loaded and parsed");
 
@@ -785,7 +785,7 @@
             // Gọi hàm để cập nhật số lượng sản phẩm trong giỏ hàng khi trang được tải
             updateCartCount();
         });
-    </script>
+    </script> --}}
 </body>
 
 </html>
