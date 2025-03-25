@@ -59,6 +59,7 @@
             @php
                 $wallet = \App\Models\Wallet::where('id_user', Auth::id())->first();
                 $walletBalance = $wallet ? $wallet->balance : 0;
+                $user = \App\Models\User::where('id', Auth::id())->first();
             @endphp
 
             <p><strong>💰 Số dư ví: </strong> {{ number_format($walletBalance, 0, ',', '.') }} VNĐ</p>
@@ -67,16 +68,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label class="form-label text-dark fw-bold">📌 Họ và Tên</label>
-                        <input type="text" name="fullname" class="form-control shadow" value="{{ old('fullname') }}" required>
+                        <input type="text" name="fullname" class="form-control shadow" value="{{ $user->fullname }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-dark fw-bold">📞 Số điện thoại</label>
-                        <input type="text" name="phone" class="form-control shadow" value="{{ old('phone') }}" required>
+                        <input type="text" name="phone" class="form-control shadow" value="{{ $user->phone }}" required>
                     </div>
                 </div>
 
                 <label class="form-label mt-3 text-dark fw-bold">📍 Địa chỉ giao hàng</label>
-                <input type="text" name="shipping_address" class="form-control shadow" value="{{ old('shipping_address') }}" required>
+                <input type="text" name="shipping_address" class="form-control shadow" value="{{ $user->address }}" required>
 
                 <!--  Phương thức thanh toán -->
                 <label class="form-label mt-3 text-dark fw-bold">💳 Phương thức thanh toán</label>
