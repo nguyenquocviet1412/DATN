@@ -1,3 +1,4 @@
+<!-- filepath: c:\laragon\www\DATN\resources\views\blogs\details.blade.php -->
 @extends('master.main')
 @section('title', 'Trang chủ')
 @section('main')
@@ -94,6 +95,34 @@
                 <div class="blog-content mt-4">
                     <p>{{ $post->content }}</p>
                 </div>
+
+                <!-- Hiển thị bình luận -->
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h3>Bình luận</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Người dùng</th>
+                                    <th>Nội dung</th>
+                                    <th>Ngày bình luận</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($comments as $comment)
+                                    <tr>
+                                        <td>{{ $comment->user->fullname }}</td>
+                                        <td>{{ $comment->note }}</td>
+                                        <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Kết thúc hiển thị bình luận -->
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,6 +42,7 @@ class BlogsController extends Controller
     public function details(string $id)
     {
         $post = Post::findOrFail($id);
-        return view('blogs.details', compact('post'));
+        $comments = Comment::where('id_post', $id)->where('is_hidden', false)->get();
+        return view('blogs.details', compact('post', 'comments'));
     }
 }
