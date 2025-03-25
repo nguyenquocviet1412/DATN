@@ -174,9 +174,6 @@
 
         <div class="text-center mt-4">
             <a href="{{ route('user.orders') }}" class="btn btn-secondary">🔙 Quay lại</a>
-            @if ($order->payment_status == 'shipping')
-            <button id="confirm-receipt" class="btn btn-success">✅ Nhận hàng thành công</button>
-            @endif
         </div>
     </div>
 </main>
