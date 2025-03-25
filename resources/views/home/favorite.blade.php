@@ -1,7 +1,24 @@
 @extends('master.main')
 @section('title', 'Trang Danh Sách Yêu Thích')
 @section('main')
-
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap">
+                    <nav aria-label="breadcrumb">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{route('home.index')}}"><i class="fa fa-home"></i></a></li>
+                            <li class="breadcrumb-item active"><a href="{{route('favorite.index')}}">Yêu thích</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
 <!-- wishlist main wrapper start -->
 <div class="wishlist-main-wrapper section-padding">
     <div class="container">

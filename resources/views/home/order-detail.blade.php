@@ -3,6 +3,25 @@
 @section('main')
 
 <main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{route('home.index')}}"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item "><a href="{{route('user.orders')}}">Đơn hàng</a></li>
+                                <li class="breadcrumb-item active">Chi tiết đơn hàng</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb area end -->
     <div class="container py-5">
         <div class="text-center mb-4">
             <h2 class="fw-bold">Chi tiết đơn hàng <span class="text-primary">#{{ $order->id }}</span></h2>
