@@ -31,11 +31,10 @@ use App\Http\Controllers\client\ClientOrderController;
 use App\Http\Controllers\client\FavoriteController;
 use App\Http\Controllers\Client\Payment\MomoController;
 use App\Http\Controllers\Client\Payment\VnPayController;
-use App\Http\Controllers\Client\Payment\PaypalController;
 use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
 use App\Http\Controllers\client\UserControllerClient;
-use App\Http\Controllers\FilterProductController;
+use App\Http\Controllers\client\WalletClientController;
 
 use App\Http\Controllers\ShopController;
 
@@ -91,7 +90,9 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::post('/add', [FavoriteController::class, 'add'])->name('favorite.add'); // Thêm sản phẩm vào yêu thích
         Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');// Thêm sản phẩm vào yêu thích
         Route::delete('/remove/{id}', [FavoriteController::class, 'remove'])->name('favorite.remove'); // Xóa sản phẩm khỏi yêu thích
- });
+    });
+    //Ví
+    Route::get('/wallet', [WalletClientController::class, 'index'])->name('walletclient.index');
 });
 
   // Thanh toán

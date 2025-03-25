@@ -101,7 +101,7 @@
                     <h3 class="mb-3">🚚 Trạng thái đơn hàng</h3>
                     <div class="form-group">
                         <label for="payment_status" class="fw-bold">📌 Trạng thái đơn hàng:</label>
-                        <select class="form-select shadow-sm p-2 rounded" name="payment_status">
+                        <select class="form-select shadow-sm p-2 rounded" name="payment_status" {{ in_array($order->payment_status, ['cancelled', 'refunded']) ? 'disabled' : '' }}>
                             @foreach ([
                                 'waiting_payment' => ['Chờ thanh toán', 'secondary', 'bi-wallet2'],
                                 'pending' => ['Chờ xử lý', 'warning', 'bi-hourglass-split'],
@@ -132,7 +132,8 @@
                         <select class="form-control" name="payment_method">
                             @foreach ([
                                 'COD' => 'Thanh toán khi nhận hàng',
-                                'Online' => 'Thanh toán trực tuyến'
+                                'momo' => 'Thanh toán qua momo',
+                                'wallet' => 'Thanh toán bằng ví '
                             ] as $key => $value)
                                 <option value="{{ $key }}" {{ $order->payment_method == $key ? 'selected' : '' }}>
                                     {{ $value }}
