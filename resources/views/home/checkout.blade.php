@@ -90,14 +90,14 @@
                         <input class="form-check-input" type="radio" name="payment_method" value="momo">
                         <label class="form-check-label">Momo</label>
                     </div>
-                    <div class="form-check me-3">
+                    {{-- <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="payment_method" value="vnpay">
                         <label class="form-check-label">VNPay</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="payment_method" value="credit_card">
                         <label class="form-check-label">Thẻ tín dụng</label>
-                    </div>
+                    </div> --}}
                     <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="payment_method" value="wallet">
                         <label class="form-check-label">Ví tiền</label>
