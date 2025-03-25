@@ -173,10 +173,11 @@ class ClientOrderController extends Controller
         $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
         $shippingFee = 30000; // Phí vận chuyển
 
-        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
         // Tính toán giảm giá
         $discountAmount = session('discount_amount');
         $totalAfterDiscount = session('cart_total_after_discount');
+        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
+
 
         //Thanh toán momo
         if ($request->payment_method === 'momo') {
@@ -208,7 +209,11 @@ class ClientOrderController extends Controller
                 $accessKey = 'klm05TvNBzhg7h7j';
                 $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
                 $orderInfo = "Thanh toán qua MoMo";
-                $amount = $totalAfterDiscount;
+                if($totalAfterDiscount == 0 || $totalAfterDiscount == null){
+                    $amount = $cartTotal + $shippingFee;
+                }else{
+                    $amount = $totalAfterDiscount;
+                }
                 $orderId = time() . "";
                 $redirectUrl = route('momo.ipn');  // Chuyển hướng khi thành công
                 $ipnUrl = route('momo.ipn'); // URL nhận phản hồi từ MoMo
@@ -234,7 +239,7 @@ class ClientOrderController extends Controller
                         'requestType' => $requestType,
                         'signature' => $signature);
                     $result = execPostRequest($endpoint, json_encode($data));
-                    // dd($result);
+                    // dd([$result,$amount,$ipnUrl]);
                     $jsonResult = json_decode($result, true);  // decode json
 
                     //Just a example, please check more in there
