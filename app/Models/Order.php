@@ -142,6 +142,7 @@ const ORDER_STATUS = [
 
 const PAYMENT_METHOD = [
     'COD' => 'Thanh toán khi nhận hàng',
-    'Online' => 'Thanh toán trực tuyến'
+    'momo' => 'Thanh toán qua momo',
+    'wallet' => 'Thanh toán từ ví điện tử',
 ];
 }

@@ -15,7 +15,7 @@
                         <a href="{{ route('user.profile') }}" class="list-group-item list-group-item-action active d-flex align-items-center">
                             <i class="bi bi-person-circle me-2"></i> Hồ Sơ
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <a href="{{route('walletclient.index')}}" class="list-group-item list-group-item-action d-flex align-items-center">
                             <i class="bi bi-wallet2 me-2"></i> Ví tiền
                         </a>
                         <a href="{{ route('user.orders') }}" class="list-group-item list-group-item-action d-flex align-items-center">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 
 @endsection
