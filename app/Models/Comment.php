@@ -11,10 +11,20 @@ class Comment extends Model
 
     protected $fillable = [
         'id_user',
-        'id_product',
+        'id_post',
         'note',
         'is_hidden',
-    
+
     ];
+    //Liên kết với bảng post
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'id_post');
+    }
+    //Liên kết với bảng user
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
 

@@ -58,7 +58,7 @@ Danh sách bình luận
                     <tr>
                         <th>ID</th>
                         <th>User ID</th>
-                        <th>Product ID</th>
+                        <th>POST ID</th>
                         <th>Note</th>
                         <th>Created At</th>
                         <th>Updated At</th>
@@ -70,7 +70,7 @@ Danh sách bình luận
                     <tr>
                         <td>{{ $comment->id }}</td>
                         <td>{{ $comment->id_user }}</td>
-                        <td>{{ $comment->id_product }}</td>
+                        <td>{{ $comment->id_post }}</td>
                         <td>{{ $comment->is_hidden ? 'Hidden' : $comment->note }}</td>
                         <td>{{ $comment->created_at }}</td>
                         <td>{{ $comment->updated_at }}</td>
