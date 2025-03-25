@@ -698,9 +698,9 @@
                                         <span>{{ number_format($variant->price ?? 0, 0, ',', '.') }} VNĐ</span>
                                     </p>
                                 </div>
-                                <button class="minicart-remove" data-id="{{ $item->id }}">
+                                <a href="{{route('cart.removemini',$item->id  )}}" class="minicart-remove" data-id="{{ $item->id }}">
                                     <i class="pe-7s-close"></i>
-                                </button>
+                                </a>
                             </li>
                         @endforeach
                     </ul>
