@@ -105,13 +105,30 @@
             </div>
         </div>
 
-        <!-- Hiển thị các đánh giá -->
-        <div class="row mt-5">
-            <div class="col-md-12">
+        <!-- Thêm phần này phía trên danh sách đánh giá -->
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
                 <h3 class="mb-4">Đánh giá sản phẩm</h3>
+            </div>
+            <div class="card-body">
+                <!-- Lọc đánh giá theo sao -->
+                <div class="mb-3">
+                    <label for="reviewFilter" class="form-label fw-bold">Lọc đánh giá theo sao:</label>
+                    <select id="reviewFilter" class="form-select" onchange="filterReviews(this.value)">
+                        <option value="0">Tất cả</option>
+                        <option value="5">5 sao</option>
+                        <option value="4">4 sao</option>
+                        <option value="3">3 sao</option>
+                        <option value="2">2 sao</option>
+                        <option value="1">1 sao</option>
+                    </select>
+                </div>
+
                 <div class="list-group">
                     @foreach ($product->rates as $rate)
-                        <div class="list-group-item review-item p-3 rounded shadow-sm mb-3 border">
+                        <div class="list-group-item review-item p-3 rounded shadow-sm mb-3 border" data-rating="{{ $rate->rating }}">
                             <h5 class="mb-1 fw-bold">{{ $rate->user->fullname }}</h5>
                             <p class="mb-2 text-secondary">{{ $rate->review }}</p>
                             <div class="rating text-warning">
@@ -129,7 +146,8 @@
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
    {{-- // Hiển thị sản phẩm liên quan --}}
     <div class="row mt-5">
     <div class="col-md-12">
@@ -260,5 +278,17 @@
             }
         });
     }
+
+    function filterReviews(star) {
+        let reviews = document.querySelectorAll('.review-item');
+        reviews.forEach(review => {
+            if (star == 0 || review.getAttribute('data-rating') == star) {
+                review.style.display = 'block';
+            } else {
+                review.style.display = 'none';
+            }
+        });
+    }
+    
 </script>
 @endsection

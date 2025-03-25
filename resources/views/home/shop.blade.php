@@ -123,10 +123,15 @@
                                     <!-- Giá tiền -->
                                     <p class="text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }}₫</p>
 
-                                    <!-- Đánh giá -->
-                                    <p class="mb-0">
-                                        ⭐ {{ number_format($product->avg_rating, 1) }} / 5
-                                    </p>
+                                  <!-- Đánh giá -->
+                                <!-- filepath: c:\laragon\www\DATN\resources\views\home\shop.blade.php -->
+                        <!-- Đánh giá -->
+                        <p class="mb-0">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="fa fa-star{{ $i <= $product->average_rating ? ' text-warning' : '-o' }}"></i>
+                            @endfor
+                            ({{ number_format($product->average_rating, 1) }} / 5)
+                        </p>
                                 </div>
                             </div>
                         </div>

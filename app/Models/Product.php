@@ -56,4 +56,9 @@ class Product extends Model
     {
         return $this->hasManyThrough(Product_image::class, Variant::class, 'id_product', 'id_variant');
     }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->rates()->avg('rating');
+    }
 }
