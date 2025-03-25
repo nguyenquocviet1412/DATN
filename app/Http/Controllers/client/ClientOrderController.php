@@ -342,7 +342,8 @@ class ClientOrderController extends Controller
 
         // Kiểm tra số dư ví
         if ($wallet->balance < $totalPrice) {
-            return response()->json(['error' => 'Số dư ví không đủ để thanh toán!'], 400);
+            //Nếu không đủ số dư để thanh toán thì quay về trang checkout và báo lỗi
+            return redirect()->route('checkout')->with(['error' => 'Số dư ví không đủ để thanh toán!']);
         }
 
         // Cập nhật số dư ví

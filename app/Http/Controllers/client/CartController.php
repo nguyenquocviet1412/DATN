@@ -25,37 +25,50 @@ class CartController extends Controller
 
     // Thêm sản phẩm vào giỏ hàng
     public function add(Request $request)
-    {
-        $request->validate([
-            'id_variant' => 'required|exists:variants,id',
-            'quantity' => 'required|integer|min:1'
-        ]);
+{
+    $request->validate([
+        'id_variant' => 'required|exists:variants,id',
+        'quantity' => 'required|integer|min:1'
+    ]);
 
-        $variant = Variant::with('product')->findOrFail($request->id_variant);
-        $user = Auth::user();
+    $variant = Variant::with('product')->findOrFail($request->id_variant);
+    $user = Auth::user();
+
+    // Kiểm tra xem sản phẩm có trong giỏ hàng chưa
+    $cartItem = Cart::where('id_user', $user->id)
+                    ->where('id_variant', $variant->id)
+                    ->first();
+
+    if ($cartItem) {
+        // Nếu sản phẩm đã có trong giỏ hàng, cộng dồn số lượng mới
+        $newQuantity = $cartItem->quantity + $request->quantity;
 
         // Kiểm tra số lượng tồn kho
+        if ($newQuantity > $variant->quantity) {
+            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
+        }
+
+        $cartItem->update(['quantity' => $newQuantity]);
+    } else {
+        // Nếu chưa có, thêm mới
         if ($variant->quantity < $request->quantity) {
             return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
         }
 
-        // Thêm vào giỏ hàng hoặc cập nhật số lượng nếu đã tồn tại
-        $cartItem = Cart::updateOrCreate(
-            [
-                'id_user' => $user->id,
-                'id_variant' => $variant->id
-            ],
-            [
-                'quantity' => $request->quantity,
-                'price' => $variant->price
-            ]
-        );
-
-        return response()->json([
-            'message' => 'Sản phẩm đã được thêm vào giỏ hàng',
-            'cartItem' => $cartItem
+        $cartItem = Cart::create([
+            'id_user' => $user->id,
+            'id_variant' => $variant->id,
+            'quantity' => $request->quantity,
+            'price' => $variant->price
         ]);
     }
+
+    return response()->json([
+        'message' => 'Sản phẩm đã được thêm vào giỏ hàng',
+        'cartItem' => $cartItem
+    ]);
+}
+
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public function update(Request $request, $id)
@@ -64,10 +77,16 @@ class CartController extends Controller
 
         $cartItem = Cart::findOrFail($id);
         $variant = Variant::findOrFail($cartItem->id_variant);
+    if (!$cartItem) {
+        return response()->json(['message' => 'Sản phẩm không tồn tại trong giỏ hàng'], 400);
+    }
 
-        if ($variant->quantity < $request->quantity) {
-            return response()->json(['message' => 'Không đủ hàng trong kho'], 400);
-        }
+    if ($variant->quantity < $request->quantity) {
+        return response()->json([
+            'message' => 'Số lượng trong kho không đủ',
+            'max_quantity' => $variant->quantity
+        ], 400);
+    }
 
         $cartItem->update(['quantity' => $request->quantity]);
 
@@ -90,7 +109,17 @@ class CartController extends Controller
         $cartItem = Cart::findOrFail($id);
         $cartItem->delete();
 
-        return response()->json(['message' => 'Xóa sản phẩm thành công']);
+         // Tính tổng giá trị giỏ hàng
+        $cartItems = Cart::where('id_user', Auth::id())->get();
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->variant->price);
+        $total = $subtotal + 30000; // Cộng phí vận chuyển
+
+        return response()->json([
+            'message' => 'Xóa sản phẩm thành công',
+            'cartItem' => $cartItem,
+            'subtotal' => $subtotal,
+            'total' => $total
+        ]);
     }
 
     // Áp dụng mã giảm giá
