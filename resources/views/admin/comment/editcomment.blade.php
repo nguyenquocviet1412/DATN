@@ -66,8 +66,8 @@ Danh sách bình luận
                     <input type="text" class="form-control" id="id_user" name="id_user" value="{{ $comment->id_user }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="id_product" class="form-label">Product ID</label>
-                    <input type="text" class="form-control" id="id_product" name="id_product" value="{{ $comment->id_product }}" required>
+                    <label for="id_post" class="form-label">POST ID</label>
+                    <input type="text" class="form-control" id="id_post" name="id_post" value="{{ $comment->id_post }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="note" class="form-label">Note</label>
@@ -79,12 +79,6 @@ Danh sách bình luận
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center text-lg-start">
-        <div class="container text-center">
-            <p>&copy; 2025 Comment Management. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

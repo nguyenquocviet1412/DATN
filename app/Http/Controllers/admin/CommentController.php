@@ -26,7 +26,7 @@ class CommentController extends Controller
     {
         $request->validate([
             'id_user' => 'required|exists:users,id',
-            'id_product' => 'required|exists:products,id',
+            'id_post' => 'required|exists:posts,id',
             'note' => 'required|string|max:255',
         ]);
 
@@ -46,7 +46,7 @@ class CommentController extends Controller
     {
         $request->validate([
             'id_user' => 'required',
-            'id_product' => 'required',
+            'id_post' => 'required',
             'note' => 'required',
         ]);
 
