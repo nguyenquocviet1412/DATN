@@ -22,6 +22,7 @@ class ClientOrderController extends Controller
     // Trang thanh toán
     public function checkout()
     {
+        session()->forget(['id_voucher', 'voucher_code', 'discount_amount', 'cart_total_after_discount']);
         $userId = Auth::id();
 
         // Lấy danh sách sản phẩm trong giỏ hàng
@@ -33,7 +34,7 @@ class ClientOrderController extends Controller
             return redirect()->route('cart.index')->with('message', 'Không có sản phẩm trong giỏ hàng!.');
         }
         // Tính tổng tiền trước giảm giá
-        $cartTotalBeforeDiscount = $cartItems->sum(fn($item) => $item->quantity * $item->price + 30000); // 30000 là phí vận chuyển cố định
+        $cartTotalBeforeDiscount = $cartItems->sum(fn($item) => $item->quantity * $item->price )+30000; // 30000 là phí vận chuyển cố định
 
         // Giả lập giảm giá nếu có mã giảm giá
         $cartDiscount = session('cart_discount', 0);
@@ -46,6 +47,9 @@ class ClientOrderController extends Controller
     //Xử lý voucher
     public function applyVoucher(Request $request)
 {
+    // Xóa session cũ để đảm bảo luôn cập nhật voucher mới
+    session()->forget(['id_voucher', 'voucher_code', 'discount_amount', 'cart_total_after_discount']);
+
     $voucherCode = $request->voucher_code;
     $voucher = Voucher::where('code', $voucherCode)->where('status', 'active')->first();
 
@@ -59,14 +63,13 @@ class ClientOrderController extends Controller
     $user = Auth::user();
     $cartTotal = $this->calculateCartTotal();
 
-    // Kiểm tra nếu đơn hàng chưa đạt giá trị tối thiểu để áp dụng voucher
     if ($voucher->min_order_value && $cartTotal < $voucher->min_order_value) {
         return response()->json([
             'success' => false,
             'message' => 'Đơn hàng chưa đạt mức tối thiểu để áp dụng voucher.'
         ]);
     }
-    // Kiểm tra số lượng voucher còn lại
+
     if ($voucher->quantity <= 0) {
         return response()->json([
             'success' => false,
@@ -74,7 +77,6 @@ class ClientOrderController extends Controller
         ]);
     }
 
-    // Kiểm tra số lần user đã sử dụng voucher
     $userVoucherCount = User_voucher::where('id_user', $user->id)
         ->where('id_voucher', $voucher->id)
         ->count();
@@ -86,7 +88,6 @@ class ClientOrderController extends Controller
         ]);
     }
 
-    // Tính giảm giá
     $discountAmount = 0;
     if ($voucher->discount_type === 'percentage') {
         $discountAmount = ($cartTotal * $voucher->discount_value) / 100;
@@ -97,9 +98,9 @@ class ClientOrderController extends Controller
         $discountAmount = $voucher->discount_value;
     }
 
-    $cartTotalAfterDiscount = max(0, $cartTotal - $discountAmount);
+    $cartTotalAfterDiscount = max(0, $cartTotal - $discountAmount) +30000; // 30000 là phí vận chuyển cố định
 
-    // Lưu voucher vào session
+    // Cập nhật session mới
     session([
         'id_voucher' => $voucher->id,
         'voucher_code' => $voucherCode,
@@ -114,6 +115,7 @@ class ClientOrderController extends Controller
         'cart_total_after_discount' => $cartTotalAfterDiscount
     ]);
 }
+
 
 
     // Xử lý đặt hàng
@@ -173,10 +175,10 @@ class ClientOrderController extends Controller
         $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
         $shippingFee = 30000; // Phí vận chuyển
 
+        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
         // Tính toán giảm giá
         $discountAmount = session('discount_amount');
         $totalAfterDiscount = session('cart_total_after_discount');
-        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
 
 
         //Thanh toán momo
@@ -247,49 +249,6 @@ class ClientOrderController extends Controller
         }
         if ($request->payment_method === 'cod') {
             // Thanh toán tiền mặt
-            $user = Auth::user();
-        // Lấy danh sách sản phẩm trong giỏ hàng
-        $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
-            ->where('id_user', $user->id)
-            ->get();
-        // Kiểm tra số lượng sản phẩm có đủ không
-        foreach ($cartItems as $item) {
-            $variant = Variant::find($item['id_variant']);
-            if (!$variant || $variant->quantity < $item['quantity']) {
-                return response()->json([
-                    'error' => "Sản phẩm {$variant->product->name} {$variant->product->id} (Size: {$variant->size}, Color: {$variant->color}) không đủ hàng."
-                ], 400);
-            }
-        }
-
-        // Kiểm tra voucher nếu có
-        $voucherId = session('id_voucher') ?? null; // Lấy voucher từ session
-        $discountAmount = 0; // Mặc định không có giảm giá
-        $voucher = null;
-
-        if ($voucherId) { // Chỉ kiểm tra nếu có voucher
-            $voucher = Voucher::find($voucherId);
-            if ($voucher && $voucher->quantity > 0) {
-                $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
-                $voucher->quantity -= 1;
-                $voucher->save();
-
-                User_voucher::create([
-                    'id_user' => $user->id,
-                    'id_voucher' => $voucher->id,
-                ]);
-            }
-        }
-
-        // Tính tổng tiền của các sản phẩm trong giỏ hàng
-        $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-        $shippingFee = 30000; // Phí vận chuyển
-
-        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
-        // Tính toán giảm giá
-        $discountAmount = session('discount_amount');
-        $totalAfterDiscount = session('cart_total_after_discount');
-
         // Tạo đơn hàng
         $order = Order::create([
             'fullname' => session('fullname'),
@@ -303,17 +262,49 @@ class ClientOrderController extends Controller
             'status' => 'pending',
         ]);
 
-        // Thêm sản phẩm vào đơn hàng
+        // Tính tổng số lượng sản phẩm trong đơn hàng
+        $totalQuantity = $cartItems->sum('quantity');
+
+        // Tránh chia cho 0 nếu không có sản phẩm
+        $discountPerItem = ($voucher && $totalQuantity > 0) ? $discountAmount / $totalQuantity : 0;
+
+        $remainingDiscount = $discountAmount; // Số tiền giảm giá còn lại để phân bổ
+
+        // Thêm sản phẩm vào đơn hàng với giá đã giảm
         foreach ($cartItems as $item) {
+            $originalPrice = $item->price; // Giá gốc của sản phẩm
+            $discountedPrice = max(0, $originalPrice - $discountPerItem); // Không để giá âm
+
+            // Nếu giá sau giảm bằng 0, phần giảm dư sẽ được dồn sang các sản phẩm khác
+            $remainingDiscount -= ($originalPrice - $discountedPrice) * $item->quantity;
+
             Order_item::create([
                 'id_order' => $order->id,
                 'id_variant' => $item->id_variant,
                 'quantity' => $item->quantity,
-                'price' => $item->price,
-                'subtotal' => $item->price * $item->quantity,
+                'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
+                'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
                 'status' => 'pending',
             ]);
         }
+
+// Nếu còn tiền giảm giá chưa sử dụng hết, phân bổ lại cho các sản phẩm có giá cao hơn
+if ($remainingDiscount > 0) {
+    foreach ($order->orderItems as $orderItem) {
+        if ($remainingDiscount <= 0) break;
+
+        $additionalDiscount = min($orderItem->price, $remainingDiscount / $orderItem->quantity);
+        $newPrice = max(0, $orderItem->price - $additionalDiscount);
+
+        $remainingDiscount -= ($orderItem->price - $newPrice) * $orderItem->quantity;
+
+        $orderItem->update([
+            'price' => $newPrice,
+            'subtotal' => $newPrice * $orderItem->quantity
+        ]);
+    }
+}
+
 
         // Xóa giỏ hàng sau khi đặt hàng
         Cart::where('id_user', Auth::id())->delete();
@@ -350,51 +341,6 @@ class ClientOrderController extends Controller
         $wallet->balance -= $totalPrice;
         $wallet->save();
 
-
-
-        $user = Auth::user();
-        // Lấy danh sách sản phẩm trong giỏ hàng
-        $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
-            ->where('id_user', $user->id)
-            ->get();
-        // Kiểm tra số lượng sản phẩm có đủ không
-        foreach ($cartItems as $item) {
-            $variant = Variant::find($item['id_variant']);
-            if (!$variant || $variant->quantity < $item['quantity']) {
-                return response()->json([
-                    'error' => "Sản phẩm {$variant->product->name} {$variant->product->id} (Size: {$variant->size}, Color: {$variant->color}) không đủ hàng."
-                ], 400);
-            }
-        }
-
-        // Kiểm tra voucher nếu có
-        $voucherId = session('id_voucher') ?? null; // Lấy voucher từ session
-        $discountAmount = 0; // Mặc định không có giảm giá
-        $voucher = null;
-
-        if ($voucherId) { // Chỉ kiểm tra nếu có voucher
-            $voucher = Voucher::find($voucherId);
-            if ($voucher && $voucher->quantity > 0) {
-                $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
-                $voucher->quantity -= 1;
-                $voucher->save();
-
-                User_voucher::create([
-                    'id_user' => $user->id,
-                    'id_voucher' => $voucher->id,
-                ]);
-            }
-        }
-
-        // Tính tổng tiền của các sản phẩm trong giỏ hàng
-        $cartTotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-        $shippingFee = 30000; // Phí vận chuyển
-
-        // Nếu không có voucher, total_price = tổng tiền sản phẩm + phí ship
-        // Tính toán giảm giá
-        $discountAmount = session('discount_amount');
-        $totalAfterDiscount = session('cart_total_after_discount');
-
         // Tạo đơn hàng
         $order = Order::create([
             'fullname' => session('fullname'),
@@ -418,17 +364,48 @@ class ClientOrderController extends Controller
             'description' => 'Thanh toán đơn hàng #' . $order->id,
             'status' => 'completed'
         ]);
-        // Thêm sản phẩm vào đơn hàng
+        // Tính tổng số lượng sản phẩm trong đơn hàng
+        $totalQuantity = $cartItems->sum('quantity');
+
+        // Tránh chia cho 0 nếu không có sản phẩm
+        $discountPerItem = ($voucher && $totalQuantity > 0) ? $discountAmount / $totalQuantity : 0;
+
+        $remainingDiscount = $discountAmount; // Số tiền giảm giá còn lại để phân bổ
+
+        // Thêm sản phẩm vào đơn hàng với giá đã giảm
         foreach ($cartItems as $item) {
+            $originalPrice = $item->price; // Giá gốc của sản phẩm
+            $discountedPrice = max(0, $originalPrice - $discountPerItem); // Không để giá âm
+
+            // Nếu giá sau giảm bằng 0, phần giảm dư sẽ được dồn sang các sản phẩm khác
+            $remainingDiscount -= ($originalPrice - $discountedPrice) * $item->quantity;
+
             Order_item::create([
                 'id_order' => $order->id,
                 'id_variant' => $item->id_variant,
                 'quantity' => $item->quantity,
-                'price' => $item->price,
-                'subtotal' => $item->price * $item->quantity,
+                'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
+                'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
                 'status' => 'pending',
             ]);
         }
+
+// Nếu còn tiền giảm giá chưa sử dụng hết, phân bổ lại cho các sản phẩm có giá cao hơn
+if ($remainingDiscount > 0) {
+    foreach ($order->orderItems as $orderItem) {
+        if ($remainingDiscount <= 0) break;
+
+        $additionalDiscount = min($orderItem->price, $remainingDiscount / $orderItem->quantity);
+        $newPrice = max(0, $orderItem->price - $additionalDiscount);
+
+        $remainingDiscount -= ($orderItem->price - $newPrice) * $orderItem->quantity;
+
+        $orderItem->update([
+            'price' => $newPrice,
+            'subtotal' => $newPrice * $orderItem->quantity
+        ]);
+    }
+}
 
         // Xóa giỏ hàng sau khi đặt hàng
         Cart::where('id_user', Auth::id())->delete();
@@ -476,13 +453,6 @@ class ClientOrderController extends Controller
             $voucher = Voucher::find($voucherId);
             if ($voucher && $voucher->quantity > 0) {
                 $discountAmount = session('discount_amount', 0); // Lấy giá trị giảm giá từ session
-                $voucher->quantity -= 1;
-                $voucher->save();
-
-                User_voucher::create([
-                    'id_user' => $user->id,
-                    'id_voucher' => $voucher->id,
-                ]);
             }
         }
 
@@ -508,17 +478,48 @@ class ClientOrderController extends Controller
             'status' => 'pending',
         ]);
 
-        // Thêm sản phẩm vào đơn hàng
+        // Tính tổng số lượng sản phẩm trong đơn hàng
+        $totalQuantity = $cartItems->sum('quantity');
+
+        // Tránh chia cho 0 nếu không có sản phẩm
+        $discountPerItem = ($voucher && $totalQuantity > 0) ? $discountAmount / $totalQuantity : 0;
+
+        $remainingDiscount = $discountAmount; // Số tiền giảm giá còn lại để phân bổ
+
+        // Thêm sản phẩm vào đơn hàng với giá đã giảm
         foreach ($cartItems as $item) {
+            $originalPrice = $item->price; // Giá gốc của sản phẩm
+            $discountedPrice = max(0, $originalPrice - $discountPerItem); // Không để giá âm
+
+            // Nếu giá sau giảm bằng 0, phần giảm dư sẽ được dồn sang các sản phẩm khác
+            $remainingDiscount -= ($originalPrice - $discountedPrice) * $item->quantity;
+
             Order_item::create([
                 'id_order' => $order->id,
                 'id_variant' => $item->id_variant,
                 'quantity' => $item->quantity,
-                'price' => $item->price,
-                'subtotal' => $item->price * $item->quantity,
+                'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
+                'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
                 'status' => 'pending',
             ]);
         }
+
+// Nếu còn tiền giảm giá chưa sử dụng hết, phân bổ lại cho các sản phẩm có giá cao hơn
+if ($remainingDiscount > 0) {
+    foreach ($order->orderItems as $orderItem) {
+        if ($remainingDiscount <= 0) break;
+
+        $additionalDiscount = min($orderItem->price, $remainingDiscount / $orderItem->quantity);
+        $newPrice = max(0, $orderItem->price - $additionalDiscount);
+
+        $remainingDiscount -= ($orderItem->price - $newPrice) * $orderItem->quantity;
+
+        $orderItem->update([
+            'price' => $newPrice,
+            'subtotal' => $newPrice * $orderItem->quantity
+        ]);
+    }
+}
 
         // Xóa giỏ hàng sau khi đặt hàng
         Cart::where('id_user', Auth::id())->delete();
