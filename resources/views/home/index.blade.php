@@ -441,66 +441,26 @@
                 <div class="col-12">
                     <div class="testimonial-thumb-wrapper">
                         <div class="testimonial-thumb-carousel">
-                            <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi.webp" alt="Khách hàng 1">
-                            </div>
-                            <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi2.jpg" alt="Khách hàng 2">
-                            </div>
-                            <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi3.jpg" alt="Khách hàng 3">
-                            </div>
-                            <div class="testimonial-thumb">
-                                <img src="assets/img/testimonial/nguoi4.png" alt="Khách hàng 4">
-                            </div>
+                            @foreach ($reviews as $item)
+                                <div class="testimonial-thumb">
+                                    <img src="{{$item->product->thumbnail}}" alt="{{$item->product->name}}">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="testimonial-content-wrapper">
                         <div class="testimonial-content-carousel">
+                            @foreach ($reviews as $item)
                             <div class="testimonial-content">
-                                <p>Đôi giày ở đây thực sự tuyệt vời! Chất lượng da mềm mại, đi rất êm chân và không gây đau khi mang cả ngày. Tôi chắc chắn sẽ quay lại mua thêm!</p>
+                                <p>{{$item->review}}</p>
                                 <div class="ratings">
+                                    @for ($i = 1; $i <= $item->rating; $i++)
                                     <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
+                                    @endfor
                                 </div>
-                                <h5 class="testimonial-author">Linh Nguyễn</h5>
+                                <h5 class="testimonial-author">{{$item->user->fullname}}</h5>
                             </div>
-                            <div class="testimonial-content">
-                                <p>Shop có rất nhiều mẫu giày phong cách và hợp xu hướng. Tôi đã mua một đôi sneaker và cực kỳ hài lòng với chất lượng. Dịch vụ khách hàng cũng rất nhiệt tình!</p>
-                                <div class="ratings">
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star-half-o"></i></span>
-                                </div>
-                                <h5 class="testimonial-author">Minh Thư</h5>
-                            </div>
-                            <div class="testimonial-content">
-                                <p>Tôi đã tìm được đôi giày thể thao hoàn hảo cho việc tập gym ở đây. Thiết kế đẹp, độ bám tốt và rất nhẹ. Một sản phẩm đáng tiền!</p>
-                                <div class="ratings">
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                </div>
-                                <h5 class="testimonial-author">Minh Quân</h5>
-                            </div>
-                            <div class="testimonial-content">
-                                <p>Giày rất êm và thoải mái! Tôi đã mang thử trong nhiều giờ và vẫn cảm thấy dễ chịu. Đây chắc chắn là nơi tôi sẽ giới thiệu cho bạn bè.</p>
-                                <div class="ratings">
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                    <span><i class="fa fa-star"></i></span>
-                                </div>
-                                <h5 class="testimonial-author">Hoài Nam</h5>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
