@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\admin\Wallet_Transaction;
@@ -133,6 +134,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/blogs/{id}', [BlogsController::class, 'details'])->name('blogs.details');
     // route ng dùng
     Route::get('/user/profile', [UserControllerClient::class, 'show'])->middleware('user.auth')->name('user.profile');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/user/edit', [UserControllerClient::class, 'editProfile'])->name('user.profile.edit');
+        Route::post('/user/update', [UserControllerClient::class, 'updateProfile'])->name('user.profile.update');
+    });
+    Route::get('/user/change-password', [UserControllerClient::class, 'showChangePasswordForm'])->middleware('user.auth')->name('user.change-password');
+    Route::post('/user/change-password', [UserControllerClient::class, 'changePassword'])->middleware('user.auth')->name('user.change-password.update');
+
 
 
 
@@ -310,6 +318,6 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::get('/show/{id}', [PostController::class, 'show'])->name('post.show');
         Route::delete('/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
     });
-    
+
 
 });

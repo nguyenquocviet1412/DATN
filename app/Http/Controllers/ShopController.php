@@ -24,6 +24,11 @@ class ShopController extends Controller
         // Truy vấn sản phẩm dựa trên biến thể
         $products = Product::whereHas('variants', function ($query) use ($request) {
 
+            if ($request->filled('search')) {
+                $products = Product::where('name', 'like', '%' . $request->search . '%');
+            } else {
+                $products = Product::query();
+            }
             // Lọc theo màu sắc
             if ($request->filled('id_color')) {
                 $selectedColors = is_array($request->id_color) ? $request->id_color : [$request->id_color];
@@ -45,11 +50,6 @@ class ShopController extends Controller
         // Lọc theo khoảng giá
         if ($request->filled('max_price') && is_numeric($request->max_price)) {
             $products->where('price', '<=', (int) $request->max_price);
-        }
-
-        // Tìm kiếm theo từ khóa
-        if ($request->filled('search')) {
-            $products->where('name', 'like', '%' . $request->search . '%');
         }
 
         // Lọc theo điểm đánh giá trung bình

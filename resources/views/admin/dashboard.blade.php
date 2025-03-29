@@ -44,7 +44,7 @@
                 <div class="info">
                   <h4>Sắp hết hàng</h4>
                   <p><b><?= $lowStockProducts ?> sản phẩm</b></p>
-                  <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+                  <p class="info-tong">Cảnh báo hết cần nhập thêm.</p>
                 </div>
               </div>
             </div>
@@ -64,30 +64,54 @@
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach ($orders as $order)
+                        @foreach ($orderStatusList as $order)
                         <tr>
                             <td>{{ $order->order_code }}</td>
                             <td>{{ $order->user_name }}</td>
                             <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                             <td class="border px-4 py-2">
                                 @switch($order->payment_status)
-                                    @case('completed')
-                                        <span class="status-label status-completed">Hoàn thành</span>
-                                        @break
                                     @case('pending')
-                                        <span class="status-label status-pending">Chờ xử lý</span>
+                                        <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                        @break
+                                    @case('confirmed')
+                                        <span class="badge bg-success">Đã xác nhận</span>
+                                        @break
+                                    @case('preparing')
+                                        <span class="badge bg-info text-dark">Đang chuẩn bị</span>
+                                        @break
+                                    @case('handed_over')
+                                        <span class="badge bg-warning text-dark">Đã bàn giao</span>
+                                        @break
+                                    @case('shipping')
+                                        <span class="badge bg-info text-white">Đang vận chuyển</span>
+                                        @break
+                                    @case('completed')
+                                        <span class="badge bg-success text-white">Hoàn thành</span>
+                                        @break
+                                    @case('cancelled')
+                                        <span class="badge bg-danger text-white">Đã hủy</span>
                                         @break
                                     @case('failed')
-                                        <span class="status-label status-failed">Thất bại</span>
+                                        <span class="badge bg-dark text-white">Thất bại</span>
+                                        @break
+                                    @case('return_processing')
+                                        <span class="badge bg-danger text-dark">Xử lý hoàn tiền</span>
+                                        @break
+                                    @case('refunded')
+                                        <span class="badge bg-secondary text-white">Đã hoàn tiền</span>
                                         @break
                                     @default
-                                        <span>Không xác định</span>
+                                        <span class="badge bg-secondary text-white">Không xác định</span>
                                 @endswitch
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                   </table>
+                  <div class="d-flex justify-content-center">
+                    {{ $orderStatusList->links() }}
+                </div>
                 </div>
               </div>
             </div>
@@ -124,55 +148,90 @@
         </div>
 
         <!--Right-->
-        <div class="col-md-12 col-lg-6">
-            <h2 class="chart-title">Thống kê doanh thu</h2>
-            <canvas id="revenueChart"></canvas>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var ctx = document.getElementById('revenueChart').getContext('2d');
-
-                    var monthlyRevenue = @json($monthlyRevenue);
-
-                    var labels = [];
-                    var data = [];
-
-                    monthlyRevenue.forEach(item => {
-                        labels.push("Tháng " + item.month);
-                        data.push(item.total);
-                    });
-
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Doanh thu (VND)',
-                                data: data,
-                                backgroundColor: 'rgba(255, 193, 7, 0.8)',
-                                borderColor: 'rgba(255, 193, 7, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
+        <div class="card col-md-12 col-lg-6">
+            <div class="card-header">Biểu đồ doanh thu và đơn hàng</div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById("revenueChart").getContext("2d");
+        var revenueChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: {!! json_encode($labels) !!},
+                datasets: [
+                    {
+                        label: "Doanh thu (VND)",
+                        data: {!! json_encode($sales) !!},
+                        backgroundColor: "rgba(54, 162, 235, 0.7)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        borderWidth: 1,
+                        yAxisID: 'y-left'
+                    },
+                    {
+                        label: "Số đơn hàng",
+                        data: {!! json_encode($orders) !!},
+                        backgroundColor: "rgba(255, 99, 132, 0.8)",
+                        borderColor: "rgba(255, 99, 132, 1)",
+                        borderWidth: 1,
+                        yAxisID: 'y-right',
+                        barThickness: 30 // Làm cột đơn hàng to hơn
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    'y-left': {
+                        type: 'linear',
+                        position: 'left',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Doanh thu (VND)"
                         }
-                    });
-                });
-            </script>
-      </div>
+                    },
+                    'y-right': {
+                        type: 'linear',
+                        position: 'right',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Số đơn hàng"
+                        },
+                        grid: {
+                            drawOnChartArea: false // Không hiển thị lưới bên phải để dễ nhìn hơn
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+<style>
+    .tile-body table {
+        font-size: 14px; /* Giảm cỡ chữ */
+    }
+    .tile-body th, .tile-body td {
+        padding: 6px 10px; /* Giảm khoảng cách giữa các ô */
+    }
+    .tile {
+        padding: 10px; /* Giảm padding bên trong */
+    }
+    .tile-body {
+        max-height: 250px; /* Giới hạn chiều cao bảng */
+        overflow-y: auto; /* Thêm thanh cuộn nếu cần */
+    }
+</style>
 
-      <div class="text-center" style="font-size: 13px">
-        <p><b>Copyright
-            <script>document.write(new Date().getFullYear());</script> Phần mềm quản lý bán hàng | Dev By Trường
-          </b></p>
-      </div>
+
+
     </main>
 
 @endsection
