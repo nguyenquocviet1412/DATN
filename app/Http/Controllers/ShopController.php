@@ -78,7 +78,7 @@ class ShopController extends Controller
                 $products->orderBy('created_at', 'desc'); // Mặc định: sản phẩm mới nhất
                 break;
         }
-
+        
         // Trả về danh sách sản phẩm
         $products = $products->with('rates')->distinct()->paginate(9)->appends(request()->query());
 

@@ -209,6 +209,8 @@
                                                 {{-- Người dùng (User) đã đăng nhập --}}
                                                 <li><a href="{{ route('user.profile')}}">Tài khoản của tôi</a></li>
                                                 <li><a href="{{route('user.orders')}}">Đơn hàng</a></li>
+                                                <li><a href="{{ route('user.profile.edit') }}">Cập nhật</a></li>
+                                                <li><a href="{{ route('user.change-password') }}" >Đổi mật khẩu</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}"
                                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
