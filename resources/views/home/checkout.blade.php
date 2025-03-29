@@ -31,15 +31,15 @@
                             <td><img src="{{ asset($item->variant->getThumbnailAttribute()) }}" alt="{{ $item->variant->product->name }}" width="70" class="rounded shadow"></td>
                             <td class="fw-bold">{{ $item->variant->product->name }}</td>
                             <td class="text-muted">{{ $item->variant->color->name }} - {{ $item->variant->size->size }}</td>
-                            <td class="text-danger">{{ number_format($item->price) }}₫</td>
+                            <td class="text-danger">{{ number_format($item->price, 0, ',', '.') }}₫</td>
                             <td>{{ $item->quantity }}</td>
-                            <td class="text-success">{{ number_format($item->price * $item->quantity) }}₫</td>
+                            <td class="text-success">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}₫</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            <h5 class="text-end">Tổng trước giảm giá: <strong class="text-dark">{{ number_format($cartTotalBeforeDiscount) }}₫</strong></h5>
+            <h5 class="text-end">Tổng trước giảm giá: <strong class="text-dark">{{ number_format($cartTotalBeforeDiscount, 0, ',', '.') }}₫</strong></h5>
 
             <!-- Hiển thị thông báo voucher -->
             <div id="voucher-message"></div>
@@ -51,9 +51,9 @@
                 <button type="submit" class="btn btn-warning fw-bold shadow">Áp dụng</button>
             </form>
 
-            <h5 class="text-end text-success">Giảm giá: <strong id="discount-amount">-{{ number_format(session('discount_amount', 0)) }}₫</strong></h5>
+            <h5 class="text-end text-success">Giảm giá: <strong id="discount-amount">-{{ number_format(session('discount_amount', 0), 0, ',', '.') }}₫</strong></h5>
             <h4 class="text-end text-danger">Tổng thanh toán:
-                <strong id="cart-total-after-discount">{{ number_format(session('cart_total_after_discount', $cartTotalBeforeDiscount)) }}₫</strong>
+                <strong id="cart-total-after-discount">{{ number_format(session('cart_total_after_discount', $cartTotalBeforeDiscount), 0, ',', '.') }}₫</strong>
             </h4>
             @php
                 $wallet = \App\Models\Wallet::where('id_user', Auth::id())->first();
@@ -129,8 +129,8 @@
             success: function (response) {
                 if (response.success) {
                     $('#voucher-message').html('<div class="alert alert-success">' + response.message + '</div>');
-                    $('#discount-amount').text('-' + response.discount.toLocaleString() + '₫');
-                    $('#cart-total-after-discount').text(response.cart_total_after_discount.toLocaleString() + '₫');
+                    $('#discount-amount').text('-' + response.discount.toLocaleString('de-DE') + '₫');
+                    $('#cart-total-after-discount').text(response.cart_total_after_discount.toLocaleString('de-DE') + '₫');
                 } else {
                     $('#voucher-message').html('<div class="alert alert-danger">' + response.message + '</div>');
                 }

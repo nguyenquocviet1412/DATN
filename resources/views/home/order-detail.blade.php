@@ -120,8 +120,8 @@
                             <td>{{ $item->variant->size->size ?? '-' }}</td>
                             <td>{{ $item->variant->color->name ?? '-' }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->price) }}₫</td>
-                            <td>{{ number_format($item->subtotal) }}₫</td>
+                            <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
+                            <td>{{ number_format($item->subtotal, 0, ',', '.') }}₫</td>
                             <td>
                                 @php
                                     $status = $item->status;
@@ -169,7 +169,7 @@
 
         <!-- Tổng tiền -->
         <div class="text-end mt-4">
-            <h3 class="text-danger">💰 Tổng đơn hàng: <strong>{{ number_format($order->total_price) }}₫</strong></h3>
+            <h3 class="text-danger">💰 Tổng đơn hàng: <strong>{{ number_format($order->total_price, 0, ',', '.') }}₫</strong></h3>
         </div>
 
         <div class="text-center mt-4">
