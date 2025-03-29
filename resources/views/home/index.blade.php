@@ -443,7 +443,9 @@
                         <div class="testimonial-thumb-carousel">
                             @foreach ($reviews as $item)
                                 <div class="testimonial-thumb">
+                                    <a href="{{route('product.show',$item->product->id)}}">
                                     <img src="{{$item->product->thumbnail}}" alt="{{$item->product->name}}">
+                                    </a>
                                 </div>
                             @endforeach
                         </div>
