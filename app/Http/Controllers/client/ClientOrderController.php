@@ -141,6 +141,10 @@ class ClientOrderController extends Controller
         $cartItems = Cart::with(['variant.product', 'variant.color', 'variant.size'])
             ->where('id_user', $user->id)
             ->get();
+        //Danh sách giỏ hàng trống
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('message', 'Không có sản phẩm trong giỏ hàng!.');
+        }
         // Kiểm tra số lượng sản phẩm có đủ không
         foreach ($cartItems as $item) {
             $variant = Variant::find($item['id_variant']);

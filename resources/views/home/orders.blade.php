@@ -81,7 +81,7 @@
                                                     </ul>
                                                 </td>
                                                 <td>
-                                                    <span class="fw-bold text-danger">{{ number_format($order->total_price) }}₫</span>
+                                                    <span class="fw-bold text-danger">{{ number_format($order->total_price, 0, ',', '.') }}₫</span>
                                                 </td>
                                                 <td>
                                                     @php
