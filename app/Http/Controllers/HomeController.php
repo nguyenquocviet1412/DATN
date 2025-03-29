@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\favorite;
 use App\Models\Post;
 use App\Models\Product;
+use App\Models\Rate;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,14 +59,22 @@ class HomeController extends Controller
             ->orderByDesc('avg_rating')
             ->take(4)
             ->get();
+
         // Lấy 3 bài viết mới nhất
         $latestPosts = Post::where('status', 'published') // Lọc bài viết đang hoạt động
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
-
-            $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts','latestPosts','favoriteProductIds'));
+        // Lấy 4 đánh giá 5 sao mới nhất kèm sản phẩm
+        $reviews = Rate::with(['user', 'product'])
+            // Lọc đánh giá 5 sao và 4 sao
+            ->where('rating', '>=', 4)
+            ->latest() // Lấy mới nhất
+            ->take(5) // Giới hạn 5 đánh giá
+            ->get();
+        // Lấy danh sách sản phẩm yêu thích của người dùng
+        $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews'));
 
     }
 
