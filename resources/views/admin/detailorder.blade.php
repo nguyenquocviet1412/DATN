@@ -73,7 +73,7 @@
                 {{-- Tổng tiền trước khi giảm giá --}}
                 <tr>
                     <th>💰 Tổng tiền chưa giảm:</th>
-                    <td><strong>{{ number_format($order->total_before_discount) }} VNĐ</strong></td>
+                    <td><strong>{{ number_format($order->total_price + $order->discount_amount) }} VNĐ</strong></td>
                 </tr>
 
                 {{-- Hiển thị mã giảm giá nếu có --}}
@@ -90,7 +90,7 @@
                 </tr>
                 <tr>
                     <th>🤑 Tổng tiền đơn hàng:</th>
-                    <td><strong>{{ number_format($order->total_price) }} VNĐ</strong></td>
+                    <td><strong>{{ number_format($order->total_price) }} VNĐ </strong>(Đã tính phí vận chuyển)</td>
                 </tr>
             </table>
 
@@ -108,6 +108,7 @@
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Tổng</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,11 +124,34 @@
                                     <img src="{{ asset('default-image.jpg') }}" alt="Ảnh mặc định" width="50">
                                 @endif
                             </td>
-                            <td>{{ $item->variant->size->name ?? 'Không có' }}</td>
+                            <td>{{ $item->variant->size->size ?? 'Không có' }}</td>
                             <td>{{ $item->variant->color->name ?? 'Không có' }}</td>
                             <td>{{ number_format($item->quantity) }}</td>
                             <td>{{ number_format($item->price) }} VNĐ</td>
                             <td>{{ number_format($item->subtotal) }} VNĐ</td>
+                            <td class="text-center">
+                                @php
+                                    $status = $item->status;
+                                    $statusData = [
+                                        'pending' => ['color' => 'warning', 'icon' => '⏳', 'text' => 'Chờ xử lý'],
+                                        'confirmed' => ['color' => 'info', 'icon' => '✅', 'text' => 'Đã xác nhận'],
+                                        'preparing' => ['color' => 'primary', 'icon' => '📦', 'text' => 'Đang chuẩn bị'],
+                                        'handed_over' => ['color' => 'dark', 'icon' => '📤', 'text' => 'Đã bàn giao'],
+                                        'shipping' => ['color' => 'info', 'icon' => '🚚', 'text' => 'Đang vận chuyển'],
+                                        'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Giao thành công'],
+                                        'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
+                                        'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
+                                        'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
+                                        'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
+                                    ];
+                                @endphp
+
+                                <span class="badge bg-{{ $statusData[$status]['color'] ?? 'secondary' }}">
+                                    {!! $statusData[$status]['icon'] ?? '❓' !!} {{ $statusData[$status]['text'] ?? 'Không xác định' }}
+                                </span>
+
+
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

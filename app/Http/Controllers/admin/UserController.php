@@ -38,8 +38,6 @@ class UserController extends Controller
     {
         //
         $users = User::all();
-        // Ghi log
-        LogHelper::logAction('Vào trang tạo mới tài khoản người dùng');
         return view('admin.user.create', compact('users'));
     }
 

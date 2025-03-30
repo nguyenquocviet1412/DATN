@@ -8,9 +8,11 @@ use App\Models\favorite;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Rate;
-use DB;
+
+// use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {

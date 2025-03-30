@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Order_item;
 use App\Models\Product;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
@@ -18,8 +19,6 @@ class OrderController extends Controller
     {
         $listOrder = Order::with('orderItems.variant.product')->orderByDesc('id')->get();
 
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách đơn hàng');
         return view('admin.order', compact('listOrder'));
     }
 
@@ -27,8 +26,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::with(['user', 'voucher', 'orderItems.variant.product', 'orderItems.variant.color', 'orderItems.variant.size'])->findOrFail($id);
-        // Ghi log
-        LogHelper::logAction('Xem chi tiết đơn hàng: ' . $order->id);
+
         return view('admin.detailorder', compact('order'));
     }
 
@@ -50,30 +48,52 @@ class OrderController extends Controller
     public function update(Request $request, string $id)
 {
     $order = Order::findOrFail($id);
-    $previousStatus = $order->payment_status; // Lưu trạng thái trước đó
 
-    // Kiểm tra nếu đơn hàng đã bị hủy hoặc đã hoàn tiền
-    if (in_array($order->payment_status, ['cancelled', 'refunded'])) {
-        return redirect()->route('order.index')->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã bị hủy hoặc hoàn tiền.');
-    }
-    // Cập nhật trạng thái đơn hàng và phương thức thanh toán
-    $order->payment_status = $request->input('payment_status');
+    // Cập nhật phương thức thanh toán
     $order->payment_method = $request->input('payment_method');
     $order->save();
 
-    // Nếu trạng thái thay đổi từ return_processing → refunded thì hoàn tiền
-    if ($previousStatus === 'return_processing' && $request->input('payment_status') === 'refunded') {
-        $this->refundToWallet($order);
+    $hasStatusError = false; // Cờ kiểm tra lỗi hoàn tiền
+    $updatedStatus = false; // Cờ kiểm tra có cập nhật trạng thái không
+
+    // Cập nhật trạng thái từng sản phẩm trong đơn hàng (order_items)
+    foreach ($request->order_items as $itemId => $data) {
+        $orderItem = Order_item::findOrFail($itemId);
+        $previousStatus = $orderItem->status;
+
+        // Nếu sản phẩm đã bị hủy hoặc hoàn tiền, bỏ qua không cập nhật
+        if (in_array($previousStatus, ['cancelled', 'refunded'])) {
+            $hasStatusError = true; // Đánh dấu có lỗi trạng thái
+            continue; // Bỏ qua sản phẩm này, nhưng vẫn xử lý các sản phẩm khác
+        }
+
+        // Nếu trạng thái thay đổi từ return_processing → refunded thì hoàn tiền
+        if ($previousStatus === 'return_processing' && $data['status'] === 'refunded') {
+            $this->refundToWallet($order, $orderItem->subtotal);
+        }
+
+        // Cập nhật trạng thái sản phẩm
+        $orderItem->status = $data['status'];
+        $orderItem->save();
+        $updatedStatus = true; // Đánh dấu có sản phẩm được cập nhật
+
+        // Cập nhật trạng thái tổng của order
+        if ($previousStatus !== $data['status']) {
+            $order->payment_status = $data['status'];
+            $order->save();
+        }
     }
 
-    // Cập nhật trạng thái của các order_items nếu trạng thái trước đó giống với trạng thái tổng
-    DB::table('order_items')
-        ->where('id_order', $order->id)
-        ->where('status', $previousStatus) // Chỉ cập nhật nếu giống trạng thái tổng trước đó
-        ->update(['status' => $order->payment_status]);
+    // Ghi log nếu có cập nhật thành công
+    if ($updatedStatus) {
+        LogHelper::logAction('Cập nhật đơn hàng: ' . $order->id);
+    }
 
-    // Ghi log
-    LogHelper::logAction('Cập nhật đơn hàng: ' . $order->id);
+    // Kiểm tra nếu có lỗi hoàn tiền
+    if ($hasStatusError) {
+        return redirect()->route('order.index')->with('error', 'Một số sản phẩm không được phép cập nhật trạng thái.');
+    }
+
     return redirect()->route('order.index')->with('success', 'Cập nhật đơn hàng thành công');
 }
 
@@ -91,17 +111,19 @@ class OrderController extends Controller
     }
 
     //Phương thức hoàn tiền hàng
-    private function refundToWallet(Order $order)
+    private function refundToWallet(Order $order, $refundAmount)
 {
-
     $user = $order->user;
     $wallet = Wallet::where('id_user', $user->id)->first();
-
+    // Kiểm tra xem người dùng có ví hay không
     if (!$wallet) {
-        return redirect()->route('order.index')->with('error', 'Người dùng chưa có ví để hoàn tiền.');
+        // Nếu không có ví, tạo một ví mới cho người dùng
+        $wallet = Wallet::create([
+            'id_user' => $user->id,
+            'balance' => 0,
+            'status' => 'active'
+        ]);
     }
-
-    $refundAmount = $order->total_price; // Số tiền hoàn lại
 
     // Lưu giao dịch trước khi cập nhật số dư ví
     WalletTransaction::create([
@@ -110,7 +132,7 @@ class OrderController extends Controller
         'amount' => $refundAmount,
         'balance_before' => $wallet->balance,
         'balance_after' => $wallet->balance + $refundAmount,
-        'description' => 'Hoàn tiền đơn hàng #' . $order->id,
+        'description' => 'Hoàn tiền cho đơn hàng #' . $order->id,
         'status' => 'completed'
     ]);
 
@@ -118,5 +140,8 @@ class OrderController extends Controller
     $wallet->update([
         'balance' => $wallet->balance + $refundAmount
     ]);
+
+    // Log
+    LogHelper::logAction('Xác nhận hoàn tiền ' . number_format($refundAmount) . ' VNĐ cho đơn hàng #' . $order->id);
 }
 }

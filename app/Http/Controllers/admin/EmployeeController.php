@@ -24,8 +24,6 @@ class EmployeeController extends Controller
 
         $employees = Employee::all();
 
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách nhân viên');
         return view('admin.employee.index', compact('employees', 'sortBy', 'sortOrder', 'search'));
     }
 
