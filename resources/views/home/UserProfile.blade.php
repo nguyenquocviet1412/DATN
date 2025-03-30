@@ -67,12 +67,9 @@
                                         <th scope="row" class="bg-light"><i class="bi bi-gender-ambiguous text-info me-2"></i> Giới tính:</th>
                                         <td>{{ $user->gender }}</td>
                                     </tr>
-                                    {{-- <tr>
-                                        <th scope="row" class="bg-light"><i class="bi bi-person-badge-fill text-warning me-2"></i> Vai trò:</th>
-                                        <td>{{ $user->role }}</td>
-                                    </tr> --}}
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -80,5 +77,4 @@
         </div>
     </div>
 </div>
-
 @endsection

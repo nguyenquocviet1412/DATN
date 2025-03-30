@@ -63,16 +63,17 @@
                         </div>
 
                         <!-- Kích thước -->
-                        <div class="mb-5 pb-3 border-bottom">
-                            <label for="sizeFilter" class="form-label fw-bold mb-3">Chọn kích thước</label>
-                            <select name="id_size" id="sizeFilter" class="form-select">
-                                <option value="">Tất cả kích thước</option>
-                                @foreach($sizes as $size)
-                                    <option value="{{ $size->id }}" {{ request('id_size') == $size->id ? 'selected' : '' }}>
+                        <div class="sidebar-single mb-4 pb-3 border-bottom">
+                            <h5 class="sidebar-title fw-bold mb-3">Kích thước</h5>
+                            @foreach($sizes as $size)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="id_size[]" value="{{ $size->id }}" id="size_{{ $size->id }}"
+                                        {{ request()->has('id_size') && in_array($size->id, (array) request('id_size')) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="size_{{ $size->id }}">
                                         {{ $size->size }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
 
                         <!-- Khoảng giá -->
@@ -99,9 +100,9 @@
                     <h5 class="fw-bold">Danh sách sản phẩm</h5>
 
                     <!-- Sort By -->
-                    <div class="d-flex align-items-center">
+                    <div >
                         <label for="sort_by" class="me-2 fw-bold">Sắp xếp:</label>
-                        <select id="sort_by" class="form-select w-auto" onchange="sortProducts()">
+                        <select id="sort_by" class="form-select w-100" onchange="sortProducts()">
                             <option value="default" {{ request('sort_by') == 'default' ? 'selected' : '' }}>Mặc định</option>
                             <option value="name_asc" {{ request('sort_by') == 'name_asc' ? 'selected' : '' }}>Tên (A - Z)</option>
                             <option value="name_desc" {{ request('sort_by') == 'name_desc' ? 'selected' : '' }}>Tên (Z - A)</option>
