@@ -140,22 +140,23 @@
 
                                     // Kiểm tra thời gian trả hàng (trong vòng 7 ngày kể từ khi giao hàng)
                                     $orderDate = $order->updated_at;
-                                    $canReturn = now()->diffInDays($orderDate) <= 7;
+                                    $canReturn = now()->diffInDays($orderDate) ;
                                 @endphp
 
                                 <span class="badge bg-{{ $statusData[$status]['color'] ?? 'secondary' }} px-3 py-2">
                                     {!! $statusData[$status]['icon'] ?? '❓' !!} {{ $statusData[$status]['text'] ?? 'Không xác định' }}
                                 </span>
 
-                                @if ($status === 'completed' && $canReturn)
+                                @if ($status === 'completed' && 7 >= $canReturn )
                                     <form action="{{ route('order.return-item', ['order' => $order->id, 'item' => $item->id]) }}" method="POST" class="mt-2">
                                         @csrf
                                         <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Bạn có chắc muốn trả hàng sản phẩm này?')">
                                             🔄 Trả hàng
+                                            {{$canReturn}} ngày
                                         </button>
                                     </form>
-                                @elseif ($status === 'completed' && !$canReturn)
+                                @elseif ($status === 'completed' && $canReturn > 7)
                                     <button type="button" class="btn btn-secondary btn-sm mt-2" disabled>
                                         ⏳ Hết hạn trả hàng
                                     </button>
