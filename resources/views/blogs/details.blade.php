@@ -122,6 +122,28 @@
                         </table>
                     </div>
                 </div>
+              
+<div class="card mt-5">
+    <div class="card-header">
+        <h3>Thêm bình luận</h3>
+    </div>
+    <div class="card-body">
+        @auth
+            <form action="{{ route('blogs.addComment', $post->id) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <textarea name="note" class="form-control" rows="4" placeholder="Nhập bình luận của bạn..."></textarea>
+                    @error('note')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Gửi bình luận</button>
+            </form>
+        @else
+            <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
+        @endauth
+    </div>
+</div>
                 <!-- Kết thúc hiển thị bình luận -->
             </div>
         </div>

@@ -39,10 +39,27 @@ class BlogsController extends Controller
     return view('blogs.index', compact('posts', 'latestPosts', 'sortBy', 'sortOrder', 'search', 'monthFilter'));
 }
 
+public function addComment(Request $request, $id)
+{
+    $request->validate([
+        'note' => 'required|string|max:500',
+    ]);
+
+    Comment::create([
+        'id_post' => $id,
+        'id_user' => auth()->id(),
+        'note' => $request->input('note'),
+        'is_hidden' => false,
+    ]);
+
+    return redirect()->route('blogs.details', $id)->with('success', 'Bình luận đã được thêm thành công.');
+}
+
     public function details(string $id)
     {
         $post = Post::findOrFail($id);
         $comments = Comment::where('id_post', $id)->where('is_hidden', false)->get();
         return view('blogs.details', compact('post', 'comments'));
     }
+
 }
