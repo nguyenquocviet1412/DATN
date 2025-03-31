@@ -73,7 +73,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="hero-slider-content">
-                                        <h2 class="slide-title text-white">{{ $slider->title }}</h2>
+                                        <h2 class="slide-title">{{$slider->title}}</h2>
                                         <h4 class="slide-desc">{{ $slider->description }}</h4>
                                         <a href="{{ route('shop.index') }}" class="btn btn-hero">Khám phá ngay</a>
                                     </div>
@@ -147,14 +147,14 @@
             @foreach ($advertisements as $ad)
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                        <img src="{{ asset($ad->image) }}" alt="{{ $ad->title }}">
+                        <a href="{{ route('shop.index') }}"><img src="{{ asset($ad->image) }}" alt="{{ $ad->title }}"></a>
                     </figure>
                 </div>
             @endforeach
         </div>
     </div>
 </div>
-   
+
     <!-- product area start -->
     <section class="product-area section-padding">
         <div class="container">
