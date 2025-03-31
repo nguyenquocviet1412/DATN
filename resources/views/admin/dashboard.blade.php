@@ -1,5 +1,5 @@
 @extends('admin.layout')
-
+@section('title2', 'Dashboard')
 @section('content')
     <div class="row">
         <!--Left-->

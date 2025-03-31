@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable(); // Tiêu đề banner (nếu có)
-            $table->string('image'); // Đường dẫn ảnh banner
-            $table->text('description')->nullable();// Mô tả banner (nếu có)
-            $table->string('type')->nullable(); // loại banner
-            $table->boolean('status')->default('active'); // Trạng thái (hiển thị hoặc không)
-            $table->timestamps();
+            $table->string('title')->nullable();       // Tiêu đề banner (nếu có)
+            $table->string('image');                     // Đường dẫn ảnh banner
+            $table->text('description')->nullable();     // Mô tả banner (nếu có)
+            $table->string('type')->nullable();          // Loại banner
+            $table->boolean('status')->default(1);       // 1: Hiển thị, 0: Ẩn
+            $table->softDeletes();                       // Thêm cột deleted_at để hỗ trợ xóa mềm
+            $table->timestamps();                        // created_at và updated_at
         });
     }
 
@@ -29,4 +30,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('banners');
     }
-};
+}
