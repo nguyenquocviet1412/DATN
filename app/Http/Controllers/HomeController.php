@@ -8,7 +8,7 @@ use App\Models\favorite;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Rate;
-
+use App\Models\Banner;
 // use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +76,9 @@ class HomeController extends Controller
             ->get();
         // Lấy danh sách sản phẩm yêu thích của người dùng
         $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews'));
+        $sliders = Banner::where('type', 'slider')->whereNull('deleted_at')->get();
+        $advertisements = Banner::where('type', 'advertisement')->whereNull('deleted_at')->get();
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews','sliders', 'advertisements'));
 
     }
 

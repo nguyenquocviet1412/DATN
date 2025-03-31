@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\admin\Wallet_Transaction;
 use App\Http\Controllers\Admin\WalletController;
 use App\Models\User;
@@ -186,6 +187,22 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::delete('/delete/{id}', [VariantConntroller::class, 'variantDelete'])->name('variant.delete');
         Route::delete('/variant/image/{id}', [VariantConntroller::class, 'deleteImage'])->name('variant.image.delete');
     });
+
+    //riute banner
+    Route::resource('banners', AdminBannerController::class)
+        ->except(['show'])
+        ->names([
+            'index' => 'admin.banners.index',
+            'create' => 'admin.banners.create',
+            'store' => 'admin.banners.store',
+            'edit' => 'admin.banners.edit',
+            'update' => 'admin.banners.update',
+            'destroy' => 'admin.banners.destroy',
+        ]);
+
+    Route::get('banners/trash', [AdminBannerController::class, 'trash'])->name('admin.banners.trash');
+    Route::get('banners/restore/{id}', [AdminBannerController::class, 'restore'])->name('admin.banners.restore');
+    Route::delete('banners/delete/{id}', [AdminBannerController::class, 'delete'])->name('admin.banners.delete');
 
     //route voucher
     Route::prefix('voucher')->group(function () {

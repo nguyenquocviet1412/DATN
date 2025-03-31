@@ -64,67 +64,29 @@
     </div>
     <!-- hero slider area start -->
     <section class="slider-area">
+        <!-- Hiển thị Slider -->
         <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
-            <!-- single slider item start -->
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide2.jpg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="hero-slider-content slide-1">
-                                    <h2 class="slide-title text-white">Thoải mái & Thời trang<span>Kết hợp hoàn hảo</span></h2>
-                                    <h4 class="slide-desc">Giày phù hợp với nhịp sống của bạn, thiết kế thanh lịch.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Mua ngay</a>
+            @foreach ($sliders as $slider)
+                <div class="hero-single-slide hero-overlay">
+                    <div class="hero-slider-item bg-img" data-bg="{{ asset($slider->image) }}">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="hero-slider-content">
+                                        <h2 class="slide-title text-white">{{ $slider->title }}</h2>
+                                        <h4 class="slide-desc">{{ $slider->description }}</h4>
+                                        <a href="{{ route('shop.index') }}" class="btn btn-hero">Khám phá ngay</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- single slider item start -->
+            @endforeach
+        </div>
 
-            <!-- single slider item start -->
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide3.webp">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="hero-slider-content slide-2 float-md-end float-none">
-                                    <h2 class="slide-title text-white">Giày cao cấp<span>Bộ sưu tập</span></h2>
-                                    <h4 class="slide-desc">Nâng tầm phong cách với sự thoải mái và bền bỉ.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- single slider item start -->
-
-            <!-- single slider item start -->
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="assets/img/slide/slide1.jpg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="hero-slider-content slide-3">
-                                    <h2 class="slide-title text-white">Bước đi phong cách<span>Sản phẩm mới</span></h2>
-                                    <h4 class="slide-desc">Giày thời trang, chất lượng cao cho mọi người.</h4>
-                                    <a href="shop.html" class="btn btn-hero">Khám phá ngay</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- single slider item end -->
         </div>
     </section>
-    <!-- hero slider area end -->
-
-    <!-- twitter feed area start -->
-    <!-- twitter feed area end -->
-
     <!-- service policy area start -->
     <div class="service-policy section-padding">
         <div class="container">
@@ -179,35 +141,20 @@
     <!-- service policy area end -->
 
     <!-- banner statistics area start -->
-    <div class="banner-statistics-area">
-        <div class="container">
-            <div class="row row-20 mtn-20">
+<div class="banner-statistics-area">
+    <div class="container">
+        <div class="row row-20 mtn-20">
+            @foreach ($advertisements as $ad)
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                        <img src="assets/img/banner/banner-nho-1.png" alt="product banner">
+                        <img src="{{ asset($ad->image) }}" alt="{{ $ad->title }}">
                     </figure>
                 </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <img src="assets/img/banner/banner-nho-2.png" alt="product banner">
-                        </a>
-                    </figure>
-                </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <img src="assets/img/banner/banner-nho-3.png" alt="product banner">
-                    </figure>
-                </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <img src="assets/img/banner/banner-nho-4.png" alt="product banner">
-                    </figure>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
-    <!-- banner statistics area end -->
-
+</div>
+   
     <!-- product area start -->
     <section class="product-area section-padding">
         <div class="container">

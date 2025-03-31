@@ -1,5 +1,5 @@
     @extends('admin.layout')
-
+    @section('title2', 'Báo cáo doanh thu')
     @section('content')
     <div class="row">
         <div class="col-md-6 col-lg-3">
