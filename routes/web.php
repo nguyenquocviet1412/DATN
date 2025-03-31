@@ -39,8 +39,8 @@ use App\Http\Controllers\client\WalletClientController;
 
 
 use App\Http\Controllers\ShopController;
-
 use Spatie\FlareClient\Http\Client;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,8 +141,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/change-password', [UserControllerClient::class, 'showChangePasswordForm'])->middleware('user.auth')->name('user.change-password');
     Route::post('/user/change-password', [UserControllerClient::class, 'changePassword'])->middleware('user.auth')->name('user.change-password.update');
 
-
-
+//thêm danh gia
+Route::get('/rate/store', function (Request $request) {
+    return view('home.Rate', [
+        'id_user' => $request->id_user,
+        'id_product' => $request->id_product,
+        'id_order_item' => $request->id_order_item,
+    ]);
+})->name('rate.store');
 
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
@@ -293,7 +299,6 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::get('/', [RateController::class, 'Rindex'])->name('rate.index');
         Route::get('/{id_product}', [RateController::class, 'show'])->name('rate.show');
         Route::get('/create', [RateController::class, 'Rcreate'])->name('rate.create');
-        Route::post('/store', [RateController::class, 'Rstore'])->name('rate.store');
         Route::get('/edit/{id}', [RateController::class, 'Redit'])->name('rate.edit');
         Route::put('/update/{id}', [RateController::class, 'Rupdate'])->name('rate.update');
         Route::delete('/delete/{id}', [RateController::class, 'Rdestroy'])->name('rate.destroy');

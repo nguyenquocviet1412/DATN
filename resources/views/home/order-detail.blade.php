@@ -123,6 +123,14 @@
                             <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
                             <td>{{ number_format($item->subtotal, 0, ',', '.') }}₫</td>
                             <td>
+                                <!-- Nút thêm đánh giá -->
+        <a href="{{ route('rate.store', [
+            'id_user' => $order->user->id,
+            'id_product' => $item->variant->product->id,
+            'id_order_item' => $item->id
+        ]) }}" class="btn btn-primary btn-sm">
+            Thêm đánh giá
+        </a>
                                 @php
                                     $status = $item->status;
                                     $statusData = [
@@ -168,6 +176,7 @@
                 </table>
             </div>
 
+           
         <!-- Tổng tiền -->
         <div class="text-end mt-4">
             <h3 class="text-danger">💰 Tổng đơn hàng: <strong>{{ number_format($order->total_price, 0, ',', '.') }}₫</strong></h3>
