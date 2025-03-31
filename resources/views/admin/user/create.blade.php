@@ -15,40 +15,40 @@ Thêm người dùng
                 <div class="tile-body">
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label class="control-label">Fullname</label>
+                            <label class="control-label">Họ và tên</label>
                             <input class="form-control" type="text" name="fullname" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">email</label>
+                            <label class="control-label">Email</label>
                             <input class="form-control" type="email" name="email" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">password</label>
+                            <label class="control-label">Mật Khẩu</label>
                             <input class="form-control" type="text" name="password" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">phone</label>
+                            <label class="control-label">Số điện thoại</label>
                             <input class="form-control" type="number" name="phone" required>
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label class="control-label">address</label>
+                            <label class="control-label">Địa chỉ</label>
                             <input class="form-control" type="text" name="address" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Gender</label>
+                            <label class="control-label">Giới tính</label>
                             <select class="form-control" name="gender" required>
-                                <option value="">-- Choose gender --</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
+                                <option value="">-- Chọn giới tính --</option>
+                                <option value="Male">Nam</option>
+                                <option value="Female">Nữ</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Status</label>
+                            <label class="control-label">Trạng Thái</label>
                             <select class="form-control" name="status" required>
-                                <option value="">-- Choose status --</option>
-                                <option value="Activity">Activity</option>
-                                <option value="Disable">Disable</option>
+                                <option value="">-- Chọn trạng thái --</option>
+                                <option value="Activity">Hoạt động</option>
+                                <option value="Disable">Không Hoạt động</option>
                             </select>
                         </div>
                         @if ($errors->any())

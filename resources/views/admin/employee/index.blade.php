@@ -92,14 +92,14 @@
                         <tr class="text-center">
                             <th><input type="checkbox" id="select-all"></th>
                             <th>ID</th>
-                            <th>Username</th>
-                            <th>fullname</th>
-                            <th>email</th>
-                            <th>phone</th>
-                            <th>gender</th>
-                            <th>address</th>
-                            <th>status</th>
-                            <th>Action</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                            <th>Địa chỉ</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
