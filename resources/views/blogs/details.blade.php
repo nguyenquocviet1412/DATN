@@ -96,55 +96,60 @@
                     <p>{{ $post->content }}</p>
                 </div>
 
-                <!-- Hiển thị bình luận -->
-                <div class="card mt-5">
-                    <div class="card-header">
-                        <h3>Bình luận</h3>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Người dùng</th>
-                                    <th>Nội dung</th>
-                                    <th>Ngày bình luận</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($comments as $comment)
-                                    <tr>
-                                        <td>{{ $comment->user->fullname }}</td>
-                                        <td>{{ $comment->note }}</td>
-                                        <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-              
-<div class="card mt-5">
-    <div class="card-header">
-        <h3>Thêm bình luận</h3>
+            <!-- filepath: c:\laragon\www\DATN\resources\views\blogs\details.blade.php -->
+<!-- Hiển thị bình luận -->
+<div class="card mt-5 border-0 shadow-sm" style="border-radius: 12px;">
+    <div class="card-header" style="background-color: #ffffff; color: #000000; border-radius: 12px 12px 0 0; border: 1px solid #dcdcdc;">
+        <h3 class="mb-0">Bình luận</h3>
     </div>
-    <div class="card-body">
-        @auth
-            <form action="{{ route('blogs.addComment', $post->id) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <textarea name="note" class="form-control" rows="4" placeholder="Nhập bình luận của bạn..."></textarea>
-                    @error('note')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Gửi bình luận</button>
-            </form>
+    <div class="card-body" style="background-color: #ffffff; color: #000000; border: 1px solid #dcdcdc; border-top: none; border-radius: 0 0 12px 12px;">
+        @if ($comments->isEmpty())
+            <p class="text-muted">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
         @else
-            <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
-        @endauth
+            <ul class="list-group">
+                @foreach ($comments as $comment)
+                    <li class="list-group-item" style="background-color: #ffffff; color: #000000; border: 1px solid #dcdcdc; border-radius: 8px; margin-bottom: 10px;">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="mb-1 font-weight-bold">{{ $comment->user->fullname }}</h6>
+                                <small class="text-muted">{{ $comment->created_at->format('d/m/Y H:i') }}</small>
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-0">{{ $comment->note }}</p>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+
+        <!-- Nút mở slide thêm bình luận -->
+        <div class="text-end mt-4">
+            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#addCommentForm" aria-expanded="false" aria-controls="addCommentForm" style="border-radius: 8px;">
+                Thêm bình luận
+            </button>
+        </div>
+
+        <!-- Slide thêm bình luận -->
+        <div class="collapse mt-3" id="addCommentForm">
+            <div class="card card-body" style="border-radius: 12px; background-color: #f8f9fa;">
+                @auth
+                    <form action="{{ route('blogs.addComment', $post->id) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <textarea name="note" class="form-control" rows="4" placeholder="Nhập bình luận của bạn..." style="background-color: #ffffff; color: #000000; border: 1px solid #dcdcdc; border-radius: 8px;"></textarea>
+                            @error('note')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn mt-3" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">Gửi bình luận</button>
+                    </form>
+                @else
+                    <p>Vui lòng <a href="{{ route('login') }}" style="color: #6c757d; font-weight: bold;">đăng nhập</a> để bình luận.</p>
+                @endauth
+            </div>
+        </div>
     </div>
 </div>
-                <!-- Kết thúc hiển thị bình luận -->
+
             </div>
         </div>
     </div>
