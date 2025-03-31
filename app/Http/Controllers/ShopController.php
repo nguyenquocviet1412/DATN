@@ -21,28 +21,38 @@ class ShopController extends Controller
         $colors = Color::all();
         $sizes = Size::all();
 
-        // Truy vấn sản phẩm dựa trên biến thể
-        $products = Product::whereHas('variants', function ($query) use ($request) {
+        // Bắt đầu truy vấn sản phẩm
+        $products = Product::query();
 
-            if ($request->filled('search')) {
-                $products = Product::where('name', 'like', '%' . $request->search . '%');
-            } else {
-                $products = Product::query();
-            }
-            // Lọc theo màu sắc
-            if ($request->filled('id_color')) {
-                $selectedColors = is_array($request->id_color) ? $request->id_color : [$request->id_color];
-                $query->whereIn('id_color', $selectedColors);
-            }
+        // Lọc sản phẩm có tất cả các màu được chọn
+        if ($request->filled('id_color')) {
+            $selectedColors = is_array($request->id_color) ? $request->id_color : [$request->id_color];
 
-            // Lọc theo kích thước
-            if ($request->filled('id_size')) {
-                $selectedSizes = is_array($request->id_size) ? $request->id_size : [$request->id_size];
-                $query->whereIn('id_size', $selectedSizes);
+            // Chỉ lấy sản phẩm có **tất cả** các màu trong danh sách
+            foreach ($selectedColors as $color) {
+                $products->whereHas('variants', function ($query) use ($color) {
+                    $query->where('id_color', $color);
+                });
             }
-        });
+        }
 
-        // Lọc theo danh mục (ngoài biến thể)
+        // Lọc sản phẩm có tất cả các kích thước được chọn
+        if ($request->filled('id_size')) {
+            $selectedSizes = is_array($request->id_size) ? $request->id_size : [$request->id_size];
+
+            foreach ($selectedSizes as $size) {
+                $products->whereHas('variants', function ($query) use ($size) {
+                    $query->where('id_size', $size);
+                });
+            }
+        }
+
+        // Lọc theo từ khóa tìm kiếm
+        if ($request->filled('search')) {
+            $products->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Lọc theo danh mục
         if ($request->filled('id_category')) {
             $products->where('id_category', $request->id_category);
         }
@@ -79,7 +89,7 @@ class ShopController extends Controller
                 break;
         }
 
-        // Trả về danh sách sản phẩm
+        // Trả về danh sách sản phẩm (tránh trùng lặp)
         $products = $products->with('rates')->distinct()->paginate(9)->appends(request()->query());
 
         // Lấy danh sách sản phẩm yêu thích của người dùng (nếu có)
