@@ -196,8 +196,8 @@
                                 <div class="header-search-container">
                                     <button class="search-trigger d-xl-none d-lg-block"><i class="pe-7s-search"></i></button>
                                     <form class="header-search-box d-lg-none d-xl-block" method="GET" action="{{ route('shop.index') }}">
-                                        <input type="text" name="keyword" placeholder="Tìm kiếm..." value="{{ request('search') }}" class="header-search-field">
-                                        <button class="header-search-btn"> <i class="pe-7s-search"></i></button>
+                                        <input type="text" name="search" placeholder="Tìm kiếm..." value="{{ request('search') }}" class="header-search-field">
+                                        <button type="submit" class="header-search-btn"><i class="pe-7s-search"></i></button>
                                     </form>
                                 </div>
                                 <div class="header-configure-area">
