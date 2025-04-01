@@ -23,11 +23,12 @@ class AdminBannerController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|file|mimes:jpeg,jpg,png,gif|max:2048',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:slider,advertisement',
+            'type' => 'required|string|in:slider,advertisement,middle,bottom',
             'status' => 'required|boolean',
         ]);
 
@@ -61,9 +62,9 @@ class AdminBannerController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string|max:500',
-            'type' => 'required|in:slider,advertisement',
+            'type' => 'required|in:slider,advertisement,middle,bottom',
             'status' => 'required|boolean'
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề.',

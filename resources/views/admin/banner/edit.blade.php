@@ -51,6 +51,8 @@
             <select name="type" class="form-control">
                 <option value="slider" {{ old('type', $banner->type) == 'slider' ? 'selected' : '' }}>Slider</option>
                 <option value="advertisement" {{ old('type', $banner->type) == 'advertisement' ? 'selected' : '' }}>Quảng cáo</option>
+                <option value="middle" {{ old('type', $banner->type) == 'middle' ? 'selected' : '' }}>Banner giữa</option>
+                <option value="bottom" {{ old('type', $banner->type) == 'bottom' ? 'selected' : '' }}>Banner dưới</option>
             </select>
             @error('type')
                 <div class="text-danger">{{ $message }}</div>
