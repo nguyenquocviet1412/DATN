@@ -2,6 +2,28 @@
 @section('title2', 'Tạo Banner')
 @section('content')
 <div class="container">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Thành công!',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 4000
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                confirmButtonText: 'Đóng'
+            });
+        </script>
+    @endif
     <h2>Thêm Banner Mới</h2>
     <form action="{{ route('admin.banners.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -33,7 +55,7 @@
             <label for="type" class="form-label">Loại Banner</label>
             <select name="type" class="form-control">
                 <option value="slider" {{ old('type') == 'slider' ? 'selected' : '' }}>Slider</option>
-                <option value="advertisement" {{ old('type') == 'advertisement' ? 'selected' : '' }}>Quảng cáo</option>
+                <option value="top" {{ old('type') == 'top' ? 'selected' : '' }}>Banner top</option>
                 <option value="middle" {{ old('type') == 'middle' ? 'selected' : '' }}>Banner giữa</option>
                 <option value="bottom" {{ old('type') == 'bottom' ? 'selected' : '' }}>Banner dưới</option>
             </select>

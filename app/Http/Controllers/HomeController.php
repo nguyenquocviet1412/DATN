@@ -76,9 +76,9 @@ class HomeController extends Controller
             ->get();
         // Lấy danh sách sản phẩm yêu thích của người dùng
         $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
-        $sliders = Banner::where('type', 'slider')->whereNull('deleted_at')->get();
-        $advertisements = Banner::where('type', 'advertisement')->whereNull('deleted_at')->get();
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews','sliders', 'advertisements'));
+        //Lấy danh sách bannner
+        $banners = Banner::where('status', 1)->get();
+        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews','banners'));
 
     }
 
