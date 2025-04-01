@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
@@ -26,29 +27,47 @@ class AdminBannerController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'image' => 'required|file|mimes:jpeg,jpg,png,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:slider,advertisement,middle,bottom',
+            'type' => 'required|string|in:slider,top,middle,bottom',
             'status' => 'required|boolean',
         ]);
+        // dd($request->file('image')->getMimeType());
+
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
+        //Kiểm tra xem type của ảnh là top có đủ 4 ảnh chưa nếu đủ thì không cho tạo nữa
+        if ($request->type == 'top') {
+            $count = Banner::where('type', 'top')->count();
+            if ($count >= 4) {
+                return redirect()->back()->with('error', 'Đã đủ 4 banner loại top! Hãy xóa ảnh trước đó!');
+            }
+        }
+        // Kiểm tra xem type của ảnh là bottom có đủ 1 ảnh chưa nếu đủ thì không cho tạo nữa
+        if ($request->type == 'bottom') {
+            $count = Banner::where('type', 'bottom')->count();
+            if ($count >= 1) {
+                return redirect()->back()->with('error', 'Đã đủ 1 banner loại bottom!Hãy xóa ảnh trước đó!');
+            }
+        }
 
         // Upload ảnh
         $imagePath = $request->file('image')->store('banners', 'public');
 
         // Lưu vào database
-        Banner::create([
+        $Banner = Banner::create([
             'title' => $request->title,
             'image' => $imagePath,
             'description' => $request->description,
             'type' => $request->type,
             'status' => $request->status,
         ]);
+        // Ghi log
+        LogHelper::logAction('Tạo banner mới có ID: ' . $Banner->id);
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner đã được tạo!');
     }
@@ -62,9 +81,9 @@ class AdminBannerController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'nullable|string|max:500',
-            'type' => 'required|in:slider,advertisement,middle,bottom',
+            'type' => 'required|in:slider,top,middle,bottom',
             'status' => 'required|boolean'
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề.',
@@ -99,6 +118,8 @@ class AdminBannerController extends Controller
         }
 
         $banner->save();
+        // Ghi log
+        LogHelper::logAction('Cập nhật banner có ID: ' . $banner->id);
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner đã được cập nhật!');
     }

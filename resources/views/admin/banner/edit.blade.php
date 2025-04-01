@@ -3,6 +3,28 @@
 @section('title2', 'Chỉnh sửa Banner')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Thành công!',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 4000
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                confirmButtonText: 'Đóng'
+            });
+        </script>
+    @endif
 <div class="container">
     <h2>Chỉnh sửa Banner</h2>
 
@@ -50,7 +72,7 @@
             <label for="type" class="form-label">Loại Banner</label>
             <select name="type" class="form-control">
                 <option value="slider" {{ old('type', $banner->type) == 'slider' ? 'selected' : '' }}>Slider</option>
-                <option value="advertisement" {{ old('type', $banner->type) == 'advertisement' ? 'selected' : '' }}>Quảng cáo</option>
+                <option value="top" {{ old('type', $banner->type) == 'top' ? 'selected' : '' }}>Banner top</option>
                 <option value="middle" {{ old('type', $banner->type) == 'middle' ? 'selected' : '' }}>Banner giữa</option>
                 <option value="bottom" {{ old('type', $banner->type) == 'bottom' ? 'selected' : '' }}>Banner dưới</option>
             </select>

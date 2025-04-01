@@ -1,6 +1,28 @@
 @extends('admin.layout')
 @section('title2', 'Quản lý Banner')
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Thành công!',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 4000
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                confirmButtonText: 'Đóng'
+            });
+        </script>
+    @endif
 <div class="container">
     <h2>Quản lý Banner</h2>
     <a href="{{ route('admin.banners.create') }}" class="btn btn-primary">Thêm Banner</a>

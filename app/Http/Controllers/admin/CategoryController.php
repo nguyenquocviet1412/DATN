@@ -12,15 +12,13 @@ class CategoryController extends Controller
     public function categoryIndex()
     {
         $category = Category::whereNull('deleted_at')->get();
-        // Ghi log
-        LogHelper::logAction('Vào trang danh sách danh mục');
+
         return view('admin.category.category', compact('category'));
     }
 
     public function categoryCreate()
     {
-        // Ghi log
-        LogHelper::logAction('Vào trang tạo danh mục');
+
         return view('admin.category.addcategory');
     }
 

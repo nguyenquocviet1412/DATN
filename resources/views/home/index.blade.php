@@ -66,15 +66,16 @@
     <section class="slider-area">
         <!-- Hiển thị Slider -->
         <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
-            @foreach ($sliders as $slider)
+            @foreach ($banners as $banner)
+            @if ($banner->type == 'slider')
                 <div class="hero-single-slide hero-overlay">
-                    <div class="hero-slider-item bg-img" data-bg="{{ asset($slider->image) }}">
+                    <div class="hero-slider-item bg-img" data-bg="{{ asset('storage/' .$banner->image) }}">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="hero-slider-content">
-                                        <h2 class="slide-title">{{$slider->title}}</h2>
-                                        <h4 class="slide-desc">{{ $slider->description }}</h4>
+                                        <h2 class="slide-title">{{$banner->title}}</h2>
+                                        <h4 class="slide-desc">{{ $banner->description }}</h4>
                                         <a href="{{ route('shop.index') }}" class="btn btn-hero">Khám phá ngay</a>
                                     </div>
                                 </div>
@@ -82,6 +83,7 @@
                         </div>
                     </div>
                 </div>
+            @endif
             @endforeach
         </div>
 
@@ -144,12 +146,14 @@
 <div class="banner-statistics-area">
     <div class="container">
         <div class="row row-20 mtn-20">
-            @foreach ($advertisements as $ad)
+            @foreach ($banners as $banner)
+            @if ($banner->type == 'top')
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                        <a href="{{ route('shop.index') }}"><img src="{{ asset($ad->image) }}" alt="{{ $ad->title }}"></a>
+                        <a href="{{ route('shop.index') }}"><img style="width: 545px;height: 250px;object-fit: cover;" src="{{ asset('storage/' .$banner->image) }}" alt="{{ $banner->title }}"></a>
                     </figure>
                 </div>
+            @endif
             @endforeach
         </div>
     </div>
@@ -233,66 +237,24 @@
             <div class="row">
                 <div class="col-12">
                     <div class="product-banner-carousel slick-row-10">
-                        <!-- banner single slide start -->
-                        <div class="banner-slide-item">
-                            <figure class="banner-statistics">
-                                <a href="#">
-                                    <img src="assets/img/banner/banner-nho-9.png" alt="product banner">
-                                </a>
-                                <div class="banner-content banner-content_style2">
-                                    <h5 class="banner-text3"><a href="#">BRACELATES</a></h5>
-                                </div>
-                            </figure>
-                        </div>
-                        <!-- banner single slide start -->
-                        <!-- banner single slide start -->
-                        <div class="banner-slide-item">
-                            <figure class="banner-statistics">
-                                <a href="#">
-                                    <img src="assets/img/banner/banner-nho-8.png" alt="product banner">
-                                </a>
-                                <div class="banner-content banner-content_style2">
-                                    <h5 class="banner-text3"><a href="#">EARRINGS</a></h5>
-                                </div>
-                            </figure>
-                        </div>
-                        <!-- banner single slide start -->
-                        <!-- banner single slide start -->
-                        <div class="banner-slide-item">
-                            <figure class="banner-statistics">
-                                <a href="#">
-                                    <img src="assets/img/banner/banner-nho-7.png" alt="product banner">
-                                </a>
-                                <div class="banner-content banner-content_style2">
-                                    <h5 class="banner-text3"><a href="#">NECJLACES</a></h5>
-                                </div>
-                            </figure>
-                        </div>
-                        <!-- banner single slide start -->
-                        <!-- banner single slide start -->
-                        <div class="banner-slide-item">
-                            <figure class="banner-statistics">
-                                <a href="#">
-                                    <img src="assets/img/banner/banner-nho-6.png" alt="product banner">
-                                </a>
-                                <div class="banner-content banner-content_style2">
-                                    <h5 class="banner-text3"><a href="#">RINGS</a></h5>
-                                </div>
-                            </figure>
-                        </div>
-                        <!-- banner single slide start -->
-                        <!-- banner single slide start -->
-                        <div class="banner-slide-item">
-                            <figure class="banner-statistics">
-                                <a href="#">
-                                    <img src="assets/img/banner/banner-nho-5.png" alt="product banner">
-                                </a>
-                                <div class="banner-content banner-content_style2">
-                                    <h5 class="banner-text3"><a href="#">PEARLS</a></h5>
-                                </div>
-                            </figure>
-                        </div>
-                        <!-- banner single slide start -->
+                        @foreach ($banners as $banner)
+                        @if ($banner->type == 'middle')
+                            <!-- banner single slide start -->
+                            <div class="banner-slide-item">
+                                <figure class="banner-statistics">
+                                    <a href="{{ route('shop.index') }}">
+                                        <img src="{{ asset('storage/' .$banner->image) }}" alt="{{ $banner->title }}" style="width: 100%; height: 250px; object-fit: cover;">
+                                    </a>
+                                    <div class="banner-content banner-content_style2">
+                                        <h5 class="banner-text3"><a href="{{ route('shop.index') }}">{{ $banner->title }}</a></h5>
+                                    </div>
+                                </figure>
+                            </div>
+                            <!-- banner single slide start -->
+                        @endif
+                        @endforeach
+
+
                     </div>
                 </div>
             </div>
@@ -422,15 +384,20 @@
     <section class="group-product-area section-padding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="group-product-banner">
-                        <figure class="banner-statistics">
-                            <a href="#">
-                                <img src="assets/img/banner/banner-vua.jpg" alt="Banner sản phẩm">
-                            </a>
-                        </figure>
+                @foreach ($banners as $banner)
+                    @if ($banner->type == 'bottom')
+                    <div class="col-lg-6">
+                        <div class="group-product-banner">
+                            <figure class="banner-statistics">
+                                <a href="{{ route('shop.index') }}">
+                                    <img src="{{ asset('storage/' .$banner->image) }}" alt="{{ $banner->title }}" style="width: 100%; height: 426px; object-fit: cover;">
+                                </a>
+                            </figure>
+                        </div>
                     </div>
-                </div>
+                    @endif
+                @endforeach
+
                 <div class="col-lg-3">
                     <div class="categories-group-wrapper">
                         <!-- Tiêu đề danh mục -->
