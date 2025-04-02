@@ -103,7 +103,7 @@
 
                         <!-- Sort By -->
                         <div>
-                            <label for="sort_by" class="me-2 fw-bold text-warning"> Sắp xếp </label>
+                            <label for="sort_by" class="me-2 fw-bold text-warning"> Sắp xếp </label><br>
                             <select id="sort_by" class="form-select border-warning" onchange="sortProducts()">
                                 <option value="default" {{ request('sort_by') == 'default' ? 'selected' : '' }}>Mặc định
                                 </option>

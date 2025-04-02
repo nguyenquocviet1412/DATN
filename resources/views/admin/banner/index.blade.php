@@ -1,7 +1,8 @@
 @extends('admin.layout')
 @section('title2', 'Quản lý Banner')
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if(session('success'))
         <script>
             Swal.fire({
@@ -23,50 +24,84 @@
             });
         </script>
     @endif
-<div class="container">
-    <h2>Quản lý Banner</h2>
-    <a href="{{ route('admin.banners.create') }}" class="btn btn-primary">Thêm Banner</a>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="row element-button">
+                        <div class="col-sm-6">
+                            <a href="{{ route('admin.banners.create') }}" class="btn btn-success"><i class="fas fa-plus"></i>Thêm Banner</a>
+                            <a href="{{ route('admin.banners.trash') }}" class="btn btn-info"><i class="fas fa-trash"></i> Thùng rác</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="GET" action="{{ route('admin.banners.index') }}">
+                                <div class="input-group">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Tìm kiếm theo tiêu đề...">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Tìm kiếm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
+                    <div class="mb-3">
+                        <form method="GET" action="{{ route('admin.banners.index') }}">
+                            <label for="sort_by">Sắp xếp theo:</label>
+                            <select name="sort_by" id="sort_by" class="form-control d-inline-block w-auto">
+                                <option value="id" {{ $sortBy == 'id' ? 'selected' : '' }}>ID</option>
+                                <option value="title" {{ $sortBy == 'title' ? 'selected' : '' }}>Tiêu đề</option>
+                            </select>
+                            <select name="sort_order" id="sort_order" class="form-control d-inline-block w-auto">
+                                <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Tăng dần</option>
+                                <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Giảm dần</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Sắp xếp</button>
+                        </form>
+                    </div>
 
-    <table class="table table-bordered mt-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Hình ảnh</th>
-                <th>Tiêu đề</th>
-                <th>Loại</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($banners as $banner)
-            <tr>
-                <td>{{ $banner->id }}</td>
-                <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
-                <td>{{ $banner->title }}</td>
-                <td>{{ $banner->type }}</td>
-                <td>{{ $banner->status ? 'Hiển thị' : 'Ẩn' }}</td>
-                <td>
-                    <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">Sửa</a>
-                    <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
-                        onsubmit="return confirmDelete()" style="display:inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                  </form>
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Hình ảnh</th>
+                                <th>Tiêu đề</th>
+                                <th>Loại</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($banners as $banner)
+                                <tr>
+                                    <td>{{ $banner->id }}</td>
+                                    <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
+                                    <td>{{ $banner->title }}</td>
+                                    <td>{{ $banner->type }}</td>
+                                    <td>{{ $banner->status ? 'Hiển thị' : 'Ẩn' }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
+                                        <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
+                                            onsubmit="return confirmDelete()" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Xóa</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                  <script>
-                  function confirmDelete() {
-                      return confirm("Bạn có chắc chắn muốn xóa banner này không?");
-                  }
-                  </script>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    {{ $banners->links() }}
 
-    {{ $banners->links() }}
-</div>
+                    <script>
+                        function confirmDelete() {
+                            return confirm("Bạn có chắc chắn muốn xóa banner này không?");
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
