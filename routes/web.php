@@ -188,7 +188,7 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::delete('/variant/image/{id}', [VariantConntroller::class, 'deleteImage'])->name('variant.image.delete');
     });
 
-    //riute banner
+    //Route banner
     Route::resource('banners', AdminBannerController::class)
         ->except(['show'])
         ->names([
@@ -201,7 +201,7 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         ]);
 
     Route::get('banners/trash', [AdminBannerController::class, 'trash'])->name('admin.banners.trash');
-    Route::get('banners/restore/{id}', [AdminBannerController::class, 'restore'])->name('admin.banners.restore');
+    Route::post('banners/restore/{id}', [AdminBannerController::class, 'restore'])->name('admin.banners.restore');
     Route::delete('banners/delete/{id}', [AdminBannerController::class, 'delete'])->name('admin.banners.delete');
 
     //route voucher

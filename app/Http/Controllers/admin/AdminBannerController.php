@@ -11,10 +11,31 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminBannerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $banners = Banner::whereNull('deleted_at')->paginate(10);
-        return view('admin.banner.index', compact('banners'));
+        $sortBy = $request->input('sort_by', 'id'); // Mặc định sắp xếp theo ID
+        $sortOrder = $request->input('sort_order', 'asc'); // Mặc định tăng dần
+        $search = $request->input('search'); // Lấy giá trị tìm kiếm
+
+        $query = Banner::query()->whereNull('deleted_at');
+
+        // Nếu có từ khóa tìm kiếm, thực hiện lọc theo tiêu đề
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        // Kiểm tra xem $sortBy có nằm trong danh sách các cột được phép sắp xếp hay không
+        if (in_array($sortBy, ['id', 'title'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            // Nếu không hợp lệ, sắp xếp theo ID mặc định
+            $query->orderBy('id', $sortOrder);
+            $sortBy = 'id'; // Cập nhật lại giá trị $sortBy cho view
+        }
+
+        $banners = $query->paginate(10)->appends($request->query());
+
+        return view('admin.banner.index', compact('banners', 'sortBy', 'sortOrder', 'search'));
     }
 
     public function create()
@@ -127,27 +148,31 @@ class AdminBannerController extends Controller
     public function destroy($id)
     {
         $banner = Banner::findOrFail($id);
-        $banner->delete(); // Chuyển vào thùng rác nếu dùng soft delete
-
-        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được xóa!');
+        $banner->delete(); // Soft delete
+        LogHelper::logAction('Đưa banner có ID: ' . $banner->id . ' vào thùng rác');
+        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được đưa vào thùng rác!');
     }
     public function trash()
     {
-        $banners = Banner::whereNotNull('deleted_at')->paginate(10);
+        $banners = Banner::onlyTrashed()->paginate(10);
         return view('admin.banner.trash', compact('banners'));
     }
 
     public function restore($id)
     {
-        Banner::where('id', $id)->update(['deleted_at' => null]);
+        Banner::withTrashed()->findOrFail($id)->restore();
+        LogHelper::logAction('Khôi phục banner có ID: ' . $id . ' từ thùng rác');
         return redirect()->route('admin.banners.trash')->with('success', 'Banner đã được khôi phục!');
     }
 
     public function delete($id)
     {
         $banner = Banner::withTrashed()->findOrFail($id);
-        Storage::disk('public')->delete($banner->image);
+        if ($banner->image) {
+            Storage::disk('public')->delete($banner->image);
+        }
         $banner->forceDelete();
+        LogHelper::logAction('Xóa vĩnh viễn banner có ID: ' . $id . ' khỏi thùng rác');
         return redirect()->route('admin.banners.trash')->with('success', 'Banner đã bị xóa vĩnh viễn!');
     }
 }
