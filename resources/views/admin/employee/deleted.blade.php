@@ -12,13 +12,14 @@
                     <thead>
                         <tr class="text-center">
                             <th>ID</th>
-                            <th>Username</th>
-                            <th>Fullname</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ và tên</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Deleted At</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                            <th>Địa chỉ</th>
+                            <th>Thời gian xóa</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,19 +34,25 @@
                             <td>{{ $employee->address }}</td>
                             <td>{{ $employee->deleted_at }}</td>
                             <td class="text-center">
-                                <form action="{{ route('employee.restore', $employee->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="fas fa-undo"></i> Khôi phục
-                                    </button>
-                                </form>
+                                @php
+                                    $admin = Auth::guard('employee')->user();
+                                @endphp
+
+                                @if ($admin->role === 'superadmin')
+                                    <form action="{{ route('employee.restore', $employee->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-undo"></i> Khôi phục
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <a href="{{ route('employee.index') }}" class="btn btn-primary">Back to Employee List</a>
+                <a href="{{ route('employee.index') }}" class="btn btn-primary">Quay lại</a>
             </div>
         </div>
     </div>

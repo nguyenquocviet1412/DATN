@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
@@ -58,6 +59,11 @@ class EmployeeController extends Controller
             'position' => 'required|string',
             'status' => 'required|boolean',
         ]);
+        //Kiểm tra xem tài khoản nhân viên có phải superadmin không
+        $admin = Auth::guard('employee')->user(); // Lấy nhân viên đang đăng nhập
+        if ($admin && $admin->role !='superadmin') {
+            return redirect()->back()->withErrors(['error' => 'Bạn không có quyền thêm nhân viên mới.']);
+        }
 
         $employees = Employee::create([
             'username' => $request->input('username'),
@@ -76,7 +82,7 @@ class EmployeeController extends Controller
         // Ghi log
         LogHelper::logAction('Tạo mới nhân viên có id: '. $employees->id);
 
-        return redirect()->route('employee.index')->with('success', 'Employee created successfully');
+        return redirect()->route('employee.index')->with('success', 'Tạo tài khoản nhân viên thành công.');
     }
 
     /**
@@ -97,8 +103,6 @@ class EmployeeController extends Controller
         })
         ->orderBy('created_at', 'desc') // Sắp xếp mới nhất lên đầu
         ->paginate(10);
-// Ghi log
-LogHelper::logAction('Xem thông tin nhân viên có id: ' . $employee->id);
     return view('admin.employee.show', compact('employee', 'logs', 'search'));
 }
 
@@ -110,9 +114,6 @@ LogHelper::logAction('Xem thông tin nhân viên có id: ' . $employee->id);
     {
         //
         $employee = Employee::findOrFail($id);
-
-        // Ghi log
-        LogHelper::logAction('Vào trang chỉnh sửa nhân viên có id: ' . $employee->id);
         return view('admin.employee.edit', compact('employee'));
     }
 
@@ -120,69 +121,107 @@ LogHelper::logAction('Xem thông tin nhân viên có id: ' . $employee->id);
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $request->validate([
-            'username' => 'required|string|max:255|unique:employees,username,' . $id,
-            'password' => 'nullable|string|max:255',
-            'role' => 'required|string',
-            'fullname' => 'required|string',
-            'email' => 'required|email|unique:employees,email,' . $id,
-            'phone' => 'required|numeric|unique:employees,phone,' . $id,
-            'gender' => 'required|string',
-            'date_of_birth' => 'required|date',
-            'address' => 'required|string',
-            'position' => 'required|string',
-            'status' => 'required|boolean',
-        ]);
+{
+    $admin = Auth::guard('employee')->user(); // Lấy tài khoản đang đăng nhập
 
-        $employee = Employee::findOrFail($id);
-        $employee->username = $request->input('username');
-        if ($request->input('password')) {
-            $employee->password = Hash::make($request->input('password'));
-        }
-        $employee->role = $request->input('role');
-        $employee->fullname = $request->input('fullname');
-        $employee->email = $request->input('email');
-        $employee->phone = $request->input('phone');
-        $employee->gender = $request->input('gender');
-        $employee->date_of_birth = $request->input('date_of_birth');
-        $employee->address = $request->input('address');
-        $employee->position = $request->input('position');
-        $employee->status = $request->input('status');
-
-        $employee->save();
-
-        // Ghi log
-        LogHelper::logAction('Cập nhật thông tin nhân viên có id: ' . $employee->id);
-        return redirect()->route('employee.index')->with('success', 'Employee updated successfully');
+    // Nếu tài khoản đăng nhập là "admin" nhưng muốn chỉnh sửa tài khoản khác -> Cấm
+    if ($admin->role == 'admin' && $admin->id != $id) {
+        return redirect()->back()->withErrors(['error' => 'Bạn không có quyền chỉnh sửa tài khoản này.']);
     }
+
+    $request->validate([
+        'username' => 'required|string|max:255|unique:employees,username,' . $id,
+        'password' => 'nullable|string|max:255',
+        'role' => 'required|string',
+        'fullname' => 'required|string',
+        'email' => 'required|email|unique:employees,email,' . $id,
+        'phone' => 'required|numeric|unique:employees,phone,' . $id,
+        'gender' => 'required|string',
+        'date_of_birth' => 'required|date',
+        'address' => 'required|string',
+        'position' => 'required|string',
+        'status' => 'required|boolean',
+    ]);
+
+    $employee = Employee::findOrFail($id);
+
+    // Nếu tài khoản đăng nhập là admin -> Không cho phép thay đổi vai trò (role) và trạng thái (status)
+    if ($admin->role == 'admin') {
+        $request->merge([
+            'role' => $employee->role, // Giữ nguyên role cũ
+            'status' => $employee->status, // Giữ nguyên status cũ
+        ]);
+    }
+
+    $employee->username = $request->input('username');
+    if ($request->input('password')) {
+        $employee->password = Hash::make($request->input('password'));
+    }
+    $employee->role = $request->input('role');
+    $employee->fullname = $request->input('fullname');
+    $employee->email = $request->input('email');
+    $employee->phone = $request->input('phone');
+    $employee->gender = $request->input('gender');
+    $employee->date_of_birth = $request->input('date_of_birth');
+    $employee->address = $request->input('address');
+    $employee->position = $request->input('position');
+    $employee->status = $request->input('status');
+
+    $employee->save();
+
+    // Ghi log
+    LogHelper::logAction('Cập nhật thông tin nhân viên có id: ' . $employee->id);
+    return redirect()->route('employee.index')->with('success', 'Cập nhật tài khoản nhân viên thành công');
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function delete($id)
-    {
-        $employee = Employee::findOrFail($id);
-        $employee->delete();
-        // Ghi log
-        LogHelper::logAction('Xóa nhân viên có id: ' . $employee->id);
-        return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
+{
+    $admin = Auth::guard('employee')->user(); // Lấy tài khoản đăng nhập
+
+    // Chỉ superadmin mới có quyền xóa
+    if ($admin->role !== 'superadmin') {
+        return redirect()->back()->withErrors(['error' => 'Bạn không có quyền xóa nhân viên.']);
     }
+
+    $employee = Employee::findOrFail($id);
+
+    // Không cho phép xóa chính mình để tránh mất quyền quản trị
+    if ($admin->id == $employee->id) {
+        return redirect()->back()->withErrors(['error' => 'Bạn không thể tự xóa tài khoản của mình.']);
+    }
+
+    $employee->delete();
+
+    // Ghi log
+    LogHelper::logAction('Xóa nhân viên có id: ' . $employee->id);
+
+    return redirect()->route('employee.index')->with('success', 'Đã xóa nhân viên thành công.');
+}
 
     public function deleted()
     {
         $deletedEmployees = Employee::onlyTrashed()->get();
-        // Ghi log
-        LogHelper::logAction('Vào trang danh sách nhân viên đã xóa');
         return view('admin.employee.deleted', compact('deletedEmployees'));
     }
 
     public function restore($id)
-    {
-        $employee = Employee::onlyTrashed()->findOrFail($id);
-        $employee->restore();
-        // Ghi log
-        LogHelper::logAction('Khôi phục nhân viên có id: ' . $employee->id);
-        return redirect()->route('employee.deleted')->with('success', 'Employee restored successfully.');
+{
+    $admin = Auth::guard('employee')->user(); // Lấy tài khoản đăng nhập
+
+    // Chỉ superadmin mới có quyền khôi phục nhân viên
+    if ($admin->role !== 'superadmin') {
+        return redirect()->back()->withErrors(['error' => 'Bạn không có quyền khôi phục nhân viên.']);
     }
+
+    $employee = Employee::onlyTrashed()->findOrFail($id);
+    $employee->restore();
+
+    // Ghi log
+    LogHelper::logAction('Khôi phục nhân viên có id: ' . $employee->id);
+
+    return redirect()->route('employee.deleted')->with('success', 'Nhân viên đã được khôi phục thành công.');
+}
 }

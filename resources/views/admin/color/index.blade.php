@@ -26,7 +26,7 @@
     <div class="container">
         <h2>Quản lý Màu sắc</h2>
         <a href="{{ route('admin.color.create') }}" class="btn btn-primary">Thêm Màu</a>
-        <a href="{{ route('admin.color.trash') }}" class="btn btn-secondary">Danh sách đã xóa</a> 
+        <a href="{{ route('admin.color.trash') }}" class="btn btn-secondary">Danh sách đã xóa</a>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -37,24 +37,16 @@
             </thead>
             <tbody>
                 @foreach ($colors as $color)
+                    @if (!$color->trashed())
                     <tr>
                         <td>{{ $color->id }}</td>
                         <td>{{ $color->name }}</td>
                         <td>
-                            @if (!$color->trashed())
-                                <a href="{{ route('admin.color.softDelete', $color->id) }}" class="btn btn-danger">Xóa mềm</a>
-                            @else
-                                <a href="{{ route('admin.color.restore', $color->id) }}" class="btn btn-success">Khôi phục</a>
-                            @endif
+                            <a href="{{ route('admin.color.softDelete', $color->id) }}" class="btn btn-danger">Xóa</a>
                             <a href="{{ route('admin.color.edit', $color->id) }}" class="btn btn-warning">Sửa</a>
-                            <form action="{{ route('admin.color.destroy', $color->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Xóa</button>
-                            </form>
                         </td>
                     </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

@@ -63,21 +63,17 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr class="text-center">
-                                <th><input type="checkbox" id="select-all"></th>
                                 <th>ID</th>
-                                <th>Username</th>
-                                <th>Title</th>
-                                <th>Content</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Tên người tạo</th>
+                                <th>Tiêu đề</th>
+                                <th>Nội dung</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($posts as $post)
                                 <tr class="align-middle">
-                                    <td class="text-center">
-                                        <input type="checkbox" name="check1" value="{{ $post->id }}">
-                                    </td>
                                     <td class="text-center">{{ $post->id }}</td>
                                     <td>
                                         @if (isset($post->employee->username))

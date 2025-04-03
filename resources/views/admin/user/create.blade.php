@@ -19,6 +19,10 @@ Thêm người dùng
                             <input class="form-control" type="text" name="fullname" required>
                         </div>
                         <div class="form-group col-md-3">
+                            <label class="control-label">Ngày sinh</label>
+                            <input class="form-control" type="date" name="birthday" >
+                        </div>
+                        <div class="form-group col-md-3">
                             <label class="control-label">Email</label>
                             <input class="form-control" type="email" name="email" required>
                         </div>
@@ -41,14 +45,15 @@ Thêm người dùng
                                 <option value="">-- Chọn giới tính --</option>
                                 <option value="Male">Nam</option>
                                 <option value="Female">Nữ</option>
+                                <option value="Other">Khác</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Trạng Thái</label>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Chọn trạng thái --</option>
-                                <option value="Activity">Hoạt động</option>
-                                <option value="Disable">Không Hoạt động</option>
+                                <option value="active">Hoạt động</option>
+                                <option value="inactive">Không Hoạt động</option>
                             </select>
                         </div>
                         @if ($errors->any())

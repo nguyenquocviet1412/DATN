@@ -3,7 +3,9 @@
 @section('title2', 'Danh sách Nhân viên')
 
 @section('content')
-
+@php
+    $admin = Auth::guard('employee')->user();
+@endphp
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
@@ -43,9 +45,12 @@
 
                 <div class="row element-button">
                     <div class="col-sm-6">
+                        <!-- Nút Thêm nhân viên (chỉ superadmin) -->
+                        @if ($admin->role === 'superadmin')
                         <a class="btn btn-add btn-sm" href="{{ route('employee.create') }}" title="Thêm">
                             <i class="fas fa-plus"></i> Tạo mới Nhân viên
                         </a>
+                        @endif
                         <a class="btn btn-danger btn-sm" href="{{ route('employee.deleted') }}" title="Lịch sử xóa">
                             <i class="fas fa-history"></i> Lịch sử nhân viên đã bị xóa
                         </a>
@@ -126,11 +131,16 @@
                                     <i class="fa fa-eye"></i>
                                 </a>
 
+                                <!-- Nút sửa -->
+                                @if ($admin->role === 'superadmin' || $admin->id === $employee->id)
                                 <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                @endif
 
 
+                                <!-- Nút xóa (chỉ superadmin) -->
+                                @if ($admin->role === 'superadmin')
                                 <form action="{{ route('employee.delete', $employee->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -138,6 +148,7 @@
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

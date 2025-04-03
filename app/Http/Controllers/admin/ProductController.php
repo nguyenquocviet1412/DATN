@@ -19,25 +19,24 @@ class ProductController extends Controller
 {
     // Hiển thị danh sách sản phẩm
     public function index(Request $request)
-    {
-        $sortBy = $request->input('sort_by', 'id'); // Mặc định sắp xếp theo ID
-        $sortOrder = $request->input('sort_order', 'asc'); // Mặc định tăng dần
-        $search = $request->input('search'); // Lấy giá trị tìm kiếm
+{
+    $sortBy = $request->input('sort_by', 'id'); // Mặc định sắp xếp theo ID
+    $sortOrder = $request->input('sort_order', 'asc'); // Mặc định tăng dần
+    $search = $request->input('search'); // Lấy giá trị tìm kiếm
 
-        $query = Product::with('category', 'variants');
+    $query = Product::with(['category', 'variants.images']);
 
-        // Nếu có từ khóa tìm kiếm, thực hiện lọc theo tên sản phẩm
-        if ($search) {
-            $query->where('name', 'like', '%' . $search . '%');
-        }
-
-        // Thực hiện sắp xếp theo yêu cầu
-        $products = Product::with(['category', 'variants.images'])->orderBy($sortBy, $sortOrder)->paginate(10);
-
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách sản phẩm');
-        return view('admin.product.product', compact('products', 'sortBy', 'sortOrder', 'search'));
+    // Nếu có từ khóa tìm kiếm, thực hiện lọc theo tên sản phẩm
+    if ($search) {
+        $query->where('name', 'like', '%' . $search . '%');
     }
+
+    // Thực hiện sắp xếp theo yêu cầu
+    $products = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+
+    return view('admin.product.product', compact('products', 'sortBy', 'sortOrder', 'search'));
+}
+
 
 
     // Hiển thị form thêm sản phẩm
@@ -132,8 +131,6 @@ public function edit($id)
     $colors = Color::all();
     $sizes = Size::all();
 
-    // Ghi log
-    LogHelper::logAction('Vào trang sửa sản phẩm: ' . $product->id);
     return view('admin.product.editproduct', compact('product', 'categories','colors', 'sizes'));
 }
 

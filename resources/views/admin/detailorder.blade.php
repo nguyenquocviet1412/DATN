@@ -73,24 +73,24 @@
                 {{-- Tổng tiền trước khi giảm giá --}}
                 <tr>
                     <th>💰 Tổng tiền chưa giảm:</th>
-                    <td><strong>{{ number_format($order->total_price + $order->discount_amount) }} VNĐ</strong></td>
+                    <td><strong>{{ number_format($order->total_price + $order->discount_amount,0, ',', '.') }} VNĐ</strong></td>
                 </tr>
 
                 {{-- Hiển thị mã giảm giá nếu có --}}
-                @if ($order->coupon_code)
+                @if ($order->id_voucher)
                 <tr>
                     <th>🎟 Mã giảm giá:</th>
-                    <td><span class="badge bg-warning">{{ $order->coupon_code }}</span></td>
+                    <td><span class="badge bg-warning">{{ $order->voucher->code }}</span></td>
                 </tr>
                 @endif
 
                 <tr>
                     <th>💲 Số tiền giảm giá:</th>
-                    <td>- {{ number_format($order->discount_amount) }} VNĐ</td>
+                    <td>- {{ number_format($order->discount_amount,0, ',', '.') }} VNĐ</td>
                 </tr>
                 <tr>
                     <th>🤑 Tổng tiền đơn hàng:</th>
-                    <td><strong>{{ number_format($order->total_price) }} VNĐ </strong>(Đã tính phí vận chuyển)</td>
+                    <td><strong>{{ number_format($order->total_price,0, ',', '.') }} VNĐ </strong>(Đã tính phí vận chuyển)</td>
                 </tr>
             </table>
 
@@ -127,8 +127,8 @@
                             <td>{{ $item->variant->size->size ?? 'Không có' }}</td>
                             <td>{{ $item->variant->color->name ?? 'Không có' }}</td>
                             <td>{{ number_format($item->quantity) }}</td>
-                            <td>{{ number_format($item->price) }} VNĐ</td>
-                            <td>{{ number_format($item->subtotal) }} VNĐ</td>
+                            <td>{{ number_format($item->price,0, ',', '.') }} VNĐ</td>
+                            <td>{{ number_format($item->subtotal,0, ',', '.') }} VNĐ</td>
                             <td class="text-center">
                                 @php
                                     $status = $item->status;
@@ -156,6 +156,10 @@
                     @endforeach
                 </tbody>
             </table>
+            {{-- Quay lại --}}
+            <div class="text-center">
+                <a href="{{ route('order.index') }}" class="btn btn-primary mt-3">Quay lại danh sách</a>
+            </div>
         </div>
     </div>
 </div>

@@ -26,8 +26,6 @@ class UserController extends Controller
         $wallets = Wallet::all();
         $wallet_transactions = WalletTransaction::all();
 
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách tài khoản người dùng');
         return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search', 'wallets', 'wallet_transactions'));
     }
 
@@ -50,6 +48,7 @@ class UserController extends Controller
     $request->validate([
         'password' => 'required|string|max:255',
         'fullname' => 'required|string',
+        'birthday' => 'date',
         'email' => 'required|email|unique:users,email',
         'phone' => 'required|numeric|unique:users,phone',
         'address' => 'required|string',
@@ -59,6 +58,7 @@ class UserController extends Controller
     $user = User::create([
         'password' => Hash::make($request->input('password')),
         'fullname' => $request->input('fullname'),
+        'birthday' => $request->input('birthday'),
         'email' => $request->input('email'),
         'phone' => $request->input('phone'),
         'address' => $request->input('address'),
@@ -76,7 +76,7 @@ class UserController extends Controller
     // Ghi log thao tác
     LogHelper::logAction('Tạo mới tài khoản người dùng có id: ' . $user->id);
 
-    return redirect()->route('user.index')->with('success', 'User created successfully with wallet');
+    return redirect()->route('user.index')->with('success', 'Tài khoản người dùng đã được tạo thành công.');
 }
 
     /**
@@ -93,8 +93,6 @@ class UserController extends Controller
 
     // Nếu không có ví, vẫn cho phép truy cập, chỉ gán transactions = []
     $wallet_transactions = $wallet ? WalletTransaction::where('id_wallet', $wallet->id)->get() : collect();
-    // Ghi log
-    LogHelper::logAction('Xem chi tiết tài khoản người dùng có id: ' . $user->id);
     return view('admin.user.show', compact('user', 'wallet', 'wallet_transactions'));
 }
 
@@ -105,8 +103,6 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        // Ghi log
-        LogHelper::logAction('Vào trang chỉnh sửa tài khoản người dùng có id: ' . $user->id);
         return view('admin.user.edit', compact('user'));
     }
 
@@ -118,8 +114,8 @@ class UserController extends Controller
     {
         $request->validate([
             'password' => 'nullable|string|max:255',
-            'role' => 'required|string',
             'fullname' => 'required|string',
+            'birthday' => 'required|date',
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required|numeric|unique:users,phone,' . $id,
             'address' => 'required|string',
@@ -130,8 +126,8 @@ class UserController extends Controller
 
         $user->update([
             'password' => $request->input('password') ? Hash::make($request->input('password')) : $user->password,
-            'role' => $request->input('role'),
             'fullname' => $request->input('fullname'),
+            'birthday' => $request->input('birthday'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
@@ -140,7 +136,7 @@ class UserController extends Controller
         // Ghi log
         LogHelper::logAction('Cập nhật tài khoản người dùng có id: ' . $user->id);
 
-        return redirect()->route('user.index')->with('success', 'User updated successfully');
+        return redirect()->route('user.index')->with('success', ' Tài khoản người dùng đã được cập nhật thành công.');
     }
 
 
@@ -154,14 +150,12 @@ class UserController extends Controller
 
         // Ghi log
         LogHelper::logAction('Xóa tài khoản người dùng có id: ' . $user->id);
-        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('user.index')->with('success', 'Tài khoản người dùng đã được xóa.');
     }
 
     public function deleted()
     {
         $deletedUsers = User::onlyTrashed()->get();
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách tài khoản người dùng đã xóa');
         return view('admin.user.deleted', compact('deletedUsers'));
     }
 
@@ -171,6 +165,6 @@ class UserController extends Controller
         $user->restore();
         // Ghi log
         LogHelper::logAction('Khôi phục tài khoản người dùng có id: ' . $user->id);
-        return redirect()->route('user.deleted')->with('success', 'Employee restored successfully.');
+        return redirect()->route('user.deleted')->with('success', 'Đã khôi phục tài khoản người dùng.');
     }
 }

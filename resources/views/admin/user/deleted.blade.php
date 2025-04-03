@@ -12,20 +12,19 @@
                     <thead>
                         <tr class="text-center">
                             <th>ID</th>
-                            <th>Username</th>
-                            <th>Fullname</th>
+                            <th>Họ và tên</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Deleted At</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                            <th>Địa chỉ</th>
+                            <th>Thời gian xóa</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($deletedUsers as $user)
                         <tr class="align-middle">
                             <td class="text-center">{{ $user->id }}</td>
-                            <td>{{ $user->username }}</td>
                             <td>{{ $user->fullname }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
@@ -45,7 +44,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <a href="{{ route('user.index') }}" class="btn btn-primary">Back to User List</a>
+                <a href="{{ route('user.index') }}" class="btn btn-primary">Quay lại</a>
             </div>
         </div>
     </div>

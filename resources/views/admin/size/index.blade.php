@@ -35,23 +35,16 @@
             </thead>
             <tbody>
                 @foreach ($sizes as $size)
+                @if (!$size->trashed())
                     <tr>
                         <td>{{ $size->id }}</td>
                         <td>{{ $size->size }}</td> <!-- Đảm bảo gọi đúng tên cột -->
                         <td>
-                            @if (!$size->trashed())
-                                <a href="{{ route('admin.size.softDelete', $size->id) }}" class="btn btn-danger">Xóa mềm</a>
-                            @else
-                                <a href="{{ route('admin.size.restore', $size->id) }}" class="btn btn-success">Khôi phục</a>
-                            @endif
+                            <a href="{{ route('admin.size.softDelete', $size->id) }}" class="btn btn-danger">Xóa</a>
                             <a href="{{ route('admin.size.edit', $size->id) }}" class="btn btn-warning">Sửa</a>
-                            <form action="{{ route('admin.size.destroy', $size->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Xóa</button>
-                            </form>
                         </td>
+                    </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>

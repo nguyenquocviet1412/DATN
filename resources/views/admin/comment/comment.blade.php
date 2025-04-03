@@ -49,43 +49,67 @@ Danh sách bình luận
     </style>
 </head>
 <body>
+    {{-- thông báo thêm thành công --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true // Làm tối nền
+        });
+    </script>
+    @endif
+
+
+    {{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            title: 'Lỗi!',
+            text: '{{ session("error") }}',
+            icon: 'error',
+            showConfirmButton: true, // Hiển thị nút đóng
+            confirmButtonText: 'Đóng', // Nội dung nút đóng
+            backdrop: true // Làm tối nền
+        });
+    </script>
+    @endif
     <!-- Main Content -->
     <div class="container">
-        <h1 class="mb-4 text-center">Comments</h1>
+        <h1 class="mb-4 text-center">Bình luận</h1>
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
                 <thead class="table-primary">
                     <tr>
                         <th>ID</th>
-                        <th>User ID</th>
-                        <th>POST ID</th>
-                        <th>Note</th>
-                        <th>Created At</th>
-                        <th>Updated At</th>
-                        <th>Actions</th>
+                        <th>Người bình luận</th>
+                        <th>ID bài viết</th>
+                        <th>Nội dung</th>
+                        <th>Ngày bình luận</th>
+                        <th>Ngày Cập nhật</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($comment as $comment)
                     <tr>
                         <td>{{ $comment->id }}</td>
-                        <td>{{ $comment->id_user }}</td>
+                        <td>{{ $comment->user->fullname }}</td>
                         <td>{{ $comment->id_post }}</td>
                         <td>{{ $comment->is_hidden ? 'Hidden' : $comment->note }}</td>
                         <td>{{ $comment->created_at }}</td>
                         <td>{{ $comment->updated_at }}</td>
                         <td>
-
-                            <form action="{{ route('comment.destroy', $comment->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-
-                            </form>
                             <form action="{{ route('comment.hide', $comment->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="btn btn-sm btn-secondary">
-                                    {{ $comment->is_hidden ? 'Unhide' : 'Hide' }}
+                                    {{ $comment->is_hidden ? 'Hiển thị' : 'Ẩn' }}
                                 </button>
                             </form>
                         </td>

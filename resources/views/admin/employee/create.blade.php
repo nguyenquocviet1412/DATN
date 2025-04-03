@@ -59,8 +59,8 @@ Thêm Nhân Viên
                             <label class="control-label">Vai trò</label>
                             <select class="form-control" name="role" required>
                                 <option value="">-- Chọn vai trò --</option>
-                                <option value="1">Người dùng</option>
-                                <option value="0">Nhân viên</option>
+                                <option value="admin">Nhân viên</option>
+                                <option value="superadmin">Quản lý</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">

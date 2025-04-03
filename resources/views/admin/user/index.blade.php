@@ -112,10 +112,16 @@
                             <td class="text-center">{{ $user->email }}</td>
                             <td class="text-center">{{ $user->phone }}</td>
                             <td class="text-center">{{ $user->address }}</td>
-                            <td class="text-center">{{ $user->gender }}</td>
+                            <td class="text-center">
+                                @if($user->gender == 'Male')
+                                Nam
+                                @else
+                                Nữ
+                                @endif
+                            </td>
                             <td class="text-center">
                                 <span class="badge {{ $user->status ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $user->status ? 'Hoạt động' : 'Hết hoạt động' }}
+                                    {{ $user->status ? 'Hoạt động' : 'Vô hiệu hóa' }}
                                 </span>
                             </td>
                             <td class="text-center">

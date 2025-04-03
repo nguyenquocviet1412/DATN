@@ -14,8 +14,6 @@ class VoucherController extends Controller
         //Lấy danh sách voucher
         $vouchers = Voucher::query()->get();
 
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách voucher');
         return view('admin.voucher.voucher',compact('vouchers'));
     }
 
@@ -42,8 +40,6 @@ class VoucherController extends Controller
     // Hiển thị form thêm mới voucher
     public function voucherCreate(){
 
-        // Ghi log
-        LogHelper::logAction('Vào trang thêm voucher');
         return view('admin.voucher.addvoucher');
     }
 
@@ -84,9 +80,6 @@ public function voucherStore(Request $request)
     if (!$voucher) {
         return redirect()->route('voucher.index')->with('error', 'Voucher không tồn tại!');
     }
-
-        // Ghi log
-        LogHelper::logAction('Vào trang chỉnh sửa voucher có ID: ' . $id);
     return view('admin.voucher.editvoucher', compact('voucher'));
     }
 

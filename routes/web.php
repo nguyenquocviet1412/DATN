@@ -304,11 +304,6 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
     //route comment
     Route::prefix('comment')->group(function () {
         Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');
-        Route::get('/create', [CommentController::class, 'createCMT'])->name('comment.create');
-        Route::post('/store', [CommentController::class, 'storeCMT'])->name('comment.store');
-        Route::get('/edit/{id}', [CommentController::class, 'editCMT'])->name('comment.edit');
-        Route::put('/update/{id}', [CommentController::class, 'updateCMT'])->name('comment.update');
-        Route::delete('/delete/{id}', [CommentController::class, 'destroyCMT'])->name('comment.destroy');
         Route::patch('/hide/{id}', [CommentController::class, 'hideCMT'])->name('comment.hide');
     });
 

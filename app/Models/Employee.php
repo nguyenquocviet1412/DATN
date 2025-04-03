@@ -24,7 +24,6 @@ class Employee extends Authenticatable
         'date_of_birth',
         'address',
         'position',
-        'salary',
         'status'
     ];
     protected $hidden = ['password', 'remember_token'];

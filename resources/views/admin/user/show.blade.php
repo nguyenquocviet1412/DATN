@@ -42,8 +42,8 @@
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
-                            <tr><th>Vai trò:</th><td>{{ $user->role ?? 'Không có dữ liệu' }}</td></tr>
                             <tr><th>Họ và Tên:</th><td>{{ $user->fullname ?? 'Không có dữ liệu' }}</td></tr>
+                            <tr><th>Ngày sinh:</th><td>{{ $user->birthday ?? 'Không có dữ liệu' }}</td></tr>
                             <tr><th>Email:</th><td>{{ $user->email ?? 'Không có dữ liệu' }}</td></tr>
                             <tr><th>Số điện thoại:</th><td>{{ $user->phone ?? 'Không có dữ liệu' }}</td></tr>
                             <tr><th>Địa chỉ:</th><td>{{ $user->address ?? 'Không có dữ liệu' }}</td></tr>

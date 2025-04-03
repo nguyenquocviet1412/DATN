@@ -70,8 +70,8 @@
                                     @endif
                                 </td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->price) }} VNĐ</td>
-                                <td>{{ number_format($item->subtotal) }} VNĐ</td>
+                                <td>{{ number_format($item->price,0, ',', '.') }} VNĐ</td>
+                                <td>{{ number_format($item->subtotal,0, ',', '.') }} VNĐ</td>
                                 <td class="text-center">
                                     <select class="form-select shadow-sm p-2 rounded" name="order_items[{{ $item->id }}][status]" {{ in_array($item->status, ['cancelled', 'refunded','failed']) ? 'disabled' : '' }}>
                                         @php

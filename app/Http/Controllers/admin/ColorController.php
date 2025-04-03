@@ -12,31 +12,34 @@ class ColorController extends Controller
     public function index()
     {
         $colors = Color::withTrashed()->paginate(10);
-        // Ghi log
-        LogHelper::logAction('Vào trang danh sách màu');
         return view('admin.color.index', compact('colors'));
     }
 
     public function create()
     {
-        // Ghi log
-        LogHelper::logAction('Vào trang tạo màu');
         return view('admin.color.create');
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|unique:colors,name', // Kiểm tra không được trùng tên
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|unique:colors,name',
+    ], [
+        'name.unique' => 'Tên màu này đã tồn tại.', // Tùy chỉnh thông báo lỗi
+    ]);
 
-        try {
-            Color::create($request->all());
-            return redirect()->route('admin.color.index')->with('success', 'Màu đã được thêm thành công.');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi thêm màu.');
-        }
+    try {
+        $color = Color::create($request->only('name')); // Chỉ lấy trường 'name'
+
+        // Ghi log
+        LogHelper::logAction('Thêm màu có ID: ' . $color->id);
+
+        return redirect()->route('admin.color.index')->with('success', 'Màu đã được thêm thành công.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi thêm màu.');
     }
+}
+
 
     public function edit($id)
     {
@@ -47,13 +50,16 @@ class ColorController extends Controller
     public function update(Request $request, $id)
 {
     $request->validate([
-        'name' => 'required|unique:colors,name,' . $id,
+        'name' => 'required|string|unique:colors,name',
+    ], [
+        'name.unique' => 'Tên màu này đã tồn tại.', // Tùy chỉnh thông báo lỗi
     ]);
 
     try {
         $color = Color::findOrFail($id);
-        $color->update($request->only('size'));
-
+        $color->update($request->only('name'));
+        // Ghi log
+        LogHelper::logAction('Cập nhật màu có ID: ' . $color->id);
         return redirect()->route('admin.color.index')->with('success', 'Màu đã được cập nhật.');
     } catch (\Exception $e) {
         return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi cập nhật màu.');
@@ -63,6 +69,8 @@ public function softDelete($id)
 {
     $color = Color::findOrFail($id);
     $color->delete(); // Xóa mềm
+    // Ghi log
+    LogHelper::logAction('Xóa màu có ID: ' . $color->id);
     return redirect()->route('admin.color.index')->with('success', 'Màu đã được xóa.');
 }
 
@@ -76,6 +84,8 @@ if (Color::where('name', $color->name)->whereNull('deleted_at')->exists()) {
 }
 
 $color->restore();
+// Ghi log
+LogHelper::logAction('Khôi phục màu có ID: '. $color->id);
 return redirect()->route('admin.color.index')->with('success', 'Màu đã được khôi phục.');
 
 }
@@ -90,10 +100,12 @@ public function destroy($id)
     try {
         $color= Color::withTrashed()->findOrFail($id);
         $color->forceDelete();
+        // Ghi log
+        LogHelper::logAction('Xóa vĩnh viễn màu có ID: ' . $color->id);
         return redirect()->route('admin.color.index')->with('success', 'Màu đã bị xóa vĩnh viễn.');
     } catch (\Exception $e) {
         return redirect()->route('admin.color.index')->with('error', 'Có lỗi xảy ra khi xóa màu.');
     }
-    
+
 }
 }

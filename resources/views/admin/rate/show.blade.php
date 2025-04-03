@@ -14,10 +14,9 @@ Chi tiết đánh giá
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>ID Người dùng</th>
+                    <th>Tên Người dùng</th>
                     <th>Đánh giá</th>
                     <th>Nội dung</th>
-                    <th>Trạng thái</th>
                     <th>Ngày tạo</th>
                 </tr>
             </thead>
@@ -25,10 +24,9 @@ Chi tiết đánh giá
                 @foreach($rates as $rate)
                     <tr>
                         <td>{{ $rate->id }}</td>
-                        <td>{{ $rate->id_user }}</td>
+                        <td>{{ $rate->user->fullname }}</td>
                         <td>{{ $rate->rating }} ⭐</td>
                         <td>{{ $rate->review }}</td>
-                        <td>{{ $rate->status }}</td>
                         <td>{{ $rate->created_at }}</td>
                     </tr>
                 @endforeach
