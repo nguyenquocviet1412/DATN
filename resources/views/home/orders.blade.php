@@ -69,6 +69,12 @@
                                                 <td>
                                                     <ul class="list-unstyled">
                                                         @foreach ($order->orderItems as $item)
+                                                        {{-- nếu không còn biến thể hoặc sản phẩm thì thông báo --}}
+                                                        @if (!$item->variant || !$item->variant->product)
+                                                            <li class="text-danger">Sản phẩm không còn tồn tại</li>
+                                                        @endif
+                                                        {{-- nếu có biến thể và sản phẩm thì hiển thị --}}
+                                                        @if ($item->variant && $item->variant->product)
                                                             <li class="d-flex align-items-center">
                                                                 <img src="{{ asset($item->variant->images->first()->image_url ?? 'default-image.jpg') }}" alt="{{ $item->variant->product->name }}" width="50" class="me-2 rounded">
                                                                 <div>
@@ -77,6 +83,7 @@
                                                                     <span class="text-muted">x{{ $item->quantity }}</span>
                                                                 </div>
                                                             </li>
+                                                        @endif
                                                         @endforeach
                                                     </ul>
                                                 </td>

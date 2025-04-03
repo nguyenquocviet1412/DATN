@@ -124,13 +124,23 @@
                             <td>{{ number_format($item->subtotal, 0, ',', '.') }}₫</td>
                             <td>
                                 <!-- Nút thêm đánh giá -->
-        <a href="{{ route('rate.store', [
-            'id_user' => $order->user->id,
-            'id_product' => $item->variant->product->id,
-            'id_order_item' => $item->id
-        ]) }}" class="btn btn-primary btn-sm">
-            Thêm đánh giá
-        </a>
+                                @php
+                                    $check = 0;
+                                    foreach ($rating as $rate) {
+                                        if ($rate->id_order_item == $item->id) {
+                                            $check = 1;
+                                            break;
+                                        }
+                                    }
+                                @endphp
+
+                                @if($check == 1)
+                                <!-- Nếu đã đánh giá rồi thì không hiển thị nút -->
+                                @elseif ($item->status == 'completed')
+                                <a href="{{ route('client.rate.create', $item->id) }}" class="btn btn-custom btn-sm">
+                                    <span class="btn-text">Thêm Đánh Giá</span>
+                                </a>
+                                @endif
                                 @php
                                     $status = $item->status;
                                     $statusData = [
@@ -176,7 +186,7 @@
                 </table>
             </div>
 
-           
+
         <!-- Tổng tiền -->
         <div class="text-end mt-4">
             <h3 class="text-danger">💰 Tổng đơn hàng: <strong>{{ number_format($order->total_price, 0, ',', '.') }}₫</strong></h3>
@@ -209,5 +219,55 @@
         }
     });
 </script>
+<style>
+    /* Nút thêm đánh giá đẹp và thú vị */
+.btn-custom {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-custom:hover {
+    background: linear-gradient(135deg, #ff6a00, #ff8c00);
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng khi hover */
+.btn-custom .btn-text {
+    background: linear-gradient(90deg, #000, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-custom:disabled {
+    background: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Thêm bóng đổ cho nút khi hover */
+.btn-custom:active {
+    transform: translateY(2px);
+}
+
+/* Nếu đã đánh giá thì nút sẽ không hiển thị */
+.btn-custom.hidden {
+    display: none;
+}
+
+</style>
 
 @endsection
