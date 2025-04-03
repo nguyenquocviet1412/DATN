@@ -96,7 +96,15 @@
         <th>Tên danh mục</th>
         <th>Hành động</th>
     </tr>
+    {{-- Nếu không có thì thông báo trống --}}
+    @if($categories->isEmpty())
+        <tr>
+            <td colspan="3" class="text-center">Không có danh mục nào đã bị xóa.</td>
+        </tr>
+    @endif
     @foreach($categories as $category)
+        {{-- Nếu có thì hiển thị --}}
+        @if ($category->deleted_at!==null)
         <tr>
             <td>{{ $category->id }}</td>
             <td>{{ $category->name }}</td>
@@ -109,7 +117,11 @@
                 </form>
             </td>
         </tr>
+        @endif
     @endforeach
 </table>
+<div class="btn-container">
+    <a href="{{ route('category.index') }}">Quay lại danh sách</a>
+</div>
 
 @endsection

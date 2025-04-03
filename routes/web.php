@@ -35,6 +35,7 @@ use App\Http\Controllers\Client\Payment\MomoController;
 use App\Http\Controllers\Client\Payment\VnPayController;
 use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
+use App\Http\Controllers\Client\RateController as ClientRateController;
 use App\Http\Controllers\client\UserControllerClient;
 use App\Http\Controllers\client\WalletClientController;
 
@@ -99,6 +100,10 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
     });
     //Ví
     Route::get('/wallet', [WalletClientController::class, 'index'])->name('walletclient.index');
+
+    //Đánh giá
+    Route::get('/rate/{id}', [ClientRateController::class, 'create'])->name('client.rate.create');
+    Route::post('/rate/{id}', [ClientRateController::class,'store'])->name('client.rate.store');
 });
 
   // Thanh toán
@@ -143,14 +148,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/change-password', [UserControllerClient::class, 'showChangePasswordForm'])->middleware('user.auth')->name('user.change-password');
     Route::post('/user/change-password', [UserControllerClient::class, 'changePassword'])->middleware('user.auth')->name('user.change-password.update');
 
-//thêm danh gia
-Route::get('/rate/store', function (Request $request) {
-    return view('home.Rate', [
-        'id_user' => $request->id_user,
-        'id_product' => $request->id_product,
-        'id_order_item' => $request->id_order_item,
-    ]);
-})->name('rate.store');
+
 
 
 // -----------------------------------------------------------------------------------------------------------------------------------------

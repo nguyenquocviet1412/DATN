@@ -143,6 +143,8 @@
                         </div>
 
                         <h4 class="mt-4">Biến thể sản phẩm</h4>
+                        {{-- Sang trang thêm biến thể --}}
+                        <a href="{{ route('variant.create', $product->id) }}" class="btn btn-primary">Thêm biến thể</a>
 
                         <table class="table table-bordered">
                             <thead>
@@ -153,7 +155,6 @@
                                     <th>Giá tiền</th>
                                     <th>Ảnh biến thể</th>
                                     <th>Thêm ảnh</th>
-                                    <th>Xóa ảnh</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Cart as CartModel; // Đổi tên alias tránh trùng với thư viện Cart
 use App\Models\Order_item;
+use App\Models\Rate;
 use App\Models\Variant;
 use App\Models\Voucher;
 use App\Models\Wallet;
@@ -559,8 +560,11 @@ if ($remainingDiscount > 0) {
     // Chi tiết đơn hàng
     public function orderDetail($id)
     {
+        $user = auth()->user();
         $order = Order::where('id', $id)->where('id_user', Auth::id())->firstOrFail();
-        return view('home.order-detail', compact('order'));
+        // Lấy đánh giá của người dùng
+        $rating = Rate::where('id_user', $user->id)->get();
+        return view('home.order-detail', compact('order','user','rating'));
     }
 
     //Cập nhật trạng thái đơn hàng đã nhận hàng
