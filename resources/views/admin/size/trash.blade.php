@@ -1,48 +1,3 @@
-{{-- @extends('admin.layout')
-
-
-@section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    <script>
-        setTimeout(function() {
-            document.querySelector('.alert').style.display = 'none';
-        }, 3000); // 3 giây sau sẽ tự ẩn
-    </script>
-
-    <h2>Danh sách kích thước đã xóa</h2>
-    <a href="{{ route('admin.size.index') }}" class="btn btn-secondary">Quay về</a> 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên Kích thước</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($sizes as $size)
-                <tr>
-                    <td>{{ $size->id }}</td>
-                    <td>{{ $size->size }}</td>
-                    <td>
-                        <a href="{{ route('admin.size.restore', $size->id) }}" class="btn btn-success">Khôi phục</a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endsection --}}
-
 @extends('admin.layout')
 
 @section('title', 'Danh sách kích thước đã xóa')
@@ -70,7 +25,7 @@
 
     <div class="container">
         <h2>Danh sách kích thước đã xóa</h2>
-        
+
         <a href="{{ route('admin.size.index') }}" class="btn btn-secondary">Quay về</a> <!-- Nút quay về -->
 
         <table class="table table-bordered mt-3">

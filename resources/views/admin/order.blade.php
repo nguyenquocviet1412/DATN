@@ -65,7 +65,7 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $order->orderItems->sum('quantity') }}</td>
-                                <td>{{ number_format($order->total_price) }} VNĐ</td>
+                                <td>{{ number_format($order->total_price ,0, ',', '.') }} VNĐ</td>
                                 <td>
                                     @switch($order->payment_status)
                                         @case('waiting_payment')

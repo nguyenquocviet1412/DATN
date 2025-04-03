@@ -25,7 +25,7 @@
 
     <div class="container">
         <h2>Danh sách màu đã xóa</h2>
-        
+
         <a href="{{ route('admin.color.index') }}" class="btn btn-secondary">Quay về</a> <!-- Nút quay về -->
 
         <table class="table table-bordered mt-3">
@@ -56,4 +56,5 @@
         </table>
         {{ $colors->links() }}
     </div>
+
 @endsection

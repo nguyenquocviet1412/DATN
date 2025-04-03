@@ -119,11 +119,11 @@
 
                                     <td class="text-center">{{ $product->variants->sum('quantity') }}</td>
                                     <td class="text-center">
-                                        <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $product->status ? 'Còn hàng' : 'Hết hàng' }}
+                                        <span class="badge {{ $product->variants->sum('quantity') ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $product->variants->sum('quantity') ? 'Còn hàng' : 'Hết hàng' }}
                                         </span>
                                     </td>
-                                    <td class="text-end">{{ number_format($product->price, 0, ',', '.') }} đ</td>
+                                    <td class="text-end">{{ number_format($product->price, 0, ',', '.') }} VNĐ</td>
                                     <td class="text-center">{{ $product->category->name ?? 'Không có danh mục' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary btn-sm">

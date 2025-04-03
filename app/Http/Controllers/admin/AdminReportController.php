@@ -18,7 +18,7 @@ class AdminReportController extends Controller
     public function index(Request $request)
     {
         // Lấy tổng số nhân viên
-        $totalEmployees = Employee::where('role', 'staff')->count();
+        $totalEmployees = Employee::count();
 
         // Lấy tổng số sản phẩm (biến thể)
         $totalProducts = Variant::count();
@@ -33,12 +33,10 @@ class AdminReportController extends Controller
         $totalRevenue = Order::whereNotIn('payment_status', ['fail', 'refund'])->sum('total_price');
 
         // Lấy số nhân viên mới trong tháng này
-        $newEmployees = Employee::where('role', 'staff')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->count();
+        $newEmployees = Employee::whereMonth('created_at', Carbon::now()->month)->count();
 
         // Lấy số đơn hàng bị hoàn
-        $refundedOrders = Order::where('payment_status', 'refund')->count();
+        $refundedOrders = Order_item::whereIn('status', ['return_processing', 'refunded'])->count();
 
         // Lấy số sản phẩm hết hàng
         $outOfStockProducts = Variant::where('quantity', 0)->count();
@@ -130,8 +128,6 @@ class AdminReportController extends Controller
             $sales[] = $monthlySales[$i] ?? 0;
             $orders[] = $monthlyOrders[$i] ?? 0;
         }
-        // Ghi log
-        LogHelper::logAction('Vào trang doanh thu');
 
         // Trả dữ liệu ra view
         return view('admin.reports', compact(

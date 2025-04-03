@@ -32,4 +32,5 @@
         </div>
         <button type="submit" class="btn btn-success">Lưu</button>
     </form>
+    <a href="{{ route('admin.color.index') }}" class="btn btn-secondary mt-3">Quay về</a> <!-- Nút quay về -->
 @endsection

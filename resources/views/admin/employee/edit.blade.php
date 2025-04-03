@@ -39,8 +39,8 @@ Chỉnh sửa Nhân Viên
                             <label class="control-label">Vai trò</label>
                             <select class="form-control" name="role" required>
                                 <option value="">-- Chọn vai trò --</option>
-                                <option value="employee" @if($employee->role == 'employee') selected @endif>Nhân viên</option>
-                                <option value="user" @if($employee->role == 'user') selected @endif>Người dùng</option>
+                                <option value="admin" @if($employee->role == 'admin') selected @endif>Nhân viên</option>
+                                <option value="superadmin" @if($employee->role == 'superadmin') selected @endif>Quản lý</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">

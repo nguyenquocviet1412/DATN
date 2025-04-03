@@ -19,10 +19,6 @@ Chỉnh sửa Người Dùng
                 <div class="tile-body">
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label class="control-label">Tên đăng nhập</label>
-                            <input class="form-control" type="text" name="username" value="{{ $user->username }}" required>
-                        </div>
-                        <div class="form-group col-md-3">
                             <label class="control-label">Mật khẩu</label>
                             <input class="form-control" type="password" name="password">
                             <small>Chỉ nhập khi bạn muốn thay đổi mật khẩu</small>
@@ -30,6 +26,11 @@ Chỉnh sửa Người Dùng
                         <div class="form-group col-md-3">
                             <label class="control-label">Họ và Tên</label>
                             <input class="form-control" type="text" name="fullname" value="{{ $user->fullname }}" required>
+                        </div>
+                        {{-- Ngày sinh --}}
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Ngày sinh</label>
+                            <input class="form-control" type="date" name="birthday" value="{{ $user->birthday }}">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Email</label>
@@ -52,19 +53,11 @@ Chỉnh sửa Người Dùng
                             <input class="form-control" type="text" name="address" value="{{ $user->address }}" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Chức vụ</label>
-                            <select class="form-control" name="role" required>
-                                <option value="">-- Chọn chức vụ --</option>
-                                <option value="employee" @if($user->role == 'employee') selected @endif>Nhân viên</option>
-                                <option value="user" @if($user->role == 'user') selected @endif>Khách hàng</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
                             <label class="control-label">Trạng thái</label>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Chọn trạng thái --</option>
-                                <option value="1" @if($user->status == 1) selected @endif>Hoạt động</option>
-                                <option value="0" @if($user->status == 0) selected @endif>Không hoạt động</option>
+                                <option value="active" @if($user->status == 'active') selected @endif>Hoạt động</option>
+                                <option value="inactive" @if($user->status == 'inactive') selected @endif>Không hoạt động</option>
                             </select>
                         </div>
                         @if ($errors->any())

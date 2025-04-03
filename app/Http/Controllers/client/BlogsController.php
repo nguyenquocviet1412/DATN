@@ -17,7 +17,7 @@ class BlogsController extends Controller
     $search = $request->input('search');
     $monthFilter = $request->input('month_filter'); // Lọc theo tháng-năm
 
-    $query = Post::query();
+    $query = Post::query()->where('status', '=', 'published');
 
     // Tìm kiếm theo tiêu đề bài viết
     if ($search) {

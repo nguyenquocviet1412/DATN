@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Size;
@@ -22,11 +23,22 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'size' => 'required|unique:sizes,size',
+            'size' => 'required|string|unique:sizes,size',
+        ], [
+            'size.unique' => 'Kích thước này đã tồn tại.', // Tùy chỉnh thông báo lỗi
+            'size.required' => 'Vui lòng nhập kích thước.',
         ]);
+        // Kiểm tra xem kích thước đã tồn tại chưa
+        $existingSize = Size::where('size', $request->size)->first();
+        if ($existingSize) {
+            return redirect()->route('admin.size.index')->with('error', 'Kích thước đã tồn tại.');
+        }
+        // Nếu chưa tồn tại, tiến hành thêm mới
 
         try {
-            Size::create($request->all());
+            $size = Size::create($request->all());
+            // Ghi log
+            LogHelper::logAction('Thêm mới kích thước mới có id: '. $size->id);
             return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được thêm thành công.');
         } catch (\Exception $e) {
             return redirect()->route('admin.size.index')->with('error', 'Có lỗi xảy ra khi thêm kích thước.');
@@ -41,13 +53,19 @@ class SizeController extends Controller
 
     public function update(Request $request, $id)
 {
+    // Kiểm tra trùng lặp nhưng bỏ qua ID hiện tại
     $request->validate([
-        'size' => 'required|string|unique:sizes,size,' . $id, // Kiểm tra trùng lặp nhưng bỏ qua ID hiện tại
+        'size' => 'required|string|unique:sizes,size,' . $id,
+    ], [
+        'size.unique' => 'Size đã tồn tại.', // Tùy chỉnh thông báo lỗi
     ]);
+    // Nếu chưa tồn tại, tiến hành cập nhật
 
     try {
         $size = Size::findOrFail($id);
         $size->update($request->only('size'));
+        // Ghi log
+        LogHelper::logAction('Cập nhật kích thước có id: '. $size->id);
 
         return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được cập nhật.');
     } catch (\Exception $e) {
@@ -59,6 +77,8 @@ public function softDelete($id)
 {
     $size = Size::findOrFail($id);
     $size->delete(); // Xóa mềm
+    // Ghi log
+    LogHelper::logAction('Xóa kích thước có id: '. $size->id);
     return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được xóa.');
 }
 
@@ -66,6 +86,8 @@ public function restore($id)
 {
     $size = Size::withTrashed()->findOrFail($id);
     $size->restore(); // Khôi phục
+    // Ghi log
+    LogHelper::logAction('Khôi phục kích thước có id: '. $size->id);
     return redirect()->route('admin.size.index')->with('success', 'Kích thước đã được khôi phục.');
 }
 
@@ -79,6 +101,8 @@ public function destroy($id)
     try {
         $size = Size::withTrashed()->findOrFail($id);
         $size->forceDelete();
+        // Ghi log
+        LogHelper::logAction('Xóa vĩnh viễn kích thước có id: '. $size->id);
         return redirect()->route('admin.size.index')->with('success', 'Kích thước đã bị xóa vĩnh viễn.');
     } catch (\Exception $e) {
         return redirect()->route('admin.size.index')->with('error', 'Có lỗi xảy ra khi xóa kích thước.');

@@ -16,23 +16,37 @@ class AuthController extends Controller
     }
 
     public function postLogin(Request $request)
-    {
-        // Xác thực dữ liệu đầu vào
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
-        ]);
+{
+    // Xác thực dữ liệu đầu vào
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6'
+    ]);
 
-        // Lấy thông tin đăng nhập
-        $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember'); // Kiểm tra checkbox Remember Me
+    // Lấy thông tin đăng nhập
+    $credentials = $request->only('email', 'password');
+    $remember = $request->has('remember'); // Kiểm tra checkbox Remember Me
 
-        if (Auth::guard('web')->attempt($credentials, $remember)) {
-            return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!');
-        }
+    // Tìm tài khoản theo email
+    $user = User::withTrashed()->where('email', $request->email)->first();
 
+    if (!$user) {
         return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
     }
+
+    // Kiểm tra nếu tài khoản bị xóa (có deleted_at) hoặc bị vô hiệu hóa (status = inactive)
+    if ($user->trashed() || $user->status !== 'active') {
+        return back()->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa hoặc bị xóa.');
+    }
+
+    // Thực hiện đăng nhập
+    if (Auth::guard('web')->attempt($credentials, $remember)) {
+        return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!');
+    }
+
+    return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
+}
+
 
     public function logoutUser()
     {
@@ -49,6 +63,7 @@ class AuthController extends Controller
 {
     $data = $request->validate([
         'fullname' => 'required|min:3',
+        'birthday' => 'date',
         'email' => 'required|email|unique:users',
         'password' => 'required|min:5|confirmed',
         'phone' => 'required|digits:10|unique:users,phone',
@@ -58,7 +73,7 @@ class AuthController extends Controller
 
     $data['password'] = bcrypt($data['password']);
     $data['role'] = 'user'; // Mặc định user
-    $data['status'] = 1; // Tài khoản đang hoạt động
+    $data['status'] = 'active'; // Tài khoản đang hoạt động
 
     $user = User::create($data);
     // Tạo ví tiền mặc định cho user vừa tạo

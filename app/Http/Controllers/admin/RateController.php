@@ -14,9 +14,7 @@ class RateController extends Controller
         $rates = Rate::selectRaw('id_product, MAX(id) as id, MAX(id_order_item) as id_order_item, AVG(rating) as average_rating')
                     ->groupBy('id_product')
                     ->get();
-
-        // Ghi log
-        LogHelper::logAction('Vào trang hiển thị danh sách đánh giá');
+                    // dd($rates);
         return view('admin.rate.rate', compact('rates'));
     }
 

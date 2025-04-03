@@ -56,8 +56,6 @@ class CategoryController extends Controller
     public function categoryTrash()
     {
         $categories = Category::onlyTrashed()->get();
-        // Ghi log
-        LogHelper::logAction('Vào trang thùng rác danh mục');
         return view('admin.category.trash', compact('categories'));
     }
 

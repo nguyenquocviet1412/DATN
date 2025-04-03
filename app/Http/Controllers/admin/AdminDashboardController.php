@@ -73,7 +73,6 @@ class AdminDashboardController extends Controller
                     $sales[] = $monthlySales[$i] ?? 0;
                     $orders[] = $monthlyOrders[$i] ?? 0;
                 }
-        LogHelper::logAction('hiển thị trang dashboard');
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalProducts',
