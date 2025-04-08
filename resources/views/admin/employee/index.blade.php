@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $admin = Auth::guard('employee')->user();
+$admin = Auth::guard('employee')->user();
 @endphp
 <div class="row">
     <div class="col-md-12">
@@ -103,6 +103,7 @@
                             <th>Số điện thoại</th>
                             <th>Giới tính</th>
                             <th>Địa chỉ</th>
+                            <th>Vai trò</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -120,6 +121,11 @@
                             <td>{{ $employee->phone }}</td>
                             <td>{{ $employee->gender }}</td>
                             <td>{{ $employee->address }}</td>
+                            <td>
+                                <span class="badge bg-{{ $employee->role == 'admin' ? 'danger' : 'info' }}">
+                                    {{ $employee->role == 'admin' ? 'Quản trị cấp cao' : 'Nhân viên thường' }}
+                                </span>
+                            </td>
                             <td class="text-center">
                                 <span class="badge {{ $employee->status ? 'bg-success' : 'bg-danger' }}">
                                     {{ $employee->status ? 'Hoạt động' : 'Hết hoạt động' }}

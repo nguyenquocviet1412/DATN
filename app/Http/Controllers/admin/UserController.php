@@ -22,7 +22,7 @@ class UserController extends Controller
         $sortOrder = $request->input('sort_order', 'asc');
         $search = $request->input('search');
 
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         $wallets = Wallet::all();
         $wallet_transactions = WalletTransaction::all();
 
