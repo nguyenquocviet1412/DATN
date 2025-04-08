@@ -183,6 +183,52 @@
         }
 
         /* Thất bại - Màu đỏ */
+
+        /* menu sub */
+
+        .dropdown-menu {
+            background-color: #14142B;
+            /* Màu nền giống menu */
+            border: none;
+            /* Loại bỏ viền */
+            box-shadow: none;
+            /* Loại bỏ bóng */
+            border-radius: 0;
+            /* Loại bỏ bo góc */
+            padding: 0;
+            /* Loại bỏ padding mặc định */
+            width: 100%;
+            /* Đặt chiều rộng bằng với menu chính */
+            left: 0;
+            /* Căn trái với menu chính */
+            position: absolute;
+            /* Đảm bảo dropdown nằm trên menu */
+            z-index: 1000;
+            /* Đảm bảo dropdown hiển thị trên các thành phần khác */
+        }
+
+        .dropdown-menu .dropdown-item {
+            color: #fff;
+            /* Màu chữ trắng */
+            padding: 10px 20px;
+            /* Tăng khoảng cách giữa các mục */
+            font-size: 14px;
+            /* Kích thước chữ */
+            transition: background-color 0.3s ease;
+            /* Hiệu ứng hover mượt */
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #1f1f2e;
+            /* Màu nền khi hover */
+            color: #fff;
+            /* Màu chữ khi hover */
+        }
+
+        .nav-item:hover .dropdown-menu {
+            display: block;
+            /* Hiển thị dropdown khi hover vào menu chính */
+        }
     </style>
 
 
@@ -207,11 +253,11 @@
         </ul>
     </header>
     @php
-        if (session('user.avatar')) {
-            $anh = session('user.avatar');
-        } else {
-            $anh = 'avatar/default-avatar.jpg';
-        }
+    if (session('user.avatar')) {
+    $anh = session('user.avatar');
+    } else {
+    $anh = 'avatar/default-avatar.jpg';
+    }
 
     @endphp
     <!-- Sidebar menu-->
@@ -223,7 +269,7 @@
                 <p class="app-sidebar__user-name">
                     <b>
                         @if (session('employee'))
-                            {{ session('employee')['username'] }}
+                        {{ session('employee')['username'] }}
                         @endif
                     </b>
                 </p>
@@ -232,62 +278,79 @@
         </div>
         <hr>
         <ul class="app-menu">
-
-            <li><a class="app-menu__item " href="{{ route('admin.dashboard') }}"><i
-                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
-                        khiển</span></a></li>
-            <li><a class="app-menu__item " href="{{ route('category.index') }}"><i
-                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý danh
-                        mục</span></a></li>
-            <li><a class="app-menu__item " href="{{ route('wallet.index') }}"><i
-                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Quản lý ví tiền
-                    </span></a></li>
-            <li><a class="app-menu__item " href="{{ route('employee.index') }}"><i
-                        class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
-                        viên</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('user.index') }}"><i
-                        class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
-                        hàng</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('product.index') }}"><i
-                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
-            </li>
-            <li><a class="app-menu__item" href="{{ route('admin.banners.index') }}"><i
-                class='app-menu__icon bx bx-photo-album'></i><span class="app-menu__label">Quản lý Banner</span></a>
-            </li>
-            <li><a class="app-menu__item" href="{{ route('admin.size.index') }}"><i
-                        class="app-menu__icon bx bx-shape-square"></i><span class="app-menu__label">Quản lý
-                        Size</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('admin.color.index') }}"><i
-                        class="app-menu__icon bx bx-palette"></i><span class="app-menu__label">Quản lý Màu
-                        sắc</span></a></li>
-
-            <li><a class="app-menu__item" href="{{ route('order.index') }}"><i
-                        class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản lý đơn hàng</span></a>
-            </li>
-            <li><a class="app-menu__item" href="{{ route('voucher.index') }}"><i
-                        class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        Khuyến mãi</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('comment.index') }}"><i
-                        class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        Bình luận</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('rate.index') }}"><i
-                        class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý
-                        Đánh giá</span></a></li>
-            <li><a class="app-menu__item" href="{{ route('admin.reports.index') }}"><i
-                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
-                        thu</span></a>
-            </li>
-            <li><a class="app-menu__item" href="{{ route('post.index') }}"><i
-                        class='app-menu__icon bx bx-id-card'></i><span class="app-menu__label">Quản lý Bài
-                        Viết</span></a>
-            </li>
             <li>
-                <a class="app-menu__item" href="{{ route('admin.wallet_transactions.index') }}">
-                    <i class="app-menu__icon bx bx-purchase-tag-alt"></i>
-                    <span class="app-menu__label">Lịch sử giao dịch</span>
+                <a class="app-menu__item" href="{{ route('admin.dashboard') }}">
+                    <i class="app-menu__icon bx bx-tachometer"></i>
+                    <span class="app-menu__label">Bảng điều khiển</span>
                 </a>
             </li>
+
+            <!-- Quản lý sản phẩm -->
+            <li class="nav-item dropdown">
+                <a class="app-menu__item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="app-menu__icon bx bx-box"></i>
+                    <span class="app-menu__label">Quản lý sản phẩm</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('category.index') }}">Danh mục</a></li>
+                    <li><a class="dropdown-item" href="{{ route('product.index') }}">Sản phẩm</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.banners.index') }}">Banner</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.size.index') }}">Size</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.color.index') }}">Màu sắc</a></li>
+                </ul>
+            </li>
+
+            <!-- Quản lý người dùng -->
+            <li class="nav-item dropdown">
+                <a class="app-menu__item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="app-menu__icon bx bx-user"></i>
+                    <span class="app-menu__label">Quản lý người dùng</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('employee.index') }}">Nhân viên</a></li>
+                    <li><a class="dropdown-item" href="{{ route('user.index') }}">Khách hàng</a></li>
+                </ul>
+            </li>
+
+            <!-- Quản lý bán hàng -->
+            <li class="nav-item dropdown">
+                <a class="app-menu__item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="app-menu__icon bx bx-cart"></i>
+                    <span class="app-menu__label">Quản lý bán hàng</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('order.index') }}">Đơn hàng</a></li>
+                    <li><a class="dropdown-item" href="{{ route('voucher.index') }}">Khuyến mãi</a></li>
+                </ul>
+            </li>
+
+            <!-- Nội dung & tương tác -->
+            <li class="nav-item dropdown">
+                <a class="app-menu__item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="app-menu__icon bx bx-message-dots"></i>
+                    <span class="app-menu__label">Nội dung & tương tác</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('post.index') }}">Bài viết</a></li>
+                    <li><a class="dropdown-item" href="{{ route('comment.index') }}">Bình luận</a></li>
+                    <li><a class="dropdown-item" href="{{ route('rate.index') }}">Đánh giá</a></li>
+                </ul>
+            </li>
+
+            <!-- Tài chính & báo cáo -->
+            <li class="nav-item dropdown">
+                <a class="app-menu__item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="app-menu__icon bx bx-wallet"></i>
+                    <span class="app-menu__label">Tài chính & báo cáo</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('wallet.index') }}">Quản lý ví tiền</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.wallet_transactions.index') }}">Lịch sử giao dịch</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}">Báo cáo doanh thu</a></li>
+                </ul>
+            </li>
         </ul>
+
     </aside>
     <main class="app-content">
         <div class="row">
@@ -319,7 +382,7 @@
                 </b></p>
             {{-- <pre>
             {{ print_r(session()->all(), true) }}
-        </pre> --}}
+            </pre> --}}
         </div>
 
     </main>
@@ -379,6 +442,27 @@
                 return i;
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+    const dropdowns = document.querySelectorAll('.nav-item.dropdown');
+
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
+
+        toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            menu.classList.toggle('show'); // Hiển thị hoặc ẩn menu
+        });
+
+        // Đóng dropdown khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!dropdown.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    });
+});
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
