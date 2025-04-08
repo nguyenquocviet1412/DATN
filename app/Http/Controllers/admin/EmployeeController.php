@@ -23,7 +23,7 @@ class EmployeeController extends Controller
         $sortOrder = $request->input('sort_order', 'asc');
         $search = $request->input('search');
 
-        $employees = Employee::all();
+        $employees = Employee::orderBy('created_at', 'desc')->get();
 
         return view('admin.employee.index', compact('employees', 'sortBy', 'sortOrder', 'search'));
     }
