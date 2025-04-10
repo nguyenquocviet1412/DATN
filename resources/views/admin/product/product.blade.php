@@ -46,6 +46,7 @@
                             <a class="btn btn-add btn-sm" href="{{ route('product.create') }}" title="Thêm">
                                 <i class="fas fa-plus"></i> Tạo mới sản phẩm
                             </a>
+                            <a href="{{ route('product.trashed') }}" class="btn btn-warning">🗑️ Thùng rác</a>
                         </div>
 
                         {{-- <div class="col-md-6">

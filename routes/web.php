@@ -177,6 +177,9 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::post('/products/{id}/update-all', [ProductController::class, 'updateAll'])->name('products.updateAll');
 
         Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+        Route::get('/products/trashed', [ProductController::class, 'trashed'])->name('product.trashed');
+        Route::post('/products/{id}/restore', [ProductController::class, 'restore'])->name('product.restore');
+        Route::delete('/products/{id}/force-delete', [ProductController::class, 'forceDelete'])->name('product.forceDelete');
     });
     //route variant
     Route::prefix('variant')->group(function () {
