@@ -100,6 +100,11 @@ public function destroy($id)
 {
     try {
         $size = Size::withTrashed()->findOrFail($id);
+        // Kiểm tra có tồn tại trong variant không
+        if ($size->variants()->exists()) {
+            return redirect()->back()->with('error', 'Không thể xóa kích thước này vì nó đang được sử dụng trong các biến thể.');
+        }
+        // Xóa vĩnh viễn
         $size->forceDelete();
         // Ghi log
         LogHelper::logAction('Xóa vĩnh viễn kích thước có id: '. $size->id);
