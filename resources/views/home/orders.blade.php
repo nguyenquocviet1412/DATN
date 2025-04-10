@@ -100,10 +100,14 @@
                                                             'handed_over' => ['color' => 'dark', 'icon' => '📤', 'text' => 'Đã bàn giao'],
                                                             'shipping' => ['color' => 'info', 'icon' => '🚚', 'text' => 'Đang vận chuyển'],
                                                             'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Hoàn thành'],
-                                                            'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
-                                                            'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
                                                             'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
                                                             'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
+
+                                                            // Các trạng thái trả hàng - hoàn tiền
+                                                            'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
+                                                            'shop_refunded' => ['color' => 'info', 'icon' => '💸', 'text' => 'Shop đã hoàn tiền'],
+                                                            'customer_confirmed_refund' => ['color' => 'success', 'icon' => '🤝', 'text' => 'Khách xác nhận đã nhận tiền'],
+                                                            'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
                                                         ];
                                                     @endphp
 
@@ -135,6 +139,24 @@
                                                                 <button type="submit" class="btn btn-success btn-sm fw-bold d-flex align-items-center justify-content-center"
                                                                     style="border-radius: 8px; transition: all 0.3s;">
                                                                     <i class="fas fa-box-open me-1"></i> Đã nhận hàng
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                        <!-- Nút yêu cầu hoàn tiền -->
+                                                        @php
+                                                            $status = $order->payment_status;
+                                                            // Kiểm tra thời gian trả hàng (trong vòng 7 ngày kể từ khi giao hàng)
+                                                            $orderDate = $order->updated_at;
+                                                            $canReturn = now()->diffInDays($orderDate) ;
+                                                        @endphp
+
+                                                        @if ($status === 'completed' && 7 >= $canReturn )
+                                                            <form action="{{ route('order.return-item', ['order' => $order->id, 'item' => $item->id]) }}" method="POST" class="mt-2">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('Bạn có chắc muốn trả hàng sản phẩm này?')">
+                                                                    🔄 Trả hàng
+                                                                    {{$canReturn}} ngày
                                                                 </button>
                                                             </form>
                                                         @endif

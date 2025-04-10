@@ -60,7 +60,7 @@ class OrderController extends Controller
         }
     // Kiểm tra trạng thái thanh toán của đơn hàng
     $validStastus = ['unpaid', 'pay'];
-    $newPay = $request->payment_status_type;
+    $newPay = $request->status;
     if (!in_array($newPay, $validStastus)) {
         return redirect()->back()->with('error', 'Trạng thái thanh toán không hợp lệ.');
     }
@@ -104,7 +104,7 @@ class OrderController extends Controller
     // Cập nhật trạng thái đơn hàng
     $order->payment_status = $newStatus;
     // Cập nhật trạng thái thanh toán
-    $order->payment_status = $newPay;
+    $order->status = $newPay;
 
     $order->save();
 
@@ -113,7 +113,7 @@ class OrderController extends Controller
     // Ghi log trạng thái thanh toán
     LogHelper::logAction('Cập nhật trạng thái thanh toán đơn hàng #' . $order->id . ' thành "' . $newPay . '"');
 
-    return redirect()->route('order.index')->with('success', 'Cập nhật đơn hàng thành công');
+    return redirect()->back()->with('success', 'Cập nhật đơn hàng thành công');
 }
 
 

@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Rate;
 use App\Models\Banner;
+use App\Models\Order;
 // use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +79,9 @@ class HomeController extends Controller
         $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
         //Lấy danh sách bannner
         $banners = Banner::where('status', 1)->get();
-        return view('home.index', compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews','banners'));
+
+        return view('home.index',
+        compact('products', 'categories', 'latestProducts', 'mostViewedProducts', 'bestSellingProducts', 'topRatedProducts', 'latestPosts', 'favoriteProductIds', 'reviews','banners'));
 
     }
 

@@ -546,9 +546,19 @@ if ($remainingDiscount > 0) {
 
     // Hiển thị trang đặt hàng thành công
     public function success()
-    {
-        return view('home.checkout-success');
+{
+    // Lấy đơn hàng cuối cùng của khách (nếu đã đăng nhập)
+    $order = Order::where('id_user', Auth::id())
+        ->orderBy('created_at', 'desc')
+        ->first();
+    // Nếu không có đơn hàng nào, chuyển hướng về trang giỏ hàng
+    if (!$order) {
+        return redirect()->route('cart.index')->with('message', 'Không có đơn hàng nào để hiển thị.');
     }
+
+    return view('home.checkout-success', compact('order'));
+}
+
 
     // Lịch sử đơn hàng
     public function userOrders()
@@ -578,6 +588,10 @@ if ($remainingDiscount > 0) {
 
         // Cập nhật trạng thái đơn hàng
         $order->update(['payment_status' => 'completed']);
+        // Cập nhật nhận hàng sẽ cập nhật thanh toán
+        if ($order->payment_status == 'completed') {
+            $order->update(['status' => 'pay']);
+        }
 
         // Cập nhật trạng thái tất cả sản phẩm trong đơn hàng
         $order->orderItems()->update(['status' => 'completed']);
@@ -590,21 +604,37 @@ if ($remainingDiscount > 0) {
         // Kiểm tra thời gian trả hàng (chỉ trong vòng 7 ngày)
         $orderDate = $order->updated_at;
         if (now()->diffInDays($orderDate) > 7) {
-            return back()->with('error', 'Sản phẩm này không thể trả hàng vì đã quá 7 ngày.');
+            return back()->with('error', 'Đơn hàng này không thể trả hàng vì đã quá 7 ngày.');
         }
 
-        // Cập nhật trạng thái sản phẩm trong đơn hàng
-        $item->status = 'return_processing';
-        $item->save();
+        // Cập nhật trạng thái đơn hàng
+        $order->payment_status = 'return_processing';
+        $order->save();
 
-        // Kiểm tra nếu có ít nhất 1 sản phẩm được trả hàng -> Cập nhật trạng thái tổng thể đơn hàng
-        if ($order->orderItems->where('status', 'return_processing')->count() > 0) {
-            $order->payment_status = 'return_processing';
-            $order->save();
-        }
-
-        return back()->with('success', 'Sản phẩm đang được xử lý trả hàng.');
+        return back()->with('success', 'Đơn hàng đang được xử lý trả hàng.');
     }
+    // Xác nhận đã nhận tiền trả hàng
+public function submitRefundConfirmation(Request $request)
+{
+    $orderId = $request->input('id_order');
+
+    // Tìm đơn hàng theo ID và người dùng đang đăng nhập, và đang có trạng thái 'shop_refunded'
+    $order = Order::where('id', $orderId)
+        ->where('id_user', auth()->id())
+        ->where('payment_status', 'shop_refunded')
+        ->first();
+
+    if (!$order) {
+        return redirect()->back()->with('error', 'Không tìm thấy đơn hàng phù hợp để xác nhận hoàn tiền.');
+    }
+
+    // Cập nhật trạng thái đơn hàng thành 'customer_confirmed_refund'
+    $order->update(['payment_status' => 'customer_confirmed_refund']);
+    $order->save();
+
+    return redirect()->back()->with('success', 'Cảm ơn bạn đã xác nhận đã nhận được tiền cho đơn hàng #' . $order->id);
+}
+
     // Hủy đơn hàng
     public function cancel(Order $order)
 {

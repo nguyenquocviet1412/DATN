@@ -3,12 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Cart;
-use Auth;
 use DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Category;
+use App\Models\Order;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB as FacadesDB;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,8 +41,14 @@ class AppServiceProvider extends ServiceProvider
                 ->with(['variant.product', 'variant.color', 'variant.size', 'variant.images'])
                 ->get();
         }
+        //Lấy danh sách các đơn hàng có trạng thái xác nhận hoàn tiền
+        if($user){
+            $ordersToConfirmRefund = Order::where('id_user', Auth::id())->where('payment_status', 'shop_refunded')->get();
+        }else{
+            $ordersToConfirmRefund = [];
+        }
 
-        $view->with(compact('categories', 'cartItems'));
+        $view->with(compact('categories', 'cartItems', 'ordersToConfirmRefund'));
     });
 
     Paginator::useBootstrapFive();
