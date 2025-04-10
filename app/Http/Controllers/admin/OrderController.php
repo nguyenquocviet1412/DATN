@@ -50,31 +50,12 @@ class OrderController extends Controller
     public function update(Request $request, string $id)
 {
     $order = Order::findOrFail($id);
-    //Kiểm tra phương thức thanh toán
-    $validMethods = ['COD', 'momo'];
-    $newPaymentMethod = $request->input('payment_method');
 
-        // Kiểm tra phương thức thanh toán có hợp lệ
-        if (!in_array($newPaymentMethod, $validMethods)) {
-            return redirect()->back()->with('error', 'Phương thức thanh toán không hợp lệ.');
-        }
     // Kiểm tra trạng thái thanh toán của đơn hàng
     $validStastus = ['unpaid', 'pay'];
     $newPay = $request->status;
     if (!in_array($newPay, $validStastus)) {
         return redirect()->back()->with('error', 'Trạng thái thanh toán không hợp lệ.');
-    }
-
-    // Lưu giá trị cũ để so sánh
-    $oldPaymentMethod = $order->payment_method;
-    $newPaymentMethod = $request->input('payment_method');
-
-    // Cập nhật phương thức thanh toán nếu có thay đổi
-    if ($oldPaymentMethod !== $newPaymentMethod) {
-        $order->payment_method = $newPaymentMethod;
-
-        // Ghi log thay đổi phương thức thanh toán
-        LogHelper::logAction('Đơn hàng #' . $order->id . ' thay đổi phương thức thanh toán từ "' . $oldPaymentMethod . '" sang "' . $newPaymentMethod . '"');
     }
 
     $newStatus = $request->input('payment_status');
