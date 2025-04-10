@@ -230,13 +230,11 @@
                                         <li>
                                             <a href="{{route('favorite.index')}}">
                                                 <i class="pe-7s-like"></i>
-                                                <div class="notification">0</div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#" class="minicart-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <div class="notification">2</div>
                                             </a>
                                         </li>
                                     </ul>

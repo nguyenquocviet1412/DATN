@@ -7,7 +7,7 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
-                {{-- thông báo thêm thành công --}}
+{{-- thông báo thêm thành công --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if(session('success'))
     <script>

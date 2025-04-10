@@ -6,18 +6,36 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile p-4">
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            @if (session('success'))
-                <script>
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: '{{ session('success') }}',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 4000
-                    });
-                </script>
-            @endif
+{{-- thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
+
+
+{{-- Thông báo lỗi --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                showConfirmButton: true,  // Hiển thị nút đóng
+                confirmButtonText: 'Đóng',  // Nội dung nút đóng
+                backdrop: true  // Làm tối nền
+            });
+        </script>
+    @endif
 
             <form action="{{ route('order.update', $order->id) }}" method="POST">
                 @csrf
@@ -53,17 +71,16 @@
                             <th>Số lượng</th>
                             <th>Giá</th>
                             <th>Tổng</th>
-                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($order->orderItems as $index => $item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->variant->id_product }}</td>
-                                <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
-                                <td>
-                                    @if ($item->variant->images->isNotEmpty())
+                                <td>{{ $item->variant->id_product ?? null }}</td>
+                            <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
+                            <td>
+                                @if ($item->variant && $item->variant->images->isNotEmpty())
                                         <img src="{{ asset($item->variant->images->first()->image_url) }}" width="50" class="rounded">
                                     @else
                                         <img src="{{ asset('default-image.jpg') }}" width="50" class="rounded">
@@ -72,48 +89,38 @@
                                 <td>{{ $item->quantity }}</td>
                                 <td>{{ number_format($item->price,0, ',', '.') }} VNĐ</td>
                                 <td>{{ number_format($item->subtotal,0, ',', '.') }} VNĐ</td>
-                                <td class="text-center">
-                                    <select class="form-select shadow-sm p-2 rounded" name="order_items[{{ $item->id }}][status]" {{ in_array($item->status, ['cancelled', 'refunded','failed']) ? 'disabled' : '' }}>
-                                        @php
-                                            $statusColors = [
-                                                'pending' => ['Chờ xử lý', 'warning', 'bi-hourglass-split'],
-                                                'confirmed' => ['Đã xác nhận', 'info', 'bi-check-circle'],
-                                                'preparing' => ['Đang chuẩn bị hàng', 'primary', 'bi-box-seam'],
-                                                'handed_over' => ['Đã bàn giao cho vận chuyển', 'dark', 'bi-truck'],
-                                                'shipping' => ['Đang vận chuyển', 'primary', 'bi-truck'],
-                                                'completed' => ['Giao hàng thành công', 'success', 'bi-check2-circle'],
-                                                'return_processing' => ['Đang xử lý trả hàng hoàn tiền', 'warning', 'bi-arrow-clockwise'],
-                                                'refunded' => ['Đã hoàn tiền', 'secondary', 'bi-arrow-counterclockwise'],
-                                                'cancelled' => ['Đã hủy', 'danger', 'bi-x-circle'],
-                                                'failed' => ['Thất bại', 'danger', 'bi-exclamation-triangle'],
-                                            ];
-                                        @endphp
-                                        @foreach ($statusColors as $key => [$label, $badgeColor, $icon])
-                                            <option value="{{ $key }}" class="fw-bold text-{{ $badgeColor }}" {{ $item->status == $key ? 'selected' : '' }}>
-                                                <i class="bi {{ $icon }}"></i> {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-
+                @php
+                    $statusFlow = config('order_status.flow');
+                    $labels = config('order_status.labels');
+                    $colors = config('order_status.colors');
+                    $icons = config('order_status.icons');
+                    $currentStatus = $order->payment_status;
+                    $allowedStatuses = $statusFlow[$currentStatus] ?? [];
+                @endphp
                 <div class="row mt-4">
                     <div class="col-md-6">
                         <h3 class="text-info">🚚 Trạng thái đơn hàng</h3>
-                        <div class="form-control shadow-sm p-2 rounded fw-bold text-{{ $statusColors[$order->payment_status][1] }}">
-                            {{ $statusColors[$order->payment_status][0] }}
-                        </div>
+                        <select class="form-control" name="payment_status">
+                            <option value="{{ $currentStatus }}" selected disabled>
+                                {{ $labels[$currentStatus] ?? $currentStatus }}
+                            </option>
+                            @foreach ($allowedStatuses as $nextStatus)
+                                <option value="{{ $nextStatus }}">
+                                    {{ $labels[$nextStatus] ?? $nextStatus }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <h3 class="text-warning">💳 Phương thức thanh toán</h3>
                         <select class="form-control" name="payment_method">
                             @foreach ([
                                 'COD' => 'Thanh toán khi nhận hàng',
-                                'momo' => 'Thanh toán qua Momo',
-                                'wallet' => 'Thanh toán bằng ví'
+                                'momo' => 'Thanh toán qua Momo'
                             ] as $key => $value)
                                 <option value="{{ $key }}" {{ $order->payment_method == $key ? 'selected' : '' }}>
                                     {{ $value }}
@@ -121,6 +128,14 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-6 mt-4">
+                        <h3 class="text-success">💰 Trạng thái thanh toán</h3>
+                        <select class="form-control" name="status">
+                            <option value="unpaid" {{ $order->status == 'unpaid' ? 'selected' : '' }}>Chưa thanh toán</option>
+                            <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                        </select>
+                    </div>
+
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">

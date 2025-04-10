@@ -24,7 +24,8 @@ class Order extends Model
         'phone',
         'shipping_address',
         'payment_method',
-        'payment_status'
+        'payment_status',
+        'status',
     ];
     public function user()
     {
@@ -128,16 +129,21 @@ public function getTotalBeforeDiscountAttribute()
     return $this->orderItems->sum('subtotal');
 }
 const ORDER_STATUS = [
-    'pending' => 'Chờ xử lý',  // Đã đặt hàng nhưng chưa được xử lý
-    'confirmed' => 'Đã xác nhận',  // Đơn hàng đã được xác nhận
-    'preparing' => 'Đang chuẩn bị hàng',  // Đang đóng gói sản phẩm
-    'handed_over' => 'Đã bàn giao cho đơn vị vận chuyển',  // Giao cho đơn vị vận chuyển
-    'shipping' => 'Đang vận chuyển',  // Đang giao hàng
-    'completed' => 'Giao hàng thành công',  // Đã giao hàng thành công & hoàn tất đơn hàng
-    'cancelled' => 'Đã hủy',  // Đơn hàng bị hủy
-    'failed' => 'Thất bại',  // Thanh toán thất bại hoặc lỗi đơn hàng
-    'return_processing' => 'Đang xử lý trả hàng hoàn tiền',  // Đơn hàng đang trong quá trình xét duyệt trả hàng
-    'refunded' => 'Đã hoàn tiền'  // Hoàn tiền cho khách hàng
+    'pending' => 'Chờ xử lý',
+    'confirmed' => 'Đã xác nhận',
+    'preparing' => 'Đang chuẩn bị hàng',
+    'handed_over' => 'Đã bàn giao cho đơn vị vận chuyển',
+    'shipping' => 'Đang vận chuyển',
+    'completed' => 'Giao hàng thành công',
+    'cancelled' => 'Đã hủy',
+    'failed' => 'Thất bại',
+
+    // Các trạng thái liên quan đến trả hàng hoàn tiền
+    'return_processing' => 'Đang xử lý trả hàng hoàn tiền',
+    'shop_refunded' => 'Shop đã hoàn tiền', // ✅ mới
+    'customer_confirmed_refund' => 'Khách đã xác nhận nhận được tiền', // ✅ mới
+
+    'refunded' => 'Đã hoàn tiền' // trạng thái cuối cùng, khi cả 2 bên xác nhận xong
 ];
 
 const PAYMENT_METHOD = [

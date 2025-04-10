@@ -242,7 +242,7 @@
         stockQuantity = parseInt(selectedOption.getAttribute('data-stock'));
         let newPrice = selectedOption.getAttribute('data-price');
 
-        document.getElementById('productPrice').innerText = `₫${parseFloat(newPrice).toLocaleString('vi-VN')}`;
+        document.getElementById('productPrice').innerText = `${parseFloat(newPrice).toLocaleString('vi-VN')} VNĐ`;
         document.getElementById('quantityInput').disabled = false;
         document.getElementById('addToCartBtn').disabled = false;
     }

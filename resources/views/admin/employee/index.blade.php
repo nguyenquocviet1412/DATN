@@ -123,7 +123,7 @@ $admin = Auth::guard('employee')->user();
                             <td>{{ $employee->address }}</td>
                             <td>
                                 <span class="badge bg-{{ $employee->role == 'admin' ? 'danger' : 'info' }}">
-                                    {{ $employee->role == 'admin' ? 'Quản trị cấp cao' : 'Nhân viên thường' }}
+                                    {{ $employee->role == 'superadmin' ? 'Quản trị cấp cao' : 'Nhân viên thường' }}
                                 </span>
                             </td>
                             <td class="text-center">

@@ -56,24 +56,37 @@
                     <th>📦 Trạng thái đơn hàng:</th>
                     <td>
                         @php
-                            $statusColors = [
-                                'waiting_payment' => 'bg-warning text-dark',
-                                'pending' => 'bg-info',
-                                'shipping' => 'bg-primary',
-                                'completed' => 'bg-success',
-                                'failed' => 'bg-danger'
-                            ];
-                        @endphp
-                        <span class="badge {{ $statusColors[$order->payment_status] ?? 'bg-secondary' }}">
-                            {{ ucfirst(str_replace('_', ' ', $order->payment_status)) }}
-                        </span>
+                                    $status = $order->payment_status;
+                                    $statusData = [
+                                        'pending' => ['color' => 'warning', 'icon' => '⏳', 'text' => 'Chờ xử lý'],
+                                        'confirmed' => ['color' => 'info', 'icon' => '✅', 'text' => 'Đã xác nhận'],
+                                        'preparing' => ['color' => 'primary', 'icon' => '📦', 'text' => 'Đang chuẩn bị'],
+                                        'handed_over' => ['color' => 'dark', 'icon' => '📤', 'text' => 'Đã bàn giao'],
+                                        'shipping' => ['color' => 'info', 'icon' => '🚚', 'text' => 'Đang vận chuyển'],
+                                        'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Giao thành công'],
+                                        'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
+                                        'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
+                                        'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
+                                        'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
+                                    ];
+                                @endphp
+
+                                <span class="badge bg-{{ $statusData[$status]['color'] ?? 'secondary' }}">
+                                    {!! $statusData[$status]['icon'] ?? '❓' !!} {{ $statusData[$status]['text'] ?? 'Không xác định' }}
+                                </span>
                     </td>
                 </tr>
-
-                {{-- Tổng tiền trước khi giảm giá --}}
                 <tr>
-                    <th>💰 Tổng tiền chưa giảm:</th>
-                    <td><strong>{{ number_format($order->total_price + $order->discount_amount,0, ',', '.') }} VNĐ</strong></td>
+                    <th>💸 Trạng thái thanh toán:</th>
+                    <td>
+                        @if ($order->status == 'unpaid')
+                            <span class="badge bg-danger">Chưa thanh toán</span>
+                        @elseif ($order->status == 'paid')
+                            <span class="badge bg-success">Đã thanh toán</span>
+                        @else
+                            <span class="badge bg-secondary">Không xác định</span>
+                        @endif
+                    </td>
                 </tr>
 
                 {{-- Hiển thị mã giảm giá nếu có --}}
@@ -83,6 +96,12 @@
                     <td><span class="badge bg-warning">{{ $order->voucher->code }}</span></td>
                 </tr>
                 @endif
+
+                {{-- Tổng tiền trước khi giảm giá --}}
+                <tr>
+                    <th>💰 Tổng tiền chưa giảm:</th>
+                    <td><strong>{{ number_format($order->total_price + $order->discount_amount,0, ',', '.') }} VNĐ</strong></td>
+                </tr>
 
                 <tr>
                     <th>💲 Số tiền giảm giá:</th>
@@ -108,17 +127,17 @@
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Tổng</th>
-                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($order->orderItems as $index => $item)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->variant->id_product }}</td>
+                            <td>{{ $item->variant->id_product ?? null }}</td>
                             <td>{{ $item->variant->product->name ?? 'N/A' }}</td>
                             <td>
-                                @if ($item->variant->images->isNotEmpty())
+                                @if ($item->variant && $item->variant->images->isNotEmpty())
+                                    {{-- Hiển thị ảnh sản phẩm nếu có --}}
                                     <img src="{{ asset($item->variant->images->first()->image_url) }}" alt="Ảnh sản phẩm" width="50">
                                 @else
                                     <img src="{{ asset('default-image.jpg') }}" alt="Ảnh mặc định" width="50">
@@ -129,29 +148,6 @@
                             <td>{{ number_format($item->quantity) }}</td>
                             <td>{{ number_format($item->price,0, ',', '.') }} VNĐ</td>
                             <td>{{ number_format($item->subtotal,0, ',', '.') }} VNĐ</td>
-                            <td class="text-center">
-                                @php
-                                    $status = $item->status;
-                                    $statusData = [
-                                        'pending' => ['color' => 'warning', 'icon' => '⏳', 'text' => 'Chờ xử lý'],
-                                        'confirmed' => ['color' => 'info', 'icon' => '✅', 'text' => 'Đã xác nhận'],
-                                        'preparing' => ['color' => 'primary', 'icon' => '📦', 'text' => 'Đang chuẩn bị'],
-                                        'handed_over' => ['color' => 'dark', 'icon' => '📤', 'text' => 'Đã bàn giao'],
-                                        'shipping' => ['color' => 'info', 'icon' => '🚚', 'text' => 'Đang vận chuyển'],
-                                        'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Giao thành công'],
-                                        'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
-                                        'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
-                                        'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
-                                        'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã trả hàng'],
-                                    ];
-                                @endphp
-
-                                <span class="badge bg-{{ $statusData[$status]['color'] ?? 'secondary' }}">
-                                    {!! $statusData[$status]['icon'] ?? '❓' !!} {{ $statusData[$status]['text'] ?? 'Không xác định' }}
-                                </span>
-
-
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
