@@ -41,7 +41,7 @@
                             <nav aria-label="breadcrumb">
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">login-Register</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Đăng nhập người dùng</li>
                                 </ul>
                             </nav>
                         </div>
@@ -59,7 +59,7 @@
                         <!-- Login Content Start -->
                         <div class="col-lg-6">
                             <div class="login-reg-form-wrap">
-                                <h5>Sign In</h5>
+                                <h5>Đăng nhập</h5>
 
                                 <!-- Hiển thị thông báo -->
                                 @if(session('error'))
@@ -78,7 +78,7 @@
                                         @enderror
                                     </div>
                                     <div class="single-input-item">
-                                        <input type="password" name="password" placeholder="Enter your Password" required />
+                                        <input type="password" name="password" placeholder="Mật khẩu" required />
                                         @error('password')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -88,10 +88,10 @@
                                             <div class="remember-meta">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" name="remember" class="custom-control-input" id="rememberMe">
-                                                    <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                                                    <label class="custom-control-label" for="rememberMe">Ghi nhớ mật khẩu</label>
                                                 </div>
                                             </div>
-                                            <a href="#" class="forget-pwd">Forget Password?</a>
+                                            <a href="#" class="forget-pwd">Quên mật khẩu</a>
                                         </div>
                                     </div>
                                     <div class="single-input-item">
