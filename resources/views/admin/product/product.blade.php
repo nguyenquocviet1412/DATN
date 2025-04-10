@@ -48,7 +48,7 @@
                             </a>
                         </div>
 
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <form action="{{ route('product.index') }}" method="GET">
                                 <div class="input-group">
                                     <input type="text" name="search" class="form-control"
@@ -58,7 +58,7 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
 
 
@@ -66,7 +66,7 @@
 
 
 
-                    <!-- Dropdown sắp xếp -->
+                    {{-- <!-- Dropdown sắp xếp -->
                     <div class="mb-3">
                         <form method="GET" action="{{ route('product.index') }}">
                             <label for="sort_by">Sắp xếp theo:</label>
@@ -84,13 +84,14 @@
 
                             <button type="submit" class="btn btn-primary">Sắp xếp</button>
                         </form>
-                    </div>
+                    </div> --}}
 
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-bordered table-hover js-copytextarea" cellpadding="0" cellspacing="0" border="0"
+                    id="sampleTable">
                         <thead>
                             <tr class="text-center">
                                 <th><input type="checkbox" id="select-all"></th>
-                                <th>ID</th>
+                                <th>SKU</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Ảnh</th>
                                 <th>Số lượng</th>
@@ -106,7 +107,7 @@
                                     <td class="text-center">
                                         <input type="checkbox" name="check1" value="{{ $product->id }}">
                                     </td>
-                                    <td class="text-center">{{ $product->id }}</td>
+                                    <td >{{ $product->sku ?? "" }}</td>
                                     <td>{{ $product->name }}</td>
                                     <td class="text-center">
                                         @php
@@ -142,10 +143,10 @@
                         </tbody>
                     </table>
 
-                    <!-- Phân trang -->
+                    {{-- <!-- Phân trang -->
                     <div class="pagination justify-content-center">
                         {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
-                    </div>
+                    </div> --}}
                     <script>
                         document.getElementById('select-all').addEventListener('change', function() {
                             let checkboxes = document.querySelectorAll('input[name="check1"]');

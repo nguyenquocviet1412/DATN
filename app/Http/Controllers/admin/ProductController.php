@@ -21,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request)
 {
     $sortBy = $request->input('sort_by', 'id'); // Mặc định sắp xếp theo ID
-    $sortOrder = $request->input('sort_order', 'asc'); // Mặc định tăng dần
+    $sortOrder = $request->input('sort_order', 'desc'); // Mặc định tăng dần
     $search = $request->input('search'); // Lấy giá trị tìm kiếm
 
     $query = Product::with(['category', 'variants.images']);
@@ -32,7 +32,7 @@ class ProductController extends Controller
     }
 
     // Thực hiện sắp xếp theo yêu cầu
-    $products = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+    $products = $query->orderBy($sortBy, $sortOrder)->get();
 
     return view('admin.product.product', compact('products', 'sortBy', 'sortOrder', 'search'));
 }
@@ -51,6 +51,11 @@ class ProductController extends Controller
         return view('admin.product.addproduct', compact('categories', 'colors', 'sizes'));
     }
 
+    //hàm tạo viết tắt
+    private function generateAcronym($text)
+{
+    return strtoupper(collect(explode(' ', $text))->map(fn($word) => $word[0])->implode(''));
+}
     // Thêm sản phẩm
 public function store(Request $request)
 {
@@ -62,6 +67,9 @@ public function store(Request $request)
         'status' => ['required', Rule::in(['active','inactive'])], // Cập nhật trạng thái
     ]);
 
+    $category = Category::find($request->id_category);
+    $categoryAcronym = $this->generateAcronym($category->name);
+    $timestamp = now()->format('dmYHis');
     // Tạo sản phẩm mới
     $product = Product::create([
         'name' => $request->name,
@@ -69,6 +77,7 @@ public function store(Request $request)
         'id_category' => $request->id_category,
         'price' => $request->price,
         'status' => $request->status,
+        'sku' => $categoryAcronym . $timestamp,
     ]);
 // Ghi log
 LogHelper::logAction('Thêm sản phẩm mới có id: ' . $product->id);
@@ -88,6 +97,11 @@ LogHelper::logAction('Thêm sản phẩm mới có id: ' . $product->id);
             }
             $variantCombinations[] = $variantKey;
 
+
+            $productAcronym = $this->generateAcronym($request->name);
+            $color = Color::find($variantData['id_color']);
+            $size = Size::find($variantData['id_size']);
+            $colorAcronym = $this->generateAcronym($color->name ?? '');
             // Thêm biến thể mới
             $variant = Variant::create([
                 'id_product' => $product->id,
@@ -95,6 +109,7 @@ LogHelper::logAction('Thêm sản phẩm mới có id: ' . $product->id);
                 'id_size' => $variantData['id_size'],
                 'price' => $variantData['price'],
                 'quantity' => $variantData['quantity'],
+                'sku' => $product->id . $productAcronym . $colorAcronym . $size->size,
             ]);
 // Ghi log
 LogHelper::logAction('Thêm biến thể mới có id: ' . $variant->id. ' cho sản phẩm có id: ' . $product->id);
