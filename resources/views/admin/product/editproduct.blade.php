@@ -149,6 +149,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Sku</th>
                                     <th>Màu sắc</th>
                                     <th>Kích thước</th>
                                     <th>Số lượng</th>
@@ -162,6 +163,9 @@
                                 <tr>
                                     <input type="hidden" name="variants[{{ $variant->id }}][id]" value="{{ $variant->id }}">
                                     <td>
+                                        {{ $variant->sku ?? '' }}
+                                    </td>
+                                    <td style="width: 150px;">
                                         <select name="variants[{{ $variant->id }}][id_color]" class="form-control">
                                             @foreach ($colors as $color)
                                                 @php
@@ -174,7 +178,7 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td>
+                                    <td style="width: 100px;">
                                         <select name="variants[{{ $variant->id }}][id_size]" class="form-control">
                                             @foreach ($sizes as $size)
                                                 @php
@@ -187,7 +191,7 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td>
+                                    <td style="width: 100px;">
                                         <input type="number" name="variants[{{ $variant->id }}][quantity]" value="{{ $variant->quantity }}" class="form-control">
                                     </td>
                                     <td>
@@ -201,7 +205,7 @@
                                             </div>
                                         @endforeach
                                     </td>
-                                    <td>
+                                    <td style="width: 150px;">
                                         <input type="file" name="variant_images[{{ $variant->id }}][]" multiple>
                                     </td>
                                 </tr>
