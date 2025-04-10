@@ -102,8 +102,9 @@
                     $allowedStatuses = $statusFlow[$currentStatus] ?? [];
                 @endphp
                 <div class="row mt-4">
-                    <div class="col-md-6">
-                        <h3 class="text-info">🚚 Trạng thái đơn hàng</h3>
+                    {{-- Trạng thái đơn hàng --}}
+                    <div class="col-md-6 mb-4">
+                        <h3 class="text-info mb-2">🚚 Trạng thái đơn hàng</h3>
                         <select class="form-control" name="payment_status">
                             <option value="{{ $currentStatus }}" selected disabled>
                                 {{ $labels[$currentStatus] ?? $currentStatus }}
@@ -115,27 +116,31 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <h3 class="text-warning">💳 Phương thức thanh toán</h3>
-                        <select class="form-control" name="payment_method">
-                            @foreach ([
-                                'COD' => 'Thanh toán khi nhận hàng',
-                                'momo' => 'Thanh toán qua Momo'
-                            ] as $key => $value)
-                                <option value="{{ $key }}" {{ $order->payment_method == $key ? 'selected' : '' }}>
-                                    {{ $value }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6 mt-4">
-                        <h3 class="text-success">💰 Trạng thái thanh toán</h3>
+
+                    {{-- Trạng thái thanh toán --}}
+                    <div class="col-md-6 mb-4">
+                        <h3 class="text-success mb-2">💰 Trạng thái thanh toán</h3>
                         <select class="form-control" name="status">
                             <option value="unpaid" {{ $order->status == 'unpaid' ? 'selected' : '' }}>Chưa thanh toán</option>
                             <option value="pay" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                         </select>
                     </div>
 
+                    {{-- Phương thức thanh toán (chỉ hiển thị) --}}
+                    <div class="col-md-6 mb-4">
+                        <h3 class="text-warning fw-bold mb-2">💳 Phương thức thanh toán</h3>
+                        <div class="border rounded-3 p-3 bg-light shadow-sm d-flex align-items-center">
+                            <i class="fas fa-credit-card fa-lg text-warning me-3"></i>
+                            <span class="fs-5 text-dark mb-0">
+                                @switch($order->payment_method)
+                                    @case('COD') Thanh toán khi nhận hàng @break
+                                    @case('cod') Thanh toán khi nhận hàng @break
+                                    @case('momo') Thanh toán qua Momo @break
+                                    @default Không xác định
+                                @endswitch
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
