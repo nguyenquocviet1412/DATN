@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'sku',
@@ -18,6 +20,10 @@ class Product extends Model
         'view',
         'status',
     ];
+
+    // Nếu cần khai báo thêm cột deleted_at (không bắt buộc nếu đã có migration)
+    protected $dates = ['deleted_at'];
+    
 
     /**
      * Quan hệ với bảng Category
