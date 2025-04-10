@@ -132,7 +132,7 @@
                         <h3 class="text-success">💰 Trạng thái thanh toán</h3>
                         <select class="form-control" name="status">
                             <option value="unpaid" {{ $order->status == 'unpaid' ? 'selected' : '' }}>Chưa thanh toán</option>
-                            <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                            <option value="pay" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                         </select>
                     </div>
 

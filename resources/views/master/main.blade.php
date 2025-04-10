@@ -726,6 +726,60 @@
     </div>
 </div>
 
+@if(Auth::guard('web')->check())
+    @if ($ordersToConfirmRefund && $ordersToConfirmRefund->count() > 0)
+        {{-- Modal xác nhận hoàn tiền --}}
+        <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="refundModalLabel">💸 Xác nhận hoàn tiền</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có <strong>{{ $ordersToConfirmRefund->count() }}</strong> đơn hàng đã được hoàn tiền.
+                        </p>
+                        <p>Vui lòng xác nhận từng đơn bên dưới:</p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($ordersToConfirmRefund as $order)
+                                    <tr>
+                                        <td>#{{ $order->id }}</td>
+                                        <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ number_format($order->total_price, 0, ',', '.') }}đ</td>
+                                        <td>
+                                            <form action="{{ route('confirm.refund.submit') }}" method="POST" style="display:inline-block">
+                                                @csrf
+                                                <input type="hidden" name="id_order" value="{{ $order->id }}">
+                                                <button type="submit" class="btn btn-success btn-sm">Đã nhận tiền</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Script hiển thị modal -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var refundModal = new bootstrap.Modal(document.getElementById('refundModal'));
+                refundModal.show();
+            });
+        </script>
+    @endif
+@endif
+
 
 
     <!-- JS

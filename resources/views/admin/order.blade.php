@@ -68,9 +68,6 @@
                                 <td>{{ number_format($order->total_price ,0, ',', '.') }} VNĐ</td>
                                 <td>
                                     @switch($order->payment_status)
-                                        @case('waiting_payment')
-                                            <span class="badge bg-secondary"><i class="bi bi-wallet2"></i> Chờ thanh toán</span>
-                                            @break
                                         @case('pending')
                                             <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Chờ xử lý</span>
                                             @break
@@ -78,28 +75,34 @@
                                             <span class="badge bg-info"><i class="bi bi-check-circle"></i> Đã xác nhận</span>
                                             @break
                                         @case('preparing')
-                                            <span class="badge bg-primary"><i class="bi bi-box-seam"></i> Đang chuẩn bị</span>
+                                            <span class="badge bg-primary"><i class="bi bi-box-seam"></i> Đang chuẩn bị hàng</span>
                                             @break
                                         @case('handed_over')
-                                            <span class="badge bg-dark"><i class="bi bi-truck"></i> Đã bàn giao</span>
+                                            <span class="badge bg-dark"><i class="bi bi-truck"></i> Đã bàn giao vận chuyển</span>
                                             @break
                                         @case('shipping')
-                                            <span class="badge bg-primary"><i class="bi bi-truck"></i> Đang giao</span>
+                                            <span class="badge bg-primary"><i class="bi bi-truck"></i> Đang giao hàng</span>
                                             @break
                                         @case('completed')
-                                            <span class="badge bg-success"><i class="bi bi-check2-circle"></i> Hoàn thành</span>
-                                            @break
-                                        @case('return_processing')
-                                            <span class="badge bg-warning text-dark"><i class="bi bi-arrow-clockwise"></i> Đang xử lý trả hàng</span>
-                                            @break
-                                        @case('refunded')
-                                            <span class="badge bg-secondary"><i class="bi bi-arrow-counterclockwise"></i> Đã hoàn tiền</span>
+                                            <span class="badge bg-success"><i class="bi bi-check2-circle"></i> Giao hàng thành công</span>
                                             @break
                                         @case('cancelled')
                                             <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Đã hủy</span>
                                             @break
                                         @case('failed')
                                             <span class="badge bg-danger"><i class="bi bi-exclamation-triangle"></i> Thất bại</span>
+                                            @break
+                                        @case('return_processing')
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-arrow-clockwise"></i> Đang xử lý trả hàng</span>
+                                            @break
+                                        @case('shop_refunded')
+                                            <span class="badge bg-info text-dark"><i class="bi bi-cash-coin"></i> Shop đã hoàn tiền</span>
+                                            @break
+                                        @case('customer_confirmed_refund')
+                                            <span class="badge bg-success"><i class="bi bi-check-circle"></i> Khách đã xác nhận nhận tiền</span>
+                                            @break
+                                        @case('refunded')
+                                            <span class="badge bg-secondary"><i class="bi bi-arrow-counterclockwise"></i> Đã hoàn tiền (hoàn tất)</span>
                                             @break
                                         @default
                                             <span class="badge bg-secondary"><i class="bi bi-question-circle"></i> Không xác định</span>
