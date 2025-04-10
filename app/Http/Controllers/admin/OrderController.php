@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+
     //hiển thị danh sách đơn hàng
     public function index()
     {
@@ -35,6 +36,7 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
+
         $order = Order::query()->findOrFail($id);
         if (!$order) {
             return redirect()->route('order.index');
@@ -48,54 +50,72 @@ class OrderController extends Controller
     public function update(Request $request, string $id)
 {
     $order = Order::findOrFail($id);
+    //Kiểm tra phương thức thanh toán
+    $validMethods = ['COD', 'momo'];
+    $newPaymentMethod = $request->input('payment_method');
 
-    // Cập nhật phương thức thanh toán
-    $order->payment_method = $request->input('payment_method');
+        // Kiểm tra phương thức thanh toán có hợp lệ
+        if (!in_array($newPaymentMethod, $validMethods)) {
+            return redirect()->back()->with('error', 'Phương thức thanh toán không hợp lệ.');
+        }
+    // Kiểm tra trạng thái thanh toán của đơn hàng
+    $validStastus = ['unpaid', 'pay'];
+    $newPay = $request->payment_status_type;
+    if (!in_array($newPay, $validStastus)) {
+        return redirect()->back()->with('error', 'Trạng thái thanh toán không hợp lệ.');
+    }
+
+    // Lưu giá trị cũ để so sánh
+    $oldPaymentMethod = $order->payment_method;
+    $newPaymentMethod = $request->input('payment_method');
+
+    // Cập nhật phương thức thanh toán nếu có thay đổi
+    if ($oldPaymentMethod !== $newPaymentMethod) {
+        $order->payment_method = $newPaymentMethod;
+
+        // Ghi log thay đổi phương thức thanh toán
+        LogHelper::logAction('Đơn hàng #' . $order->id . ' thay đổi phương thức thanh toán từ "' . $oldPaymentMethod . '" sang "' . $newPaymentMethod . '"');
+    }
+
+    $newStatus = $request->input('payment_status');
+    $previousStatus = $order->payment_status;
+
+    // Kiểm tra thứ tự trạng thái
+    $statusFlow = [
+        'pending' => ['confirmed'],
+        'confirmed' => ['preparing'],
+        'preparing' => ['handed_over'],
+        'handed_over' => ['shipping'],
+        'shipping' => ['completed'],
+        'completed' => ['return_processing'],
+        'return_processing' => ['shop_refunded'],
+        'shop_refunded' => ['customer_confirmed_refund'],
+        'customer_confirmed_refund' => ['refunded'],
+        'refunded' => [],
+        'cancelled' => [],
+        'failed' => [],
+    ];
+
+    // Không cho chuyển về trạng thái trước hoặc nhảy cóc
+    if (!in_array($newStatus, $statusFlow[$previousStatus] ?? [])) {
+        return redirect()->back()->with('error', 'Không thể chuyển trạng thái! Vui lòng thực hiện theo đúng thứ tự xử lý.');
+    }
+
+    // Cập nhật trạng thái đơn hàng
+    $order->payment_status = $newStatus;
+    // Cập nhật trạng thái thanh toán
+    $order->payment_status = $newPay;
+
     $order->save();
 
-    $hasStatusError = false; // Cờ kiểm tra lỗi hoàn tiền
-    $updatedStatus = false; // Cờ kiểm tra có cập nhật trạng thái không
-
-    // Cập nhật trạng thái từng sản phẩm trong đơn hàng (order_items)
-    foreach ($request->order_items as $itemId => $data) {
-        $orderItem = Order_item::findOrFail($itemId);
-        $previousStatus = $orderItem->status;
-
-        // Nếu sản phẩm đã bị hủy hoặc hoàn tiền, bỏ qua không cập nhật
-        if (in_array($previousStatus, ['cancelled', 'refunded'])) {
-            $hasStatusError = true; // Đánh dấu có lỗi trạng thái
-            continue; // Bỏ qua sản phẩm này, nhưng vẫn xử lý các sản phẩm khác
-        }
-
-        // Nếu trạng thái thay đổi từ return_processing → refunded thì hoàn tiền
-        if ($previousStatus === 'return_processing' && $data['status'] === 'refunded') {
-            $this->refundToWallet($order, $orderItem->subtotal);
-        }
-
-        // Cập nhật trạng thái sản phẩm
-        $orderItem->status = $data['status'];
-        $orderItem->save();
-        $updatedStatus = true; // Đánh dấu có sản phẩm được cập nhật
-
-        // Cập nhật trạng thái tổng của order
-        if ($previousStatus !== $data['status']) {
-            $order->payment_status = $data['status'];
-            $order->save();
-        }
-    }
-
-    // Ghi log nếu có cập nhật thành công
-    if ($updatedStatus) {
-        LogHelper::logAction('Cập nhật đơn hàng: ' . $order->id);
-    }
-
-    // Kiểm tra nếu có lỗi hoàn tiền
-    if ($hasStatusError) {
-        return redirect()->route('order.index')->with('error', 'Một số sản phẩm không được phép cập nhật trạng thái.');
-    }
+    // Ghi log trạng thái
+    LogHelper::logAction('Cập nhật trạng thái đơn hàng #' . $order->id . ' thành "' . $newStatus . '"');
+    // Ghi log trạng thái thanh toán
+    LogHelper::logAction('Cập nhật trạng thái thanh toán đơn hàng #' . $order->id . ' thành "' . $newPay . '"');
 
     return redirect()->route('order.index')->with('success', 'Cập nhật đơn hàng thành công');
 }
+
 
     public function confirmReceipt($id)
     {
