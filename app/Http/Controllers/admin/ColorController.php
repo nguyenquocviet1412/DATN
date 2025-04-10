@@ -99,6 +99,10 @@ public function destroy($id)
 {
     try {
         $color= Color::withTrashed()->findOrFail($id);
+        // Kiểm tra xem màu có tồn tại trong các variant không
+        if ($color->variants()->exists()) {
+            return redirect()->back()->with('error', 'Không thể xóa màu này vì nó đang được sử dụng trong các biến thể.');
+        }
         $color->forceDelete();
         // Ghi log
         LogHelper::logAction('Xóa vĩnh viễn màu có ID: ' . $color->id);

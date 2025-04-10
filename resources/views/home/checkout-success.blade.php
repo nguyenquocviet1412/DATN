@@ -21,6 +21,7 @@
                     <p><strong>💳 Thanh toán:</strong>
                         @switch($order->payment_method)
                             @case('COD') Thanh toán khi nhận hàng (COD) @break
+                            @case('cod') Thanh toán khi nhận hàng (COD) @break
                             @case('momo') Momo @break
                             @default Khác
                         @endswitch

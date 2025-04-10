@@ -289,7 +289,7 @@ class ClientOrderController extends Controller
                 'quantity' => $item->quantity,
                 'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
                 'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
-                'status' => 'pending',
+                'status' => 'unpaid',
             ]);
         }
 
@@ -323,7 +323,7 @@ if ($remainingDiscount > 0) {
             $variant->save();
         }
 
-        return view('home.checkout-success');
+        return $this->success();
     }
 //Thanh toán bằng ví
     if ($request->payment_method === 'wallet') {
@@ -480,7 +480,7 @@ if ($remainingDiscount > 0) {
             'id_voucher' => $voucher ? $voucher->id : null,
             'discount_amount' => $voucher ? $discountAmount : 0, // Nếu không có voucher thì giảm giá = 0
             'payment_method' => session('payment_method'),
-            'status' => 'pending',
+            'status' => 'pay',
         ]);
 
         // Tính tổng số lượng sản phẩm trong đơn hàng
