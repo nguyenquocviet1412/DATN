@@ -47,20 +47,10 @@
                             </a>
                         </div>
 
-                        <div class="col-md-6">
-                            <form action="{{ route('post.index') }}" method="GET">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control"
-                                        placeholder="Tìm kiếm bài viết..." value="{{ request('search') }}">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Tìm kiếm
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+
                     </div>
 
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                             <tr class="text-center">
                                 <th>ID</th>

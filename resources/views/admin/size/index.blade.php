@@ -25,7 +25,7 @@
         <h2>Quản lý Kích thước</h2>
         <a href="{{ route('admin.size.create') }}" class="btn btn-primary">Thêm Kích thước</a>
         <a href="{{ route('admin.size.trash') }}" class="btn btn-secondary">Danh sách đã xóa</a>
-        <table class="table table-bordered">
+        <table class="table table-hover table-bordered" id="sampleTable">
             <thead>
                 <tr>
                     <th>ID</th>

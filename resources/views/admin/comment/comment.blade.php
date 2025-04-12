@@ -83,7 +83,7 @@ Danh sách bình luận
     <div class="container">
         <h1 class="mb-4 text-center">Bình luận</h1>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+            <table class="table table-hover table-bordered" id="sampleTable">
                 <thead class="table-primary">
                     <tr>
                         <th>ID</th>

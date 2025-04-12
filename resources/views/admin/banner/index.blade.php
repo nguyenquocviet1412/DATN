@@ -33,34 +33,9 @@
                             <a href="{{ route('admin.banners.create') }}" class="btn btn-success"><i class="fas fa-plus"></i>Thêm Banner</a>
                             <a href="{{ route('admin.banners.trash') }}" class="btn btn-info"><i class="fas fa-trash"></i> Thùng rác</a>
                         </div>
-                        <div class="col-md-6">
-                            <form method="GET" action="{{ route('admin.banners.index') }}">
-                                <div class="input-group">
-                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Tìm kiếm theo tiêu đề...">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-search"></i> Tìm kiếm
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <form method="GET" action="{{ route('admin.banners.index') }}">
-                            <label for="sort_by">Sắp xếp theo:</label>
-                            <select name="sort_by" id="sort_by" class="form-control d-inline-block w-auto">
-                                <option value="id" {{ $sortBy == 'id' ? 'selected' : '' }}>ID</option>
-                                <option value="title" {{ $sortBy == 'title' ? 'selected' : '' }}>Tiêu đề</option>
-                            </select>
-                            <select name="sort_order" id="sort_order" class="form-control d-inline-block w-auto">
-                                <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Tăng dần</option>
-                                <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Giảm dần</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">Sắp xếp</button>
-                        </form>
-                    </div>
-
-                    <table class="table table-bordered mt-3">
+                    <table  class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
