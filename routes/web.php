@@ -2,8 +2,6 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminBannerController;
-use App\Http\Controllers\admin\Wallet_Transaction;
-use App\Http\Controllers\Admin\WalletController;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +19,6 @@ use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\EmployeeController;
 use App\Http\Controllers\admin\VariantConntroller;
-use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Http\Controllers\client\AuthController;
 use App\Http\Controllers\admin\EmployeeAuthController;
 use App\Http\Controllers\client\BlogsController;
@@ -37,7 +34,6 @@ use App\Http\Controllers\Client\Payment\CreditCardController;
 use App\Http\Controllers\Client\Payment\PaymentController;
 use App\Http\Controllers\Client\RateController as ClientRateController;
 use App\Http\Controllers\client\UserControllerClient;
-use App\Http\Controllers\client\WalletClientController;
 
 
 use App\Http\Controllers\ShopController;
@@ -98,9 +94,6 @@ Route::prefix('')->middleware(['user.auth'])->group(function () {
         Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');// Thêm sản phẩm vào yêu thích
         Route::delete('/remove/{id}', [FavoriteController::class, 'remove'])->name('favorite.remove'); // Xóa sản phẩm khỏi yêu thích
     });
-    //Ví
-    Route::get('/wallet', [WalletClientController::class, 'index'])->name('walletclient.index');
-
     //Đánh giá
     Route::get('/rate/{id}', [ClientRateController::class, 'create'])->name('client.rate.create');
     Route::post('/rate/{id}', [ClientRateController::class,'store'])->name('client.rate.store');
@@ -236,13 +229,6 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::put('/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
     });
 
-    //route Wallet
-    Route::get('/wallets', [WalletController::class, 'index'])->name('wallet.index');
-    Route::post('/wallets/{id}/toggle', [WalletController::class, 'toggleStatus'])->name('wallet.toggleStatus');
-
-    //route Wallet_Transaction
-    Route::get('admin/wallet/{id}/transactions', [Wallet_Transaction::class, 'show'])->name('wallet.transactions');
-
     /// Route quản lý Color
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('admin/color', ColorController::class);
@@ -299,12 +285,6 @@ Route::prefix('admin')->middleware(['employee.auth'])->group(function () {
         Route::get('admin/user/deleted', [UserController::class, 'deleted'])->name('user.deleted');
         Route::patch('admin/user/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
     });
-    //route wallet_transactions
-    Route::resource('wallet_transactions', WalletTransactionController::class);
-    Route::get('wallet_transactions', [WalletTransactionController::class, 'index'])->name('admin.wallet_transactions.index');
-    Route::get('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'show'])->name('admin.wallet_transactions.show');
-    Route::delete('admin/wallet_transactions/{id}', [WalletTransactionController::class, 'destroy'])->name('admin.wallet_transactions.destroy');
-
     //route comment
     Route::prefix('comment')->group(function () {
         Route::get('/', [CommentController::class, 'indexCMT'])->name('comment.index');

@@ -5,8 +5,6 @@ namespace App\Http\Controllers\admin;
 use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Wallet;
-use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,10 +21,8 @@ class UserController extends Controller
         $search = $request->input('search');
 
         $users = User::orderBy('created_at', 'desc')->get();
-        $wallets = Wallet::all();
-        $wallet_transactions = WalletTransaction::all();
 
-        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search', 'wallets', 'wallet_transactions'));
+        return view('admin.user.index', compact('users', 'sortBy', 'sortOrder', 'search'));
     }
 
     /**
@@ -65,14 +61,6 @@ class UserController extends Controller
         'gender' => $request->input('gender'),
     ]);
 
-    // Tạo ví tiền mặc định cho user vừa tạo
-    Wallet::create([
-        'id_user' => $user->id,
-        'balance' => 0, // Mặc định số dư ban đầu là 0
-        'currency' => 'VND', // Hoặc có thể là USD tùy vào hệ thống của bạn
-        'status' => 'active', // Mặc định ví sẽ hoạt động
-    ]);
-
     // Ghi log thao tác
     LogHelper::logAction('Tạo mới tài khoản người dùng có id: ' . $user->id);
 
@@ -85,15 +73,8 @@ class UserController extends Controller
     public function show(string $id)
 {
     $user = User::findOrFail($id);
-    $wallet = Wallet::where('id_user', $id)->first(); // Lấy ví theo id_user
 
-    // if (!$wallet) {
-    //     return back()->with('error', 'Người dùng chưa có ví.');
-    // }
-
-    // Nếu không có ví, vẫn cho phép truy cập, chỉ gán transactions = []
-    $wallet_transactions = $wallet ? WalletTransaction::where('id_wallet', $wallet->id)->get() : collect();
-    return view('admin.user.show', compact('user', 'wallet', 'wallet_transactions'));
+    return view('admin.user.show', compact('user'));
 }
 
 

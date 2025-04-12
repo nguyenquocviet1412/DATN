@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Order_item;
 use App\Models\Product;
-use App\Models\Wallet;
-use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -81,18 +79,23 @@ class OrderController extends Controller
     if (!in_array($newStatus, $statusFlow[$previousStatus] ?? [])) {
         return redirect()->back()->with('error', 'Không thể chuyển trạng thái! Vui lòng thực hiện theo đúng thứ tự xử lý.');
     }
+    //Nếu trạng thái mới là completed thì kiểm tra trạng thái thanh toán
+    if ($newStatus == 'completed') {
+        // Nếu trạng thái thanh toán là unpaid thì sẽ chuyển thành pay
+        if ($newPay == 'unpaid') {
+            $order->status = 'pay';
+            // Ghi log trạng thái thanh toán
+            LogHelper::logAction('Cập nhật trạng thái thanh toán đơn hàng #' . $order->id . ' thành "pay"');
+        }
+    }
 
     // Cập nhật trạng thái đơn hàng
     $order->payment_status = $newStatus;
-    // Cập nhật trạng thái thanh toán
-    $order->status = $newPay;
 
     $order->save();
 
     // Ghi log trạng thái
     LogHelper::logAction('Cập nhật trạng thái đơn hàng #' . $order->id . ' thành "' . $newStatus . '"');
-    // Ghi log trạng thái thanh toán
-    LogHelper::logAction('Cập nhật trạng thái thanh toán đơn hàng #' . $order->id . ' thành "' . $newPay . '"');
 
     return redirect()->back()->with('success', 'Cập nhật đơn hàng thành công');
 }
@@ -111,38 +114,4 @@ class OrderController extends Controller
         return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
     }
 
-    //Phương thức hoàn tiền hàng
-    private function refundToWallet(Order $order, $refundAmount)
-{
-    $user = $order->user;
-    $wallet = Wallet::where('id_user', $user->id)->first();
-    // Kiểm tra xem người dùng có ví hay không
-    if (!$wallet) {
-        // Nếu không có ví, tạo một ví mới cho người dùng
-        $wallet = Wallet::create([
-            'id_user' => $user->id,
-            'balance' => 0,
-            'status' => 'active'
-        ]);
-    }
-
-    // Lưu giao dịch trước khi cập nhật số dư ví
-    WalletTransaction::create([
-        'id_wallet' => $wallet->id,
-        'transaction_type' => 'refund',
-        'amount' => $refundAmount,
-        'balance_before' => $wallet->balance,
-        'balance_after' => $wallet->balance + $refundAmount,
-        'description' => 'Hoàn tiền cho đơn hàng #' . $order->id,
-        'status' => 'completed'
-    ]);
-
-    // Cập nhật số dư ví
-    $wallet->update([
-        'balance' => $wallet->balance + $refundAmount
-    ]);
-
-    // Log
-    LogHelper::logAction('Xác nhận hoàn tiền ' . number_format($refundAmount) . ' VNĐ cho đơn hàng #' . $order->id);
-}
 }

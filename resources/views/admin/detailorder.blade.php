@@ -41,12 +41,6 @@
                             <span class="badge bg-secondary">Thanh toán khi nhận hàng (COD)</span>
                         @elseif ($order->payment_method == 'momo')
                             <span class="badge bg-primary">Momo</span>
-                        @elseif ($order->payment_method == 'zalopay')
-                            <span class="badge bg-primary">ZaloPay</span>
-                        @elseif ($order->payment_method == 'bank_transfer')
-                            <span class="badge bg-primary">Chuyển khoản ngân hàng</span>
-                        @elseif ($order->payment_method == 'online_payment')
-                            <span class="badge bg-primary">Thanh toán online</span>
                         @else
                             <span class="badge bg-primary">Thanh toán trực tuyến</span>
                         @endif
@@ -86,7 +80,7 @@
                     <td>
                         @if ($order->status == 'unpaid')
                             <span class="badge bg-danger">Chưa thanh toán</span>
-                        @elseif ($order->status == 'paid')
+                        @elseif ($order->status == 'pay')
                             <span class="badge bg-success">Đã thanh toán</span>
                         @else
                             <span class="badge bg-secondary">Không xác định</span>

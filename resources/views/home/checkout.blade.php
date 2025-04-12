@@ -56,12 +56,8 @@
                 <strong id="cart-total-after-discount">{{ number_format(session('cart_total_after_discount', $cartTotalBeforeDiscount), 0, ',', '.') }}₫</strong>
             </h4>
             @php
-                $wallet = \App\Models\Wallet::where('id_user', Auth::id())->first();
-                $walletBalance = $wallet ? $wallet->balance : 0;
                 $user = \App\Models\User::where('id', Auth::id())->first();
             @endphp
-
-            <p><strong>💰 Số dư ví: </strong> {{ number_format($walletBalance, 0, ',', '.') }} VNĐ</p>
             <form action="{{ route('placeOrder') }}" method="POST" class="mt-4">
                 @csrf
                 <div class="row">
@@ -88,18 +84,6 @@
                     <div class="form-check me-3">
                         <input class="form-check-input" type="radio" name="payment_method" value="momo">
                         <label class="form-check-label">Momo</label>
-                    </div>
-                    {{-- <div class="form-check me-3">
-                        <input class="form-check-input" type="radio" name="payment_method" value="vnpay">
-                        <label class="form-check-label">VNPay</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment_method" value="credit_card">
-                        <label class="form-check-label">Thẻ tín dụng</label>
-                    </div> --}}
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="radio" name="payment_method" value="wallet">
-                        <label class="form-check-label">Ví tiền</label>
                     </div>
                 </div>
 
