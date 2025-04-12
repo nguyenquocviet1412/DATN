@@ -27,7 +27,7 @@
         <h2>Quản lý Màu sắc</h2>
         <a href="{{ route('admin.color.create') }}" class="btn btn-primary">Thêm Màu</a>
         <a href="{{ route('admin.color.trash') }}" class="btn btn-secondary">Danh sách đã xóa</a>
-        <table class="table table-bordered">
+        <table class="table table-hover table-bordered" id="sampleTable">
             <thead>
                 <tr>
                     <th>ID</th>

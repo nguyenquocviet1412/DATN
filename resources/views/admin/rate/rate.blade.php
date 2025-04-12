@@ -10,7 +10,7 @@ Danh sách đánh giá
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Danh sách đánh giá</h1>
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
+        <table class="table table-hover table-bordered" id="sampleTable">
             <thead class="table-primary">
                 <tr>
                     <th>ID sản phẩm</th>

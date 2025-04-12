@@ -5,7 +5,7 @@
 @section('title2', 'Lịch Sử Giao Dịch')
 
 @section('content')
-    <table class="table">
+    <table class="table table-hover table-bordered" id="sampleTable">
         <!-- Bộ lọc -->
         <form method="GET" action="{{ route('admin.wallet_transactions.index') }}"
             style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">

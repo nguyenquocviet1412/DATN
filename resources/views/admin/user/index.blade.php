@@ -50,18 +50,6 @@
                             <i class="fas fa-history"></i> Lịch sử người dùng đã bị xóa
                         </a>
                     </div>
-
-                    <div class="col-md-6">
-                        <form action="{{ route('user.index') }}" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control"
-                                    placeholder="Tìm kiếm sản phẩm..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search"></i> Tìm kiếm
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
 
 
@@ -69,25 +57,9 @@
 
 
 
-                <!-- Dropdown sắp xếp -->
-                <div class="mb-3">
-                    <form method="GET" action="{{ route('user.index') }}">
-                        <label for="sort_by">Sắp xếp theo:</label>
-                        <select name="sort_by" id="sort_by" class="form-control d-inline-block w-auto">
-                            <option value="id" {{ $sortBy == 'id' ? 'selected' : '' }}>ID</option>
-                            <option value="status" {{ $sortBy == 'status' ? 'selected' : '' }}>Tình trạng</option>
-                        </select>
 
-                        <select name="sort_order" id="sort_order" class="form-control d-inline-block w-auto">
-                            <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Tăng dần</option>
-                            <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Giảm dần</option>
-                        </select>
 
-                        <button type="submit" class="btn btn-primary">Sắp xếp</button>
-                    </form>
-                </div>
-
-                <table class="table table-hover table-bordered">
+                <table class="table table-hover table-bordered" id="sampleTable">
                     <thead>
                         <tr class="text-center">
                             <th><input type="checkbox" id="select-all"></th>
