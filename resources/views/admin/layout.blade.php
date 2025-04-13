@@ -344,8 +344,6 @@
                     <span class="app-menu__label">Tài chính & báo cáo</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('wallet.index') }}">Quản lý ví tiền</a></li>
-                    <li><a class="dropdown-item" href="{{ route('admin.wallet_transactions.index') }}">Lịch sử giao dịch</a></li>
                     <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}">Báo cáo doanh thu</a></li>
                 </ul>
             </li>
