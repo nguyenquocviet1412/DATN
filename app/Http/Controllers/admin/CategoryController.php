@@ -46,6 +46,10 @@ class CategoryController extends Controller
         if (!$category) {
             return redirect()->route('category.index')->with('error', 'Danh mục không tồn tại!');
         }
+        // Kiểm tra xem danh mục có tồn tại trong sản phẩm không
+        if ($category->products()->exists()) {
+            return redirect()->route('category.index')->with('error', 'Danh mục không thể xóa vì vẫn còn sản phẩm liên quan.');
+        }
 
         $category->delete(); // Xóa mềm (Cập nhật deleted_at)
         // Ghi log

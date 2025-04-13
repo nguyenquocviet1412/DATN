@@ -76,6 +76,10 @@ class SizeController extends Controller
 public function softDelete($id)
 {
     $size = Size::findOrFail($id);
+    // Kiểm tra có tồn tại trong variant không
+    if ($size->variants()->exists()) {
+        return redirect()->back()->with('error', 'Không thể xóa kích thước này vì nó đang được sử dụng trong các biến thể.');
+    }
     $size->delete(); // Xóa mềm
     // Ghi log
     LogHelper::logAction('Xóa kích thước có id: '. $size->id);
