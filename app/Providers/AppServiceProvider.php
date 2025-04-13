@@ -8,6 +8,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB as FacadesDB;
@@ -47,8 +49,15 @@ class AppServiceProvider extends ServiceProvider
         }else{
             $ordersToConfirmRefund = [];
         }
+        // Lấy danh sách voucher mới còn hạn, còn số lượng
+        $vouchers = Voucher::where('status', 'active')
+        ->whereColumn('quantity', '>', 'used_count')
+        ->where('start_date', '<=', Carbon::now())
+        ->where('end_date', '>=', Carbon::now())
+        ->where('start_date', '>=', Carbon::now()->subDay())
+        ->get();
 
-        $view->with(compact('categories', 'cartItems', 'ordersToConfirmRefund'));
+        $view->with(compact('categories', 'cartItems', 'ordersToConfirmRefund', 'vouchers'));
     });
 
     Paginator::useBootstrapFive();

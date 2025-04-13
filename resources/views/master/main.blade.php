@@ -144,6 +144,90 @@
     }
 </style>
 
+{{-- css hiển thị voucher ở trang chủ --}}
+<style>
+    .voucher-marquee-container {
+        overflow: hidden;
+        position: relative;
+        background: #fffbea;
+        border-left: 4px solid #d4a017;
+        border-radius: 6px;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .voucher-marquee-title {
+        color: #b27800;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 14px;
+    }
+
+    .voucher-marquee {
+        display: flex;
+        animation: scroll-right 25s linear infinite;
+        width: 100%;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .voucher-item {
+        background-color: #fff;
+        border: 1px solid #f1e3c4;
+        border-radius: 4px;
+        padding: 4px 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .voucher-code {
+        font-weight: 600;
+        color: #b27800;
+    }
+
+    .voucher-discount {
+        color: #388e3c;
+        font-weight: 500;
+    }
+
+    @keyframes scroll-right {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+@if($vouchers->count())
+    <div class="voucher-marquee-container my-2">
+        <div class="voucher-marquee-title">🎉 Voucher mới bắt đầu gần đây</div>
+        <div class="voucher-marquee">
+            @foreach($vouchers as $voucher)
+                <div class="voucher-item">
+                    <span class="voucher-code">{{ $voucher->code }}</span> -
+                    @if($voucher->discount_type == 'percentage')
+                        <span class="voucher-discount">{{ $voucher->discount_value }}%</span>
+                        @if($voucher->max_discount)
+                            ({{ number_format($voucher->max_discount, 0, ',', '.') }}đ max)
+                        @endif
+                    @else
+                        <span class="voucher-discount">{{ number_format($voucher->discount_value, 0, ',', '.') }}đ</span>
+                    @endif
+                    - {{ $voucher->quantity - $voucher->used_count }} lượt
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
+
+
+
     <!-- Start Header Area -->
     <header class="header-area header-wide">
         <!-- main header start -->

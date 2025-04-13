@@ -96,19 +96,25 @@ class UserController extends Controller
         $request->validate([
             'password' => 'nullable|string|max:255',
             'fullname' => 'required|string',
-            'birthday' => 'required|date',
+            'birthday' => 'date',
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required|numeric|unique:users,phone,' . $id,
             'address' => 'required|string',
-            'status' => 'required|boolean',
+            'status' => 'required',
         ]);
 
         $user = User::findOrFail($id);
+        if($request->input('birthday') == null){
+            $birthday = $user->birthday;
+        }else{
+            $birthday = $request->input('birthday');
+        }
+        // Cập nhật thông tin người dùng
 
         $user->update([
             'password' => $request->input('password') ? Hash::make($request->input('password')) : $user->password,
             'fullname' => $request->input('fullname'),
-            'birthday' => $request->input('birthday'),
+            'birthday' => $birthday,
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),

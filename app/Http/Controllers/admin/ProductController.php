@@ -124,7 +124,6 @@ class ProductController extends Controller
                             Product_image::create([
                                 'id_variant' => $variant->id,
                                 'image_url' => 'storage/product/' . $imageName,
-                                'is_primary' => ($index === 0) ? 1 : 0,
                             ]);
                         }
                     }
@@ -160,7 +159,6 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('product', 'public');
             Product_image::updateOrCreate(
-                ['id_variant' => null, 'is_primary' => 1],
                 ['image_url' => 'storage/product' . $imagePath]
             );
         }
