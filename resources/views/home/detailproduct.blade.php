@@ -1,4 +1,3 @@
-
 @extends('master.main')
 @section('title', 'Chi tiết sản phẩm')
 @section('main')
@@ -47,24 +46,35 @@
         <div class="row">
             <!-- Hình ảnh sản phẩm chính -->
             <div class="col-md-6">
-                <div class="position-relative">
-                    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner" style="height: 400px; display: flex; align-items: center; background: #f8f9fa;">
-                            @foreach ($product->variants as $variant)
-                                @foreach ($variant->images as $key => $image)
-                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                        <img src="{{ asset($image->image_url) }}" class="d-block w-100" style="max-height: 400px; object-fit: contain;" alt="Ảnh sản phẩm">
-                                    </div>
-                                @endforeach
+                <!-- Main image slideshow -->
+                <div id="productCarousel" class="carousel slide mb-3" data-bs-ride="carousel" style="border-radius: 10px; overflow: hidden; background: #f8f9fa;">
+                    <div class="carousel-inner" style="height: 400px;">
+                        @foreach ($product->variants as $variant)
+                            @foreach ($variant->images as $key => $image)
+                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                    <img src="{{ asset($image->image_url) }}" class="d-block w-100" style="height: 100%; object-fit: contain;" alt="Ảnh sản phẩm">
+                                </div>
                             @endforeach
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        </button>
+                        @endforeach
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+                <!-- Thumbnail list -->
+                <div class="d-flex justify-content-center">
+                    @foreach ($product->variants as $variant)
+                        @foreach ($variant->images as $key => $image)
+                            <img src="{{ asset($image->image_url) }}" class="img-thumbnail mx-1 thumbnail-image" 
+                                 style="cursor: pointer; object-fit: cover; height: 80px; width: 80px;" 
+                                 onclick="document.querySelector('#productCarousel .carousel-item.active').classList.remove('active'); document.querySelectorAll('#productCarousel .carousel-item')[{{ $key }}].classList.add('active');" 
+                                 alt="Ảnh sản phẩm nhỏ">
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
 
@@ -307,6 +317,10 @@
                 review.style.display = 'none';
             }
         });
+    }
+
+    function changeMainImage(imageUrl) {
+        document.getElementById('mainProductImage').src = imageUrl;
     }
 
 </script>
