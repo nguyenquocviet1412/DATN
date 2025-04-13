@@ -68,6 +68,10 @@ class ColorController extends Controller
 public function softDelete($id)
 {
     $color = Color::findOrFail($id);
+    // Kiểm tra xem màu có tồn tại trong các variant không
+    if ($color->variants()->exists()) {
+        return redirect()->back()->with('error', 'Không thể xóa màu này vì nó đang được sử dụng trong các biến thể.');
+    }
     $color->delete(); // Xóa mềm
     // Ghi log
     LogHelper::logAction('Xóa màu có ID: ' . $color->id);

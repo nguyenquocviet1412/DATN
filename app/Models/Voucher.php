@@ -30,7 +30,7 @@ class Voucher extends Model
         return $this->hasMany(User_voucher::class, 'id_voucher');
     }
 
-    // Quan hệ với bảng user_voucher
+    // Quan hệ với bảng orders
     public function orders()
     {
         return $this->hasMany(Order::class, 'id_voucher');
