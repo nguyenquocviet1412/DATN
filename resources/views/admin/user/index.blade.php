@@ -52,13 +52,6 @@
                     </div>
                 </div>
 
-
-                <!-- Tím kiếm  -->
-
-
-
-
-
                 <table class="table table-hover table-bordered" id="sampleTable">
                     <thead>
                         <tr class="text-center">

@@ -204,11 +204,11 @@
     }
 </style>
 
-@if($vouchers->count())
+@if($vouchersClient->count())
     <div class="voucher-marquee-container my-2">
         <div class="voucher-marquee-title">🎉 Voucher mới bắt đầu gần đây</div>
         <div class="voucher-marquee">
-            @foreach($vouchers as $voucher)
+            @foreach($vouchersClient as $voucher)
                 <div class="voucher-item">
                     <span class="voucher-code">{{ $voucher->code }}</span> -
                     @if($voucher->discount_type == 'percentage')
@@ -259,7 +259,8 @@
                                                 <a href="">Danh mục <i class="fa"></i></a>
                                                 <ul class="dropdown">
                                                     @foreach ($categories as $category)
-                                                    <li><a href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a></li>
+                                                    <li><a href="{{ route('shop.index', ['id_category' => $category->id]) }}">{{ $category->name }}</a>
+                                                    </li>
                                                     @endforeach
                                                 </ul>
                                             </li>

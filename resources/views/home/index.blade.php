@@ -31,6 +31,41 @@
         border-radius: 10px;
         /* Đảm bảo ảnh không bị méo */
     }
+    /* css banner */
+    .banner-text {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 0 20px;
+}
+
+/* Màu vàng nâu đậm cho tiêu đề */
+.slide-title {
+    color: #ffdf2e; /* Goldenrod / vàng nâu đậm */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+/* Màu vàng sáng hoặc cam nhạt cho mô tả */
+.slide-desc {
+    color: #ffe770; /* vàng tươi hoặc chuyển thành #ffcc66 nếu muốn cam nhẹ */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+    font-size: 1.5rem;
+}
+
+/* Overlay làm mờ nền một chút */
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 1;
+}
 </style>
 <main>
 
@@ -68,14 +103,16 @@
         <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
             @foreach ($banners as $banner)
             @if ($banner->type == 'slider')
-                <div class="hero-single-slide hero-overlay">
+                <div class="hero-single-slide hero-overlay banner-container" style="position: relative; overflow: hidden;">
                     <div class="hero-slider-item bg-img" data-bg="{{ asset('storage/' .$banner->image) }}">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="hero-slider-content">
-                                        <h2 class="slide-title">{{$banner->title}}</h2>
-                                        <h4 class="slide-desc">{{ $banner->description }}</h4>
+                                    <!-- Overlay (nếu muốn làm mờ nền) -->
+                                    <div class="banner-overlay"></div>
+                                    <div class="hero-slider-content banner-text ">
+                                        <h2 class="slide-title ">{{$banner->title}}</h2>
+                                        <h4 class="slide-desc " style="color: #ffffff">{{ $banner->description }}</h4>
                                         <a href="{{ route('shop.index') }}" class="btn btn-hero">Khám phá ngay</a>
                                     </div>
                                 </div>

@@ -63,7 +63,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Giá Trị Giảm Tối Đa:</label>
                         <input type="number" name="max_discount" class="form-control @error('max_discount') is-invalid @enderror"
-                            value="{{ old('max_discount', $voucher->max_discount) }}" required>
+                            value="{{ old('max_discount', $voucher->max_discount) }}" >
                         @error('max_discount')
                             <span class="invalid-feedback d-block">{{ $message }}</span>
                         @enderror

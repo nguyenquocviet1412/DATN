@@ -22,6 +22,10 @@ class ProductController extends Controller
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
         }
+        // Lọc danh mục
+        if ($request->filled('id_category')) {
+            $query->where('id_category', $request->id_category);
+        }
 
         // Sắp xếp theo giá, lượt xem hoặc yêu thích
         if ($request->has('sort')) {

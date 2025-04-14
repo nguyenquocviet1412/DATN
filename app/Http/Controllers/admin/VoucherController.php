@@ -12,8 +12,7 @@ class VoucherController extends Controller
 {
     public function voucherIndex(){
         //Lấy danh sách voucher
-        $vouchers = Voucher::query()->get();
-
+        $vouchers = Voucher::orderBy('created_at', 'desc')->get();
         return view('admin.voucher.voucher',compact('vouchers'));
     }
 
