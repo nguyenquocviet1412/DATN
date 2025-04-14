@@ -61,7 +61,7 @@
         <!-- Mô tả -->
         <div class="mb-3">
             <label for="description" class="form-label">Mô tả</label>
-            <textarea name="description" class="form-control">{{ old('description', $banner->description) }}</textarea>
+            <textarea name="description" class="form-control">{{  $banner->description }}</textarea>
             @error('description')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

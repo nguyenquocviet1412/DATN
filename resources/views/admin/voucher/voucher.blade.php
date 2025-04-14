@@ -15,6 +15,36 @@ Danh sách Voucher
 <script src="https://cdn.jsdelivr.net/npm/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
 
 
+{{-- thông báo thêm thành công --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Thành công!',
+            text: '{{ session("success") }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
+
+
+{{-- Thông báo lỗi --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('error'))
+    <script>
+        Swal.fire({
+            title: 'Lỗi!',
+            text: '{{ session("error") }}',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 4000,
+            backdrop: true  // Làm tối nền
+        });
+    </script>
+@endif
 
 
 <div class=" mt-4">
@@ -26,38 +56,6 @@ Danh sách Voucher
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-
-                        {{-- thông báo thêm thành công --}}
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        @if(session('success'))
-                            <script>
-                                Swal.fire({
-                                    title: 'Thành công!',
-                                    text: '{{ session("success") }}',
-                                    icon: 'success',
-                                    showConfirmButton: false,
-                                    timer: 4000,
-                                    backdrop: true  // Làm tối nền
-                                });
-                            </script>
-                        @endif
-
-
-                        {{-- Thông báo lỗi --}}
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        @if(session('error'))
-                            <script>
-                                Swal.fire({
-                                    title: 'Lỗi!',
-                                    text: '{{ session("error") }}',
-                                    icon: 'error',
-                                    showConfirmButton: false,
-                                    timer: 4000,
-                                    backdrop: true  // Làm tối nền
-                                });
-                            </script>
-                        @endif
-
                       <a class="btn btn-add btn-sm" href="{{route('voucher.create')}}" title="Thêm">
                         <i class="fas fa-plus"></i> Thêm Voucher</a>
                         @if(session('message'))
