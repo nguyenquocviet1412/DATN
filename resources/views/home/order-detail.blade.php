@@ -51,7 +51,7 @@
                             'completed' => ['color' => 'success', 'icon' => '🎉', 'text' => 'Giao thành công'],
                             'cancelled' => ['color' => 'danger', 'icon' => '❌', 'text' => 'Đã hủy'],
                             'failed' => ['color' => 'danger', 'icon' => '⚠️', 'text' => 'Thất bại'],
-                            'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý trả hàng'],
+                            'return_processing' => ['color' => 'warning', 'icon' => '🔄', 'text' => 'Đang xử lý hoàn tiền'],
                             'shop_refunded' => ['color' => 'info', 'icon' => '💸', 'text' => 'Shop đã hoàn tiền'],
                             'customer_confirmed_refund' => ['color' => 'success', 'icon' => '🤝', 'text' => 'Khách xác nhận đã nhận tiền'],
                             'refunded' => ['color' => 'secondary', 'icon' => '💰', 'text' => 'Đã hoàn tiền (hoàn tất)'],

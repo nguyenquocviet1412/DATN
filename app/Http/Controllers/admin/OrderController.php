@@ -91,6 +91,11 @@ class OrderController extends Controller
 
     // Cập nhật trạng thái đơn hàng
     $order->payment_status = $newStatus;
+    // Cập nhật trạng thái đơn hàng chi tiết
+    foreach ($order->orderItems as $item) {
+        $item->status = $newStatus;
+        $item->save();
+    }
 
     $order->save();
 
