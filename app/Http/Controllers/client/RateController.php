@@ -77,7 +77,6 @@ class RateController extends Controller
     }
 
     // Tạo đánh giá mới
-    try {
         $rate = Rate::create([
             'id_user' => auth()->id(), // Lấy ID người dùng hiện tại
             'id_product' => $validated['id_product'],
@@ -87,11 +86,7 @@ class RateController extends Controller
             'status' => 'approved',
         ]);
 
-        return redirect()->back()->with(['success' => 'Đánh giá của bạn đã được gửi thành công.']);
-    } catch (\Exception $e) {
-        // Trả về lỗi nếu có lỗi trong quá trình tạo đánh giá
-        return redirect()->back()->with(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
-    }
+        return redirect()->route('home.index')->with(['success' => 'Đánh giá của bạn đã được gửi thành công.']);
 }
 
 

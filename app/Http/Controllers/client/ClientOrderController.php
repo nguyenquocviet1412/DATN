@@ -268,7 +268,7 @@ class ClientOrderController extends Controller
                 'id_voucher' => $voucher ? $voucher->id : null,
                 'discount_amount' => $voucher ? $discountAmount : 0, // Nếu không có voucher thì giảm giá = 0
                 'payment_method' => session('payment_method'),
-                'status' => 'pending',
+                'status' => 'unpaid',
             ]);
 
             // Tính tổng số lượng sản phẩm trong đơn hàng
@@ -293,7 +293,7 @@ class ClientOrderController extends Controller
                     'quantity' => $item->quantity,
                     'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
                     'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
-                    'status' => 'unpaid',
+                    'status' => session('payment_method'),
                 ]);
             }
 
@@ -408,7 +408,7 @@ class ClientOrderController extends Controller
                     'quantity' => $item->quantity,
                     'price' => $discountedPrice, // Giá sau khi trừ chiết khấu
                     'subtotal' => $discountedPrice * $item->quantity, // Thành tiền sau khi trừ chiết khấu
-                    'status' => 'pending',
+                    'status' => session('payment_method'),
                 ]);
             }
 
