@@ -163,6 +163,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-center mt-4">
+                                    {{ $orders->Links() }}
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -213,6 +216,44 @@
     color: #fff !important;
     border-color: #20c997;
 }
+/* Tùy chỉnh phân trang */
+.pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            color: #000;
+            /* Màu chữ đen */
+            background-color: #fff;
+            /* Nền trắng */
+            border: 1px solid #000;
+            /* Viền đen */
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #ffcc00;
+            /* Màu vàng nổi bật */
+            color: #000;
+            /* Chữ đen */
+            border-color: #ffcc00;
+        }
+
+        .pagination .active .page-link {
+            background-color: #ffcc00;
+            /* Màu vàng */
+            border-color: #ffcc00;
+            color: #000;
+            font-weight: bold;
+        }
 
 </style>
 @endsection

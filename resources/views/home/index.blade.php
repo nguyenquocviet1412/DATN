@@ -323,8 +323,8 @@
                                     <div class="product-item">
                                         <figure class="product-thumb">
                                             <a href="{{route('product.show',$product->id)}}">
-                                                <img class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
-                                                <img class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                <img width="263px" height="263px" class="pri-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                                <img width="263px" height="263px" class="sec-img" src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                             </a>
                                             <div class="product-badge">
                                                 <div class="product-label new">
@@ -453,7 +453,7 @@
                                     <div class="group-item">
                                         <div class="group-item-thumb">
                                             <a href="{{route('product.show',$product->id)}}">
-                                                <img src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}">
+                                                <img  src="{{ asset($product->thumbnail ?? 'default-image.jpg') }}" alt="{{ $product->name }}" >
                                             </a>
                                         </div>
                                         <div class="group-item-desc">
@@ -550,7 +550,7 @@
                     <div class="blog-post-item">
                         <figure class="blog-thumb">
                             <a href="">
-                                <img src="{{ $post->image ?? asset('assets/img/blog/default.jpg') }}" alt="{{ $post->title }}" style="width: 100%; height: 200px; object-fit: cover;">
+                                <img src="{{ '/storage/'.$post->image ?? asset('assets/img/blog/default.jpg') }}" alt="{{ $post->title }}" style="width: 100%; height: 200px; object-fit: cover;">
                             </a>
                         </figure>
                         <div class="blog-content">
