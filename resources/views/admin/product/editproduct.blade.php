@@ -137,8 +137,8 @@
                         <div class="mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select name="status" class="form-control">
-                                <option value="1" {{ $product->status == 1 ? 'selected' : '' }}>Hoạt động</option>
-                                <option value="0" {{ $product->status == 0 ? 'selected' : '' }}>Không hoạt động</option>
+                                <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="inactive" {{ $product->status == 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
                             </select>
                         </div>
 

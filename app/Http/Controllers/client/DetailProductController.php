@@ -40,6 +40,7 @@ class DetailProductController extends Controller
 
         // Lấy các sản phẩm liên quan cùng danh mục
         $relatedProducts = Product::where('id_category', $product->id_category)
+                                  ->where('products.status', 'active')
                                   ->where('id', '!=', $product->id)
                                   ->take(4)
                                   ->get()

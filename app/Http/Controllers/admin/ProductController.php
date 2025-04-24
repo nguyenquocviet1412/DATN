@@ -171,6 +171,8 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        //kiểm tra xem sản phẩm có liên kết với dữ liệu khác không
+
 
         $product->delete(); // Xoá mềm sản phẩm
 
@@ -186,28 +188,40 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'id_category' => 'required|exists:categories,id',
             'price' => 'required|numeric',
-            'status' => 'required|boolean',
+            'status' => 'required|in:active,inactive',
             'variants.*.id' => 'required|exists:variants,id',
             'variants.*.id_color' => 'required|exists:colors,id',
             'variants.*.id_size' => 'required|exists:sizes,id',
             'variants.*.price' => 'required|numeric',
-            'variants.*.quantity' => 'required|integer|min:1',
+            'variants.*.quantity' => 'required|integer|min:0',
             'deleted_images' => 'array',
             'deleted_images.*' => 'exists:product_images,id',
             'variant_images.*.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
+        $category = Category::find($request->id_category);
+        $categoryAcronym = $this->generateAcronym($category->name);
+        $timestamp = now()->format('dmYHis');
         $product->update([
             'name' => $request->name,
             'id_category' => $request->id_category,
             'price' => $request->price,
             'status' => $request->status,
+            'sku' => $categoryAcronym . $timestamp,
         ]);
 
         // Cập nhật biến thể
         foreach ($request->variants as $variantData) {
             $variant = Variant::findOrFail($variantData['id']);
+            //Tạo sku nếu sku null
+            if (empty($variant->sku)) {
+                $productAcronym = $this->generateAcronym($product->name);
+                $color = Color::find($variantData['id_color']);
+                $size = Size::find($variantData['id_size']);
+                $colorAcronym = $this->generateAcronym($color->name ?? '');
+                $variant->sku = $product->id . $productAcronym . $colorAcronym . $size->size;
+            }
             $variant->update([
                 'id_color' => $variantData['id_color'],
                 'id_size' => $variantData['id_size'],
@@ -225,6 +239,8 @@ class ProductController extends Controller
                     ]);
                 }
             }
+            //ghi log
+            LogHelper::logAction('Cập nhật biến thể có id: ' . $variant->id . ' của sản phẩm có id: ' . $product->id);
         }
 
         // Xóa ảnh đã chọn

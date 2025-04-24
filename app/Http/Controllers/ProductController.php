@@ -12,6 +12,8 @@ class ProductController extends Controller
     {
 
         $query = Product::query();
+        // Chỉ lấy sản phẩm đang hoạt động
+        $query->where('status', 'active');
 
         // Tìm kiếm theo tên sản phẩm
         if ($request->has('search') && $request->search != '') {
@@ -26,6 +28,7 @@ class ProductController extends Controller
         if ($request->filled('id_category')) {
             $query->where('id_category', $request->id_category);
         }
+
 
         // Sắp xếp theo giá, lượt xem hoặc yêu thích
         if ($request->has('sort')) {

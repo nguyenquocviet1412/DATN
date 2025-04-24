@@ -23,6 +23,8 @@ class ShopController extends Controller
 
         // Bắt đầu truy vấn sản phẩm
         $products = Product::query();
+        // Chỉ lấy sản phẩm đang hoạt động
+        $products->where('status', 'active');
 
         // Lọc sản phẩm có tất cả các màu được chọn
         if ($request->filled('id_color')) {

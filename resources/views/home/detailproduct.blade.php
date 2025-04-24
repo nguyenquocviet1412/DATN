@@ -69,9 +69,9 @@
                 <div class="d-flex justify-content-center">
                     @foreach ($product->variants as $variant)
                         @foreach ($variant->images as $key => $image)
-                            <img src="{{ asset($image->image_url) }}" class="img-thumbnail mx-1 thumbnail-image" 
-                                 style="cursor: pointer; object-fit: cover; height: 80px; width: 80px;" 
-                                 onclick="document.querySelector('#productCarousel .carousel-item.active').classList.remove('active'); document.querySelectorAll('#productCarousel .carousel-item')[{{ $key }}].classList.add('active');" 
+                            <img src="{{ asset($image->image_url) }}" class="img-thumbnail mx-1 thumbnail-image"
+                                 style="cursor: pointer; object-fit: cover; height: 80px; width: 80px;"
+                                 onclick="document.querySelector('#productCarousel .carousel-item.active').classList.remove('active'); document.querySelectorAll('#productCarousel .carousel-item')[{{ $key }}].classList.add('active');"
                                  alt="Ảnh sản phẩm nhỏ">
                         @endforeach
                     @endforeach
@@ -196,7 +196,7 @@
                     <div class="card mb-4 shadow-sm">
                         <div class="overflow-hidden" style="height: 200px;">
                             <a href="{{ route('product.show', $relatedProduct->id) }}">
-                                <img src="{{ asset($relatedProduct->image_url) }}"
+                                <img src="{{ asset($relatedProduct->thumbnail ?? 'default-image.jpg') }}"
                                      class="card-img-top"
                                      alt="{{ $relatedProduct->name }}"
                                      style="height: 100%; object-fit: cover;">

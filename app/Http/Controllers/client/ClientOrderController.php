@@ -466,7 +466,9 @@ class ClientOrderController extends Controller
     // Lịch sử đơn hàng
     public function userOrders()
     {
-        $orders = Order::where('id_user', Auth::id())->orderBy('created_at', 'desc')->get();
+        $orders = Order::where('id_user', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // số đơn hàng mỗi trang
         return view('home.orders', compact('orders'));
     }
 

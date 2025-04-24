@@ -30,6 +30,11 @@ class VariantConntroller extends Controller
         LogHelper::logAction('Vào trang thêm biến thể cho sản phẩm có ID: ' . $productId);
         return view('admin.product.addvariant',compact('product', 'colors','sizes'));
     }
+    //hàm tạo viết tắt
+    private function generateAcronym($text)
+    {
+        return strtoupper(collect(explode(' ', $text))->map(fn($word) => $word[0])->implode(''));
+    }
 
     // Thêm biến thể mới vào sản phẩm
     public function variantStore(Request $request, $productId)
@@ -49,6 +54,11 @@ class VariantConntroller extends Controller
     if ($product->variants()->where('id_color', $request->id_color)->where('id_size', $request->id_size)->exists()) {
         return redirect()->route('product.edit', $productId)->with('error', 'Biến thể đã tồn tại.');
     }
+    // tạo sku
+    $productAcronym = $this->generateAcronym($product->name);
+    $color = Color::find($request['id_color']);
+    $size = Size::find($request['id_size']);
+    $colorAcronym = $this->generateAcronym($color->name ?? '');
 
     // Tạo biến thể
     $variant = Variant::create([
@@ -57,6 +67,7 @@ class VariantConntroller extends Controller
         'id_size' => $request->id_size,
         'price' => $request->price,
         'quantity' => $request->quantity,
+        'sku' => $product->id . $productAcronym . $colorAcronym . $size->size,
     ]);
 
     if (!$variant) {

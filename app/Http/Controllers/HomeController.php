@@ -25,6 +25,8 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $query = Product::query();
+        // Chỉ lấy sản phẩm đang hoạt động
+        $query->where('status', 'active');
 
         // Tìm kiếm theo tên sản phẩm
         if ($request->has('search') && $request->search != '') {
@@ -37,10 +39,10 @@ class HomeController extends Controller
         }
 
         // Lấy 8 sản phẩm mới nhất
-        $latestProducts = Product::orderBy('created_at', 'desc')->take(8)->get();
+        $latestProducts = Product::orderBy('created_at', 'desc')->take(8)->where('status', 'active')->get();
 
         // Lấy 8 sản phẩm có lượt xem nhiều nhất
-        $mostViewedProducts = Product::orderBy('view', 'desc')->take(8)->get();
+        $mostViewedProducts = Product::orderBy('view', 'desc')->where('status', 'active')->take(8)->get();
 
         $products = $query->paginate(9);
         $categories = Category::all();
@@ -49,6 +51,7 @@ class HomeController extends Controller
         $bestSellingProducts = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_sold'))
             ->join('variants', 'products.id', '=', 'variants.id_product')
             ->join('order_items', 'variants.id', '=', 'order_items.id_variant')
+            ->where('products.status', 'active')
             ->groupBy('products.id')
             ->orderByDesc('total_sold')
             ->take(4)
@@ -63,6 +66,7 @@ class HomeController extends Controller
             ->groupBy('products.id')
             ->orderByDesc('avg_rating')
             ->take(4)
+            ->where('products.status', 'active')
             ->get();
 
         // Lấy 3 bài viết mới nhất
@@ -76,9 +80,10 @@ class HomeController extends Controller
             ->where('rating', '>=', 4)
             ->latest() // Lấy mới nhất
             ->take(5) // Giới hạn 5 đánh giá
+            ->where('status', 'active')
             ->get();
         // Lấy danh sách sản phẩm yêu thích của người dùng
-        $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->toArray() : [];
+        $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->where('status', 'active')->toArray() : [];
         //Lấy danh sách bannner
         $banners = Banner::where('status', 1)->get();
 

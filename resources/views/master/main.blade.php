@@ -265,7 +265,7 @@
                                                 </ul>
                                             </li>
                                             <li><a href="{{route('shop.index')}}">Cửa hàng <i class="fa"></i></a> </li>
-                                            <li><a href="{{route('blogs.index')}}">Blog </a> </li>
+                                            <li><a href="{{route('blogs.index')}}">Bài viết </a> </li>
                                             <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>
@@ -629,7 +629,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="copyright-text text-center">
-                            <p>&copy; 2022 <b>Corano</b> Được tạo với <i class="fa fa-heart text-danger"></i> bởi <a href="https://hasthemes.com/"><b>HasThemes</b></a></p>
+                            <p>&copy; 2025 <b>CCS SHOES</b> Được tạo với <i class="fa fa-heart text-danger"></i> bởi <a href="#"><b>WD-45</b></a></p>
                         </div>
                     </div>
                 </div>

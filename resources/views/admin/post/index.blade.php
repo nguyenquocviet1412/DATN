@@ -71,7 +71,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
-                                    <td>{{ $post->content }}</td>
+                                    <td>{{ Str::limit($post->content, 200) }}</td>
                                     <td class="text-center">
                                         @if ($post->status === 'published')
                                             <span class="badge bg-success">Đã xuất bản</span>

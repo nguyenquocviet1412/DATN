@@ -31,7 +31,7 @@ class BlogsController extends Controller
     }
 
     // Phân trang bài viết
-    $posts = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+    $posts = $query->orderBy($sortBy, $sortOrder)->paginate(6);
 
     // Lấy 3 bài viết mới nhất
     $latestPosts = Post::orderBy('created_at', 'desc')->limit(3)->get();
