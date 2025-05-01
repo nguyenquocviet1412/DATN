@@ -17,9 +17,36 @@ class CartController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $cartItems = Cart::where('id_user', $user->id)
-            ->with(['variant.product', 'variant.color', 'variant.size', 'variant.images'])
-            ->get();
+
+    // Lấy tất cả sản phẩm trong giỏ hàng của người dùng
+    $cartItems = Cart::where('id_user', $user->id)
+        ->with(['variant.product', 'variant.color', 'variant.size', 'variant.images'])
+        ->get();
+
+    // Xử lý xóa cart item nếu:
+    // - Biến thể không tồn tại
+    // - Sản phẩm không tồn tại
+    // - Sản phẩm đã bị soft delete
+    // - Sản phẩm không có trạng thái 'active'
+    foreach ($cartItems as $item) {
+        $variant = $item->variant;
+        $product = $variant->product ?? null;
+
+        if (
+            !$variant ||
+            !$product ||
+            $product->trashed() ||
+            $product->status !== 'active'
+        ) {
+            $item->delete();
+        }
+    }
+
+    // Lấy lại danh sách cartItems sau khi đã lọc
+    $cartItems = Cart::where('id_user', $user->id)
+        ->with(['variant.product', 'variant.color', 'variant.size', 'variant.images'])
+        ->get();
+
         return view('home.cart', compact('cartItems'));
     }
 

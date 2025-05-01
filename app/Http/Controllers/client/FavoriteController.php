@@ -13,14 +13,39 @@ class FavoriteController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $user = Auth::user();
-        $favoriteItems = favorite::where('id_user', $user->id)
-            ->with(['product.images']) // Load quan hệ product và images
-            ->get();
-        $favoriteProductIds = $favoriteItems->pluck('id_product')->toArray();
-        return view('home.favorite', compact('favoriteItems', 'favoriteProductIds'));
+{
+    $user = Auth::user();
+
+    // Lấy danh sách yêu thích cùng quan hệ product và images
+    $favoriteItems = favorite::where('id_user', $user->id)
+        ->with(['product.images'])
+        ->get();
+
+    // Xóa nếu sản phẩm:
+    // - Không tồn tại
+    // - Đã bị soft delete
+    // - Không ở trạng thái active
+    foreach ($favoriteItems as $item) {
+        $product = $item->product;
+
+        if (
+            !$product ||
+            $product->trashed() ||
+            $product->status !== 'active'
+        ) {
+            $item->delete();
+        }
     }
+
+    // Lấy lại danh sách sau khi đã lọc
+    $favoriteItems = favorite::where('id_user', $user->id)
+        ->with(['product.images'])
+        ->get();
+
+    $favoriteProductIds = $favoriteItems->pluck('id_product')->toArray();
+
+    return view('home.favorite', compact('favoriteItems', 'favoriteProductIds'));
+}
 
     /**
      * Show the form for creating a new resource.

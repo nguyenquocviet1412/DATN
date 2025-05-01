@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'sku',
@@ -40,7 +42,7 @@ class Variant extends Model
    // Quan hệ với sản phẩm
    public function product()
    {
-       return $this->belongsTo(Product::class, 'id_product');
+       return $this->belongsTo(Product::class, 'id_product')->withTrashed();
    }
 
    // Quan hệ với bảng ProductImage (Ảnh sản phẩm)

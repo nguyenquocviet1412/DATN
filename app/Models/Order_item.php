@@ -19,7 +19,7 @@ class Order_item extends Model
     // Quan hệ với bảng Variant
     public function variant()
     {
-        return $this->belongsTo(Variant::class, 'id_variant');
+        return $this->belongsTo(Variant::class, 'id_variant')->withTrashed();
     }
     // Quan hệ với bảng Order
     public function order()

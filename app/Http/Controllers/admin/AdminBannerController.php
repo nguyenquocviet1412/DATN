@@ -142,7 +142,7 @@ class AdminBannerController extends Controller
         // Ghi log
         LogHelper::logAction('Cập nhật banner có ID: ' . $banner->id);
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được cập nhật!');
+        return redirect()->back()->with('success', 'Banner đã được cập nhật!');
     }
 
     public function destroy($id)
@@ -162,7 +162,7 @@ class AdminBannerController extends Controller
     {
         Banner::withTrashed()->findOrFail($id)->restore();
         LogHelper::logAction('Khôi phục banner có ID: ' . $id . ' từ thùng rác');
-        return redirect()->route('admin.banners.trash')->with('success', 'Banner đã được khôi phục!');
+        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được khôi phục!');
     }
 
     public function delete($id)

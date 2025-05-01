@@ -388,11 +388,14 @@
                     <div class="testimonial-thumb-wrapper">
                         <div class="testimonial-thumb-carousel">
                             @foreach ($reviews as $item)
+                            {{-- @if ($item->product->status == 'active') --}}
                                 <div class="testimonial-thumb">
                                     <a href="{{route('product.show',$item->product->id)}}">
                                     <img src="{{$item->product->thumbnail}}" alt="{{$item->product->name}}">
                                     </a>
                                 </div>
+                            {{-- @endif --}}
+
                             @endforeach
                         </div>
                     </div>
@@ -491,6 +494,7 @@
                         <div class="group-list-item-wrapper">
                             <div class="group-list-carousel">
                                 @foreach($topRatedProducts as $product)
+                                @if ($product->status == 'active')
                                 <div class="group-slide-item">
                                     <div class="group-item">
                                         <div class="group-item-thumb">
@@ -522,6 +526,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
@@ -549,7 +554,7 @@
                 <div class="col-md-4">
                     <div class="blog-post-item">
                         <figure class="blog-thumb">
-                            <a href="">
+                            <a href="{{ route('blogs.details', $post->id) }}">
                                 <img src="{{ '/storage/'.$post->image ?? asset('assets/img/blog/default.jpg') }}" alt="{{ $post->title }}" style="width: 100%; height: 200px; object-fit: cover;">
                             </a>
                         </figure>
@@ -558,7 +563,7 @@
                                 <p>{{ $post->created_at->format('d/m/Y') }}</p>
                             </div>
                             <h5 class="blog-title">
-                                <a href="">{{ $post->title }}</a>
+                                <a href="{{ route('blogs.details', $post->id) }}">{{ $post->title }}</a>
                             </h5>
                             <p class="blog-excerpt">
                                 {{ Str::limit($post->content, 100, '...') }}
