@@ -13,6 +13,7 @@ use App\Models\Rate;
 use App\Models\Variant;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 
@@ -465,23 +466,44 @@ class ClientOrderController extends Controller
 
     // Lịch sử đơn hàng
     public function userOrders()
-    {
-        $orders = Order::where('id_user', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10); // số đơn hàng mỗi trang
-        return view('home.orders', compact('orders'));
-    }
+{
+    $orders = Order::with([
+        'orderItems.variant' => function ($query) {
+            $query->with(['product' => function ($q) {
+                $q->withTrashed(); // Load luôn product đã bị xóa mềm
+            }]);
+        }
+    ])
+    ->where('id_user', Auth::id())
+    ->orderBy('created_at', 'desc')
+    ->paginate(6);
+
+    return view('home.orders', compact('orders'));
+}
 
     // Chi tiết đơn hàng
     public function orderDetail($id)
-    {
-        $user = auth()->user();
-        $order = Order::where('id', $id)->where('id_user', Auth::id())->firstOrFail();
-        // Lấy đánh giá của người dùng
-        $rating = Rate::where('id_user', $user->id)->get();
-        return view('home.order-detail', compact('order', 'user', 'rating'));
-    }
+{
+    $user = auth()->user();
 
+    $order = Order::with([
+        'orderItems.variant' => function ($query) {
+            $query->withTrashed()->with([
+                'product' => function ($query) {
+                    $query->withTrashed();
+                }
+            ]);
+        }
+    ])
+    ->where('id', $id)
+    ->where('id_user', $user->id)
+    ->firstOrFail();
+
+    // Lấy đánh giá của người dùng
+    $rating = Rate::where('id_user', $user->id)->get();
+
+    return view('home.order-detail', compact('order', 'user', 'rating'));
+}
     //Cập nhật trạng thái đơn hàng đã nhận hàng
     public function markAsReceived($id)
     {

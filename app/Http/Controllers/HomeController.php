@@ -78,9 +78,11 @@ class HomeController extends Controller
         $reviews = Rate::with(['user', 'product'])
             // Lọc đánh giá 5 sao và 4 sao
             ->where('rating', '>=', 4)
+            ->whereHas('product', function ($query) {
+                $query->where('status', 'active');
+            })
             ->latest() // Lấy mới nhất
             ->take(5) // Giới hạn 5 đánh giá
-            ->where('status', 'active')
             ->get();
         // Lấy danh sách sản phẩm yêu thích của người dùng
         $favoriteProductIds = Auth::check() ? favorite::where('id_user', Auth::id())->pluck('id_product')->where('status', 'active')->toArray() : [];

@@ -118,7 +118,7 @@ class PostController extends Controller
 
             $post->update($data);
 
-            return redirect()->route('post.index')->with('success', 'Cập nhật bài viết thành công!');
+            return redirect()->back()->with('success', 'Cập nhật bài viết thành công!');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi cập nhật: ' . $e->getMessage()])->withInput();
         }
