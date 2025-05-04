@@ -116,7 +116,7 @@
                             <th>Size</th>
                             <th>Màu</th>
                             <th>Số lượng</th>
-                            <th>Giá</th>
+                            <th>Giá (sau giảm)</th>
                             <th>Tổng</th>
                             <th>Thao tác</th> <!-- Cột mới -->
                         </tr>
@@ -156,7 +156,7 @@
                                 <a href="{{route('product.show',$item->variant->id_product)}}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-shopping-cart"></i> Mua lại
                                 </a>
-                                @elseif ($item->status == 'completed')
+                                @elseif ($order->payment_status == 'completed')
                                 <a href="{{ route('client.rate.create', $item->id) }}" class="btn btn-custom btn-sm">
                                     <span class="btn-text">Thêm Đánh Giá</span>
                                 </a>

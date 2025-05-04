@@ -18,8 +18,9 @@
 
     <!-- CSS
 	============================================ -->
-    <!-- google fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900" rel="stylesheet">
+    <!-- Google Fonts: Open Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('assets/css/vendor/bootstrap.min.css')}}">
     <!-- Pe-icon-7-stroke CSS -->
@@ -266,7 +267,6 @@
                                             </li>
                                             <li><a href="{{route('shop.index')}}">Cửa hàng <i class="fa"></i></a> </li>
                                             <li><a href="{{route('blogs.index')}}">Bài viết </a> </li>
-                                            <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>
                                     <!-- main menu navbar end -->

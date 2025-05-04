@@ -188,6 +188,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'id_category' => 'required|exists:categories,id',
             'price' => 'required|numeric',
+            'description' => 'required|string',
             'status' => 'required|in:active,inactive',
             'variants.*.id' => 'required|exists:variants,id',
             'variants.*.id_color' => 'required|exists:colors,id',
@@ -206,6 +207,7 @@ class ProductController extends Controller
         $product->update([
             'name' => $request->name,
             'id_category' => $request->id_category,
+            'description' => $request->description,
             'price' => $request->price,
             'status' => $request->status,
             'sku' => $categoryAcronym . $timestamp,

@@ -243,7 +243,7 @@
                                                 </a>
                                             </div>
                                             <div class="cart-hover">
-                                                <button class="btn btn-cart">Thêm vào giỏ</button>
+                                                <a href="{{route('product.show',$product->id)}}" class="btn btn-cart">Xem chi tiết</a>
                                             </div>
                                         </figure>
                                         <div class="product-caption text-center">

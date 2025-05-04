@@ -16,24 +16,42 @@ class EmployeeAuthController extends Controller
     }
 
     public function postLogin(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    // Xác thực dữ liệu đầu vào
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6'
+    ]);
 
-        if (Auth::guard('employee')->attempt($credentials)) {
-            $employee = Auth::guard('employee')->user();
+    // Lấy thông tin đăng nhập
+    $credentials = $request->only('email', 'password');
+    $remember = $request->has('remember');
 
-            // Lưu toàn bộ thông tin của nhân viên vào session
-            session(['employee' => $employee]);
+    // Tìm tài khoản nhân viên theo email (kể cả đã bị xóa mềm)
+    $employee = \App\Models\Employee::withTrashed()->where('email', $request->email)->first();
 
-            // Ghi log
-            LogHelper::logAction('Đăng nhập vào hệ thống');
-
-            return redirect()->route('admin.dashboard');
-        }
-
-        // Trả về thông báo lỗi sử dụng SweetAlert2
+    if (!$employee) {
         return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
     }
+
+    // Kiểm tra nếu tài khoản bị xóa mềm hoặc bị vô hiệu hóa (status != active)
+    if ($employee->trashed() || $employee->status !== 'active') {
+        return back()->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa hoặc bị xóa.');
+    }
+
+    // Thực hiện đăng nhập
+    if (Auth::guard('employee')->attempt($credentials, $remember)) {
+        // Lưu thông tin nhân viên vào session
+        session(['employee' => Auth::guard('employee')->user()]);
+
+        // Ghi log
+        LogHelper::logAction('Đăng nhập vào hệ thống');
+
+        return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
+    }
+
+    return back()->with('error', 'Email hoặc mật khẩu không chính xác.');
+}
 
     public function logout()
     {

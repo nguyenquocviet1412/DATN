@@ -85,8 +85,8 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <span class="badge {{ $user->status ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $user->status ? 'Hoạt động' : 'Vô hiệu hóa' }}
+                                <span class="badge {{ $user->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $user->status == 'active' ? 'Hoạt động' : 'Vô hiệu hóa' }}
                                 </span>
                             </td>
                             <td class="text-center">

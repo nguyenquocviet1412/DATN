@@ -130,6 +130,11 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea name="description" class="form-control" rows="4" required>{{ $product->description }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Giá tiền</label>
                             <input type="number" name="price" class="form-control" value="{{ $product->price }}" required>
                         </div>

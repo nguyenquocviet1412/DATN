@@ -96,7 +96,7 @@ class UserController extends Controller
         $request->validate([
             'password' => 'nullable|string|max:255',
             'fullname' => 'required|string',
-            'birthday' => 'date',
+            'birthday' => 'nullable|date',
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required|numeric|unique:users,phone,' . $id,
             'address' => 'required|string',
