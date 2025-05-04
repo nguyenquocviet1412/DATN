@@ -129,18 +129,19 @@ class EmployeeController extends Controller
         return redirect()->back()->withErrors(['error' => 'Bạn không có quyền chỉnh sửa tài khoản này.']);
     }
 
+
     $request->validate([
         'username' => 'required|string|max:255|unique:employees,username,' . $id,
         'password' => 'nullable|string|max:255',
-        'role' => 'required|string',
+        'role' => 'string',
         'fullname' => 'required|string',
         'email' => 'required|email|unique:employees,email,' . $id,
         'phone' => 'required|numeric|unique:employees,phone,' . $id,
         'gender' => 'required|string',
         'date_of_birth' => 'required|date',
         'address' => 'required|string',
-        'position' => 'required|string',
-        'status' => 'required|boolean',
+        'position' => 'string',
+        'status' => '',
     ]);
 
     $employee = Employee::findOrFail($id);
@@ -157,21 +158,29 @@ class EmployeeController extends Controller
     if ($request->input('password')) {
         $employee->password = Hash::make($request->input('password'));
     }
-    $employee->role = $request->input('role');
-    $employee->fullname = $request->input('fullname');
-    $employee->email = $request->input('email');
-    $employee->phone = $request->input('phone');
-    $employee->gender = $request->input('gender');
-    $employee->date_of_birth = $request->input('date_of_birth');
-    $employee->address = $request->input('address');
-    $employee->position = $request->input('position');
-    $employee->status = $request->input('status');
-
+    if($admin->role == 'admin' ){
+        $employee->fullname = $request->input('fullname');
+        $employee->email = $request->input('email');
+        $employee->phone = $request->input('phone');
+        $employee->gender = $request->input('gender');
+        $employee->date_of_birth = $request->input('date_of_birth');
+        $employee->address = $request->input('address');
+    }elseif($admin->role == 'superadmin'){
+        $employee->role = $request->input('role')?? $employee->role;
+        $employee->fullname = $request->input('fullname');
+        $employee->email = $request->input('email');
+        $employee->phone = $request->input('phone');
+        $employee->gender = $request->input('gender');
+        $employee->date_of_birth = $request->input('date_of_birth');
+        $employee->address = $request->input('address');
+        $employee->position = $request->input('position') ?? $employee->position;
+        $employee->status = $request->input('status') ?? $employee->status;
+    }
     $employee->save();
 
     // Ghi log
     LogHelper::logAction('Cập nhật thông tin nhân viên có id: ' . $employee->id);
-    return redirect()->route('employee.index')->with('success', 'Cập nhật tài khoản nhân viên thành công');
+    return redirect()->back()->with('success', 'Cập nhật tài khoản nhân viên thành công');
 }
 
     /**

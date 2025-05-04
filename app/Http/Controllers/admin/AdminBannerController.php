@@ -33,7 +33,7 @@ class AdminBannerController extends Controller
             $sortBy = 'id'; // Cập nhật lại giá trị $sortBy cho view
         }
 
-        $banners = $query->paginate(10)->appends($request->query());
+        $banners = Banner::get();
 
         return view('admin.banner.index', compact('banners', 'sortBy', 'sortOrder', 'search'));
     }

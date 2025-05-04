@@ -53,7 +53,7 @@
                 </p>
                 <p><strong>Vai trò:</strong>
                     <span class="badge bg-{{ $employee->role == 'admin' ? 'danger' : 'info' }}">
-                        {{ $employee->role == 'admin' ? 'Quản trị cấp cao' : 'Nhân viên thường' }}
+                        {{ $employee->role == 'admin' ? 'Nhân viên thường' : 'Quản trị cấp cao' }}
                     </span>
                 </p>
             </div>

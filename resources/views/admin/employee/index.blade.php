@@ -95,8 +95,8 @@ $admin = Auth::guard('employee')->user();
                                 </span>
                             </td>
                             <td class="text-center">
-                                <span class="badge {{ $employee->status ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $employee->status ? 'Hoạt động' : 'Hết hoạt động' }}
+                                <span class="badge {{ $employee->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $employee->status =='active' ? 'Hoạt động' : 'Tạm dừng hoạt động' }}
                                 </span>
                             </td>
 
