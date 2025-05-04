@@ -152,14 +152,40 @@
 
                                 @if($check == 1)
                                 <!-- Nếu đã đánh giá rồi thì không hiển thị nút -->
-                                {{-- Nút mua lại --}}
-                                <a href="{{route('product.show',$item->variant->id_product)}}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-shopping-cart"></i> Mua lại
-                                </a>
+                                {{-- Nút mua lại cải tiến --}}
+                                <a href="{{ route('product.show', $item->variant->id_product) }}"
+                                    class="btn btn-sm d-inline-flex align-items-center gap-1 shadow-sm rounded-pill px-3"
+                                    style="background-color: #c59d5f; color: #fff; border: none;">
+                                     {{-- SVG icon giỏ hàng --}}
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                          class="bi bi-cart" viewBox="0 0 16 16">
+                                         <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1
+                                                  .485.379L2.89 5H14.5a.5.5 0 0 1
+                                                  .49.598l-1.5 7A.5.5 0 0 1 13 13H4a.5.5
+                                                  0 0 1-.49-.402L1.01 2H.5a.5.5 0 0
+                                                  1-.5-.5zM3.102 6l1.313 6h8.17l1.2-5.6H3.102zM5
+                                                  14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7
+                                                  0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                     </svg>
+                                     <span>Mua lại</span>
+                                 </a>
+
                                 @elseif ($order->payment_status == 'completed')
-                                <a href="{{ route('client.rate.create', $item->id) }}" class="btn btn-custom btn-sm">
-                                    <span class="btn-text">Thêm Đánh Giá</span>
-                                </a>
+                                <a href="{{ route('client.rate.create', $item->id) }}"
+                                    class="btn btn-sm d-inline-flex align-items-center gap-1 rounded-pill px-3 shadow-sm"
+                                    style="background-color: #c59d5f; color: #fff; border: none;">
+                                     {{-- SVG icon ngôi sao đánh giá --}}
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                          class="bi bi-star-fill" viewBox="0 0 16 16">
+                                         <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173
+                                                  6.765c-.329-.32-.158-.888.283-.95l4.898-.696 2.192-4.327c.197-.39.73-.39.927
+                                                  0l2.192 4.327 4.898.696c.441.062.612.63.282.95l-3.522
+                                                  3.356.83 4.73c.078.443-.36.79-.746.592L8
+                                                  13.187l-4.389 2.256z"/>
+                                     </svg>
+                                     <span>Thêm Đánh Giá</span>
+                                 </a>
+
                                 @endif
 
                             </td>
@@ -251,6 +277,12 @@
     display: none;
 }
 
+/* Nút mua lại */
+a.btn:hover {
+    background-color: #b58950;
+    transform: scale(1.03);
+    transition: all 0.2s ease-in-out;
+}
 </style>
 
 @endsection
